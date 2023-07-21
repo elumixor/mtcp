@@ -1,0 +1,24 @@
+# This file will contain your sensitive passwords
+# Make a copy from clusters_example.yaml, rename it to clusters.yaml and fill in your passwords
+clusters.yaml
+
+# Python generated files
+__pycache__/
+*.py[cod]
+
+# Artifacts
+artifacts/
+!artifacts/.gitkeep
+jobs/**/artifacts/
+
+# Logs
+logs/
+
+# Job statuses
+jobs/**/.job_status
+
+# Node modules
+node_modules/
+
+# Generated js bundle, map files, etc.
+pipeliner/client/dist/

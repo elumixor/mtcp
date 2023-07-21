@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+        "outDir": "./pipeliner/client/dist/",
+        "noImplicitAny": true,
+        "module": "esnext",
+        "target": "es5",
+        "jsx": "react",
+        "allowJs": true,
+        "moduleResolution": "node",
+        "allowSyntheticDefaultImports": true,
+        "baseUrl": "./pipeliner/client/src",
+        "rootDir": "./pipeliner/client/src"
+    },
+    "include": ["./pipeliner/client/src/**/*"]
+}

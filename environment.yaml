@@ -1,0 +1,56 @@
+name: pipeliner
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - _libgcc_mutex=0.1=conda_forge
+  - _openmp_mutex=4.5=2_gnu
+  - bcrypt=3.2.2=py310h5764c6d_1
+  - bzip2=1.0.8=h7f98852_4
+  - ca-certificates=2023.5.7=hbcca054_0
+  - cffi=1.15.1=py310h255011f_3
+  - cfgv=3.3.1=pyhd8ed1ab_0
+  - cryptography=41.0.2=py310h75e40e8_0
+  - distlib=0.3.7=pyhd8ed1ab_0
+  - filelock=3.12.2=pyhd8ed1ab_0
+  - identify=2.5.25=pyhd8ed1ab_0
+  - ld_impl_linux-64=2.40=h41732ed_0
+  - libffi=3.4.2=h7f98852_5
+  - libgcc-ng=13.1.0=he5830b7_0
+  - libgomp=13.1.0=he5830b7_0
+  - libnsl=2.0.0=h7f98852_0
+  - libsodium=1.0.18=h36c2ea0_1
+  - libsqlite=3.42.0=h2797004_0
+  - libstdcxx-ng=13.1.0=hfd8a6a1_0
+  - libuuid=2.38.1=h0b41bf4_0
+  - libzlib=1.2.13=hd590300_5
+  - ncurses=6.4=hcb278e6_0
+  - nodeenv=1.8.0=pyhd8ed1ab_0
+  - openssl=3.1.1=hd590300_1
+  - paramiko=3.2.0=pyhd8ed1ab_0
+  - pip=23.2=pyhd8ed1ab_0
+  - platformdirs=3.9.1=pyhd8ed1ab_0
+  - pre-commit=3.3.3=pyha770c72_0
+  - pycparser=2.21=pyhd8ed1ab_0
+  - pynacl=1.5.0=py310h5764c6d_2
+  - python=3.10.12=hd12c33a_0_cpython
+  - python_abi=3.10=3_cp310
+  - pyyaml=6.0=py310h5764c6d_5
+  - readline=8.2=h8228510_1
+  - setuptools=68.0.0=pyhd8ed1ab_0
+  - six=1.16.0=pyh6c4a22f_0
+  - tk=8.6.12=h27826a3_0
+  - typing-extensions=4.7.1=hd8ed1ab_0
+  - typing_extensions=4.7.1=pyha770c72_0
+  - tzdata=2023c=h71feb2d_0
+  - ukkonen=1.0.1=py310hbf28c38_3
+  - virtualenv=20.24.1=pyhd8ed1ab_0
+  - wheel=0.40.0=pyhd8ed1ab_1
+  - xz=5.2.6=h166bdaf_0
+  - yaml=0.2.5=h7f98852_2
+  - pip:
+      - autoroot==1.0.0
+      - autorootcwd==1.0.0
+      - pyrootutils==1.0.4
+      - python-dotenv==1.0.0
+prefix: /home/elumixor/miniconda3/envs/pipeliner

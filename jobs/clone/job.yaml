@@ -1,0 +1,4 @@
+description: Clone the mtcp repository
+clusters: [cern, lambda]
+command: "git clone git@github.com:elumixor/mtcp.git"
+artifacts: [mtcp]

@@ -1,0 +1,33 @@
+{
+    "name": "mtcp",
+    "version": "1.0.0",
+    "description": "Manages my ttH research. Where I want to automate stuff, visualize different steps, jobs, artifacts, etc.",
+    "scripts": {
+        "build": "npm run clean && webpack",
+        "watch": "npm run clean && webpack --watch",
+        "dev": "npm run clean && webpack serve --open",
+        "clean": "rm -rf ./pipeliner/client/dist"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/elumixor/mtcp.git"
+    },
+    "devDependencies": {
+        "@types/react": "^18.2.15",
+        "@types/react-dom": "^18.2.7",
+        "css-loader": "^6.8.1",
+        "html-webpack-plugin": "^5.5.3",
+        "sass": "^1.64.0",
+        "sass-loader": "^13.3.2",
+        "style-loader": "^3.3.3",
+        "ts-loader": "^9.4.4",
+        "typescript": "^5.1.6",
+        "webpack": "^5.88.2",
+        "webpack-cli": "^5.1.4",
+        "webpack-dev-server": "^4.15.1"
+    },
+    "dependencies": {
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0"
+    }
+}

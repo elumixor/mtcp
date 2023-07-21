@@ -1,0 +1,22 @@
+autoroot==1.0.0
+autorootcwd==1.0.0
+bcrypt @ file:///home/conda/feedstock_root/build_artifacts/bcrypt_1666831240012/work
+cffi @ file:///home/conda/feedstock_root/build_artifacts/cffi_1671179353105/work
+cfgv @ file:///home/conda/feedstock_root/build_artifacts/cfgv_1629909281805/work
+cryptography @ file:///home/conda/feedstock_root/build_artifacts/cryptography-split_1689055966651/work
+distlib @ file:///home/conda/feedstock_root/build_artifacts/distlib_1689598491484/work
+filelock @ file:///home/conda/feedstock_root/build_artifacts/filelock_1686612785345/work
+identify @ file:///home/conda/feedstock_root/build_artifacts/identify_1689794627642/work
+nodeenv @ file:///home/conda/feedstock_root/build_artifacts/nodeenv_1683892983968/work
+paramiko @ file:///home/conda/feedstock_root/build_artifacts/paramiko_1685074311662/work
+platformdirs @ file:///home/conda/feedstock_root/build_artifacts/platformdirs_1689538620473/work
+pre-commit @ file:///home/conda/feedstock_root/build_artifacts/pre-commit_1686748903002/work
+pycparser @ file:///home/conda/feedstock_root/build_artifacts/pycparser_1636257122734/work
+PyNaCl @ file:///home/conda/feedstock_root/build_artifacts/pynacl_1666862613613/work
+pyrootutils==1.0.4
+python-dotenv==1.0.0
+PyYAML @ file:///home/conda/feedstock_root/build_artifacts/pyyaml_1666772395347/work
+six @ file:///home/conda/feedstock_root/build_artifacts/six_1620240208055/work
+typing_extensions @ file:///home/conda/feedstock_root/build_artifacts/typing_extensions_1688315532570/work
+ukkonen @ file:///home/conda/feedstock_root/build_artifacts/ukkonen_1666948975051/work
+virtualenv @ file:///home/conda/feedstock_root/build_artifacts/virtualenv_1689843851427/work

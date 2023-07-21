@@ -1,0 +1,5 @@
+description: Create a simple file after 1 minute
+clusters: [cern]
+condor: true
+command: "$P_JOBS/$P_JOB_NAME/touch.sh"
+artifacts: [$P_ARTIFACTS/touched]

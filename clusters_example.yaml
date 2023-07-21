@@ -1,0 +1,14 @@
+# Make a copy, rename to clusters.yaml and fill in your passwords
+cern:
+  hostname: lxplus.cern.ch
+  username: username
+  password: password
+  port: 22
+  root: ~/eos
+
+lambda:
+  hostname: lambda.cluster.com
+  username: username
+  password: password
+  port: 22
+  root: ~
