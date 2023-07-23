@@ -23,7 +23,7 @@ export function Cluster(props: { name: string; jobs: IJobData[] }) {
 
     if (!isLocal) {
         useEffect(() => {
-            post("/check_connection", { cluster: props.name }).then(({ connected }) => setConnected(connected));
+            post("/connect", { cluster: props.name }).then(({ connected }) => setConnected(connected));
         }, [props.name]);
     }
 
@@ -62,7 +62,7 @@ export function Job(props: { cluster: string; jobData: IJobData }) {
     const [artifacts, setArtifacts] = useState<IArtifactStatus>({});
 
     const checkArtifacts = async () => {
-        const artifacts = await post("/check_artifacts", { cluster: props.cluster, job: props.jobData.name });
+        const artifacts = await post("/job_status", { cluster: props.cluster, job: props.jobData.name, debug: true });
         setArtifacts(artifacts);
     };
 

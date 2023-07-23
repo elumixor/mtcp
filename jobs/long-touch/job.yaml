@@ -2,4 +2,4 @@ description: Create a simple file after 1 minute
 clusters: [cern]
 condor: true
 command: "$MTCP_JOBS/$MTCP_JOB/touch.sh"
-artifacts: [$MTCP_ARTIFACTS_DIR/touched]
+artifacts: [$MTCP_JOB_ARTIFACTS_DIR/touched]

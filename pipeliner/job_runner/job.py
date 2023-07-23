@@ -78,6 +78,9 @@ class Job:
             print()
 
     def log_condor_status(self, cluster: str, status: dict):
+        if "condor" not in status:
+            return
+
         status = status["condor"]
         id, status_str = status["id"], status["status"]
         color = orange if status_str == "running" else \
@@ -185,7 +188,7 @@ class Job:
 
             return json.loads(result.stdout) if result.success else {"error": result.exit_code, "message": result.stderr}
 
-    def delete_artifacts(self, cluster: str):
+    def delete_artifacts(self, cluster: str, debug=False):
         results = {}
         with self.connector[cluster] as connection:
 
@@ -200,10 +203,10 @@ class Job:
 
                 result = connection.run_command(cmd)
 
-                if not result.success:
-                    self.log(result.stderr, cluster=cluster, error=True)
-                else:
-                    self.log(green("Deleted") + " " + cyan(f"\"{artifact}\""), cluster=cluster)
+            if debug or not result.success:
+                self.log_output(cmd, result.stdout, result.stderr, debug=debug)
+            else:
+                self.log(green("Deleted") + " " + cyan(f"\"{artifact}\""), cluster=cluster)
 
                 results[artifact] = result.success
 
