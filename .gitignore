@@ -6,16 +6,16 @@ clusters.yaml
 __pycache__/
 *.py[cod]
 
-# Artifacts
-artifacts/
-!artifacts/.gitkeep
-jobs/**/artifacts/
-
 # Logs
 logs/
 
-# Job statuses
-jobs/**/.job_status
+# Job files
+jobs/**/artifacts/
+jobs/**/artifacts
+jobs/**/logs/
+jobs/**/logs
+jobs/**/status.json
+jobs/**/condor_submit.sub
 
 # Node modules
 node_modules/

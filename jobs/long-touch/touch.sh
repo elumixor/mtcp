@@ -1,6 +1,12 @@
 #!/bin/bash
 
-# Wait for 1 minute
-sleep 1m
+echo "before sleep"
+echo "before speep (stderr)" >&2
 
-touch $MTCP_ARTIFACTS/touched
+# Wait for 1 second
+sleep 1
+
+echo "after sleep"
+echo "after sleep (stderr)" >&2
+
+touch $MTCP_JOB_ARTIFACTS_DIR/touched
