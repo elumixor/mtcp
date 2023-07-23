@@ -46,17 +46,40 @@ if "condor" in status:
     else:
         status["condor"]["status"] = status["status"]
 
-        # Add out and err from the files
-        out_file = os.path.join(job_folder, "logs/out")
-        if os.path.exists(out_file):
-            with open(out_file, "r") as f:
-                status["out"] = f.read().strip()
+# Add out and err from the files
+out_file = os.path.join(job_folder, "logs/out")
+if os.path.exists(out_file):
+    with open(out_file, "r") as f:
+        status["out"] = f.read().strip()
 
-        err_file = os.path.join(job_folder, "logs/err")
-        if os.path.exists(err_file):
-            with open(err_file, "r") as f:
-                status["err"] = f.read().strip()
+err_file = os.path.join(job_folder, "logs/err")
+if os.path.exists(err_file):
+    with open(err_file, "r") as f:
+        status["err"] = f.read().strip()
+
+# Also check job artifacts if they exist or no
+job_config = os.path.join(job_folder, "job.yaml")
+with open(job_config, "r") as f:
+    # Find the line starting with "artifacts:"
+    for art_i, line in enumerate(f):
+        if line.startswith("artifacts:"):
+            break
+
+    if "[" in line:
+        line = line[line.index("[") + 1:line.index("]")]
+        artifacts = [a.strip() for a in line.split(",")]
+    else:
+        for line in f:
+            line = line.strip()
+            # Each item should start with "-"
+            if line.startswith("-"):
+                artifacts.append(line[1:].strip())
+            else:
+                break
+
+    # Check if artifacts exist on disk
+    status["artifacts"] = { a: os.path.exists(os.path.expandvars(a)) for a in artifacts }
+
 
 # Print the status
 print(json.dumps(status))
-
