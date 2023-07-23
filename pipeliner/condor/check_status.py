@@ -3,6 +3,30 @@ import json
 
 from run_command import run_command
 
+def get_artifacts():
+    # Also check job artifacts if they exist or no
+    job_config = os.path.join(job_folder, "job.yaml")
+    with open(job_config, "r") as f:
+        # Find the line starting with "artifacts:"
+        for line in f:
+            if line.startswith("artifacts:"):
+                break
+
+        if "[" in line:
+            line = line[line.index("[") + 1:line.index("]")]
+            return [a.strip() for a in line.split(",")]
+
+        artifacts = []
+        for line in f:
+            line = line.strip()
+            # Each item should start with "-"
+            if line.startswith("-"):
+                artifacts.append(line[1:].strip())
+            else:
+                break
+
+        return artifacts
+
 job_name = os.environ["MTCP_JOB"]
 job_folder = os.environ["MTCP_JOB_DIR"]
 
@@ -11,7 +35,13 @@ status_file = os.path.join(job_folder, "status.json")
 
 # If it doesn't exist, the job hasn't started yet
 if not os.path.exists(status_file):
-    print(json.dumps({"status": "not_started"}))
+    # Check if artifacts exist on disk
+    status = dict(
+        status="not_started",
+        artifacts={ a: os.path.exists(os.path.expandvars(a)) for a in get_artifacts() }
+    )
+
+    print(json.dumps(status))
     exit(0)
 
 # If it does exist, read it and print its contents
@@ -57,29 +87,8 @@ if os.path.exists(err_file):
     with open(err_file, "r") as f:
         status["err"] = f.read().strip()
 
-# Also check job artifacts if they exist or no
-job_config = os.path.join(job_folder, "job.yaml")
-with open(job_config, "r") as f:
-    # Find the line starting with "artifacts:"
-    for art_i, line in enumerate(f):
-        if line.startswith("artifacts:"):
-            break
-
-    if "[" in line:
-        line = line[line.index("[") + 1:line.index("]")]
-        artifacts = [a.strip() for a in line.split(",")]
-    else:
-        for line in f:
-            line = line.strip()
-            # Each item should start with "-"
-            if line.startswith("-"):
-                artifacts.append(line[1:].strip())
-            else:
-                break
-
-    # Check if artifacts exist on disk
-    status["artifacts"] = { a: os.path.exists(os.path.expandvars(a)) for a in artifacts }
-
+# Check if artifacts exist on disk
+status["artifacts"] = { a: os.path.exists(os.path.expandvars(a)) for a in get_artifacts() }
 
 # Print the status
 print(json.dumps(status))
