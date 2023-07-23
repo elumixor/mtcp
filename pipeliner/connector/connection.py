@@ -1,9 +1,21 @@
 import paramiko
-from typing import NamedTuple
+from dataclasses import dataclass
 
 from pipeliner.utils import DotDict, green, yellow
 
-Result = NamedTuple("Result", [("success", bool), ("stdout", str), ("stderr", str), ("exit_code", int)])
+
+@dataclass
+class Result:
+    success: bool
+    stdout: str
+    stderr: str
+    exit_code: int
+
+    def __iter__(self):
+        yield self.success
+        yield self.stdout
+        yield self.stderr
+        yield self.exit_code
 
 
 class Connection:
