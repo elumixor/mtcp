@@ -18,8 +18,16 @@ h1 {
     text-align: center;
 }
 
-h2 {
-    margin-top: 40px;
+.cluster-title {
+    position: relative;
+    padding: 10px 20px;
+    text-transform: uppercase;
+    margin: 0
+}
+
+.cluster-header {
+    display: flex;
+    justify-content: center;
 }
 
 ul {
@@ -46,10 +54,6 @@ li {
     margin: 20px;
     border-radius: 15px;
     padding: 10px;
-}
-
-.cluster h2 {
-    margin-top: 0;
 }
 
 .job {
@@ -100,14 +104,45 @@ button {
         filter: brightness(1.2);
         cursor: pointer;
     }
+}
 
-    &:disabled {
-        filter: brightness(1.2) saturate(0.5) grayscale(0.4);
+:disabled,.disabled {
+    filter: brightness(1.2) saturate(0.5) grayscale(0.4);
+    cursor: not-allowed;
+    pointer-events: none;
+
+    &:hover {
         cursor: not-allowed;
+    }
+}
 
-        &:hover {
-            cursor: not-allowed;
-        }
+.alpha {
+    &-10 {
+        opacity: 0.1;
+    }
+    &-20 {
+        opacity: 0.2;
+    }
+    &-30 {
+        opacity: 0.3;
+    }
+    &-40 {
+        opacity: 0.4;
+    }
+    &-50 {
+        opacity: 0.5;
+    }
+    &-60 {
+        opacity: 0.6;
+    }
+    &-70 {
+        opacity: 0.7;
+    }
+    &-80 {
+        opacity: 0.8;
+    }
+    &-90 {
+        opacity: 0.9;
     }
 }
 
@@ -169,15 +204,28 @@ button {
     &:hover {
         box-shadow: 0 0 10px 0 rgb(22, 44, 183);
 
-        animation: rotate 10s infinite linear;
+        &:not(:disabled):not(.disabled) {
 
-        @keyframes rotate {
-            from {
-                transform: rotate(0deg);
+            animation: rotate 10s infinite linear;
+
+            @keyframes rotate {
+                from {
+                    transform: rotate(0deg);
+                }
+                to {
+                    transform: rotate(-360deg);
+                }
             }
-            to {
-                transform: rotate(-360deg);
-            }
+        }
+    }
+
+    &:disabled,&.disabled {
+        cursor: not-allowed;
+        filter: grayscale(1);
+        box-shadow: 0 0 10px 0 rgba(179, 179, 179, 0.61);
+
+        &:hover {
+            cursor: not-allowed;
         }
     }
 }

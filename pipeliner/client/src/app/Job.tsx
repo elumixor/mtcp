@@ -60,7 +60,11 @@ export function Job(props: { cluster: string; jobData: IJobData }) {
 
     return (
         <div className="job">
-            <ReactSVG className="button job-refresh" onClick={jobStatusRequest} src="icons/refresh.svg" />
+            <ReactSVG
+                className={"button job-refresh" + (blocked ? " disabled" : "")}
+                onClick={jobStatusRequest}
+                src="icons/refresh.svg"
+            />
             <div className="flex">
                 <div className="job-info text-left">
                     <h4 className="job-title">{props.jobData.name}</h4>

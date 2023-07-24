@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { IConnectResponse, IJobData } from "responses";
 import { requests } from "server-api";
 import { Job } from "./Job";
+import { ReactSVG } from "react-svg";
 
 export function Cluster(props: { name: string; jobs: IJobData[] }) {
     const isLocal = props.name === "[local]";
@@ -19,7 +20,12 @@ export function Cluster(props: { name: string; jobs: IJobData[] }) {
 
     return (
         <div className="cluster">
-            <h2>{props.name}</h2>
+            <div className="cluster-header">
+                <h2 className="cluster-title">
+                    {props.name}
+                    <ReactSVG className="button job-refresh" onClick={gitSync} src="icons/refresh.svg" />
+                </h2>
+            </div>
             {isLocal ? (
                 <></>
             ) : (
@@ -31,15 +37,12 @@ export function Cluster(props: { name: string; jobs: IJobData[] }) {
                     >
                         {blocked ? "..." : connected ? "Connected" : "Connect"}
                     </button>
-                    <button disabled={blocked || !connected} onClick={() => gitSync()}>
-                        Sync
-                    </button>
                 </>
             )}
             {!connected ? (
                 <></>
             ) : (
-                <div className="jobs">
+                <div className={"jobs" + (blocked ? " disabled alpha-50" : "")}>
                     {props.jobs.map((job) => (
                         <Job key={job.name} cluster={props.name} jobData={job} />
                     ))}
