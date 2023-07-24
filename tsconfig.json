@@ -8,6 +8,8 @@
         "allowJs": true,
         "moduleResolution": "node",
         "allowSyntheticDefaultImports": true,
+        "strict": true,
+        "sourceMap": true,
         "baseUrl": "./pipeliner/client/src",
         "rootDir": "./pipeliner/client/src"
     },

@@ -53,6 +53,10 @@ if __name__ == "__main__":
     with Connector() as connector, JobRunner() as runner, Server() as server:
         # start_job()
         # monitor_job()
+
+        # connector["lambda"].git_sync(debug=True)
+        # connector["cern"].git_sync(debug=False)
+
         try:
             while True:
                 sleep(1)

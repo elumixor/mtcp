@@ -53,14 +53,38 @@ li {
 }
 
 .job {
+    position: relative;
     margin: 10px;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 15px;
+    width: 300px;
+    box-shadow: 0 0 10px 0 rgba(143, 143, 143, 0.35);
+
+    transition: all 0.2s ease-in-out;
+
+    &.running {
+        border-color: #ffc107;
+    }
+
+    &:hover {
+        box-shadow: 0 0 10px 0 rgba(67, 67, 67, 0.5);
+        transform: scale(1.02);
+    }
 }
 
-.job h3 {
-    margin-top: 0;
+.job-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.job-title {
+    text-transform: capitalize;
+}
+
+.job-info {
+    margin-right: 30px;
 }
 
 button {
@@ -87,9 +111,32 @@ button {
     }
 }
 
-.artifacts {
+.button {
+    cursor: pointer;
+
+    &:not(:disabled):hover {
+        filter: brightness(1.2);
+        cursor: pointer;
+    }
+
+    &:hover {
+        font-weight: bold;
+    }
+}
+
+.artifact {
     text-align: left;
     margin-top: 10px;
+    width: 100%;
+    align-items: baseline;
+    transition: all 0.2s ease-in-out;
+
+    &:hover {
+        width: fit-content;
+        background-color: #e7e7e7;
+        border-radius: 5px;
+        padding: 5px;
+    }
 }
 
 .artifact-name {
@@ -98,12 +145,48 @@ button {
     font-weight: 800;
     padding: 5px;
     margin: 5px;
+
+    &:hover {
+        overflow: unset;
+        white-space: unset;
+        text-overflow: unset;
+    }
+}
+
+.job-refresh {
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    right: -15px;
+    top: -15px;
+    padding: 5px;
+    border-radius: 50%;
+    background-color: #ffffff;
+    box-shadow: 0 0 10px 0 rgb(213, 213, 213);
+    border: 2px solid #ccc;
+    transition: all 0.1s ease-in-out;
+
+    &:hover {
+        box-shadow: 0 0 10px 0 rgb(22, 44, 183);
+
+        animation: rotate 10s infinite linear;
+
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(-360deg);
+            }
+        }
+    }
 }
 
 .artifact-exists {
     color: #fff;
     font-weight: 500;
     padding: 5px;
+    margin: 5px;
     border-radius: $border-radius;
 }
 
@@ -113,4 +196,83 @@ button {
 
 .good {
     background-color: #28a745;
+}
+
+.status-icon {
+    width: 40px;
+    height: 40px;
+
+    &.running, &.retrieving {
+        animation: rotate 10s infinite linear;
+
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(-360deg);
+            }
+        }
+    }
+
+}
+
+.status-container {
+    margin: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .status-text {
+        text-transform: capitalize;
+        text-align: center;
+
+        &.not_started {
+            color: #6c757d;
+        }
+
+        &.running {
+            color: #ffc107;
+            font-style: italic;
+        }
+
+        &.retrieving {
+            color: #d8b13c;
+            font-style: italic;
+        }
+
+        &.done {
+            color: #28a745;
+        }
+
+        &.interrupted {
+            color: #ff8000;
+        }
+
+        &.error {
+            color: #dc3545;
+        }
+    }
+}
+
+.flex {
+    display: flex;
+}
+
+.ellipsis {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.text {
+    &-center {
+        text-align: center;
+    }
+    &-left {
+        text-align: left;
+    }
+    &-right {
+        text-align: right;
+    }
 }

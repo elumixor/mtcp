@@ -9,7 +9,7 @@ class Connector:
         config = read_yaml(clusters_path)
 
         self.connections = {
-            key: Connection(value)
+            key: Connection(key, value)
             for key, value in config.items()
         }
 

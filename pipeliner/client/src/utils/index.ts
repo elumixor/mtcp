@@ -1,1 +1,1 @@
-export { post } from "./post";
+export { mergeStates } from "./merge-states";

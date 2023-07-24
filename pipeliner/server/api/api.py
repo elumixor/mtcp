@@ -18,15 +18,23 @@ class Api:
 
     @post("/jobs")
     def get_jobs(self):
-        return [job.json() for job in self.job_runner.jobs.values()]
+        return [job.json for job in self.job_runner.jobs.values()]
 
     @post("/connect")
     def connect(self, cluster):
         return {"connected": self.connector[cluster].open()}
 
+    @post("/git_sync")
+    def git_sync(self, cluster, debug=False):
+        return self.connector[cluster].git_sync(debug=debug)
+
     @post("/job_status")
     def job_status(self, job, cluster, debug=False):
         return self.job_runner[job].check_status(cluster, debug=debug)
+
+    @post("/interrupt_job")
+    def interrupt_job(self, job, cluster, debug=False):
+        return self.job_runner[job].interrupt(cluster, debug=debug)
 
     @post("/delete_artifacts")
     def delete_artifacts(self, job, cluster, debug=False):
