@@ -4,6 +4,7 @@ import { ReactSVG } from "react-svg";
 export function StatusIcon(props: { status: "..." | "not_started" | "done" | "warn" | "running" | "interrupted" }) {
     const cssStatus = props.status === "..." ? "retrieving" : props.status;
     const className = "status-icon " + cssStatus;
+    const statusText = props.status.replace("_", " ");
     const svg =
         props.status === "not_started" ? (
             <ReactSVG src="icons/not-started.svg" className={className} />
@@ -21,7 +22,7 @@ export function StatusIcon(props: { status: "..." | "not_started" | "done" | "wa
             {props.status === "..." ? (
                 <span className="status-text retrieving">Retrieving status...</span>
             ) : (
-                <span className={"status-text " + cssStatus}>{props.status}</span>
+                <span className={"status-text " + cssStatus}>{statusText}</span>
             )}
         </div>
     );

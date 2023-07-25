@@ -1,0 +1,108 @@
+- best_Z_Mll
+- DeltaR_min_lep_jet
+- DeltaR_min_lep_jet_fwd
+- dEta_maxMjj_frwdjet
+- dilep_type
+- DRll01
+- eta_frwdjet
+- HT
+- HT_fwdJets
+- HT_inclFwdJets
+- HT_jets
+- HT_lep
+
+# - jet_eta0
+# - jet_eta1
+# - jet_eta2
+# - jet_eta3
+# - jet_eta4
+# - jet_eta5
+- jets_eta
+
+# - jet_pt0
+# - jet_pt1
+# - jet_pt2
+# - jet_pt3
+# - jet_pt4
+# - jet_pt5
+- jets_pt
+
+# - jet_e0
+# - jet_e1
+# - jet_e2
+# - jet_e3
+# - jet_e4
+# - jet_e5
+- jets_e
+
+# - jet_phi0
+# - jet_phi1
+# - jet_phi2
+# - jet_phi3
+# - jet_phi4
+# - jet_phi5
+- jets_phi
+
+- lep_E_0
+- lep_E_1
+- lep_Eta_0
+- lep_Eta_1
+- lep_EtaBE2_0
+- lep_EtaBE2_1
+- lep_ID_0
+- lep_ID_1
+- lep_Phi_0
+- lep_Phi_1
+- lep_Pt_0
+- lep_Pt_1
+- lep_Z0SinTheta_0
+- lep_Z0SinTheta_1
+- max_eta
+- met_met
+- met_phi
+- minDeltaR_LJ_0
+- minDeltaR_LJ_1
+- minDeltaR_LJ_2
+- minOSMll
+- minOSSFMll
+- mjjMax_frwdJet
+- MLepMet
+- Mll01
+- Mlll012
+- Mllll0123
+- MtLepMet
+- nFwdJets_OR
+- nJets_OR
+- nTaus_OR_Pt25
+- Ptll01
+- sumPsbtag
+- total_charge
+- total_leptons
+- lep_nTrackParticles_0
+- lep_nTrackParticles_1
+- taus_passEleOLR_0
+- taus_decayMode_0
+- taus_phi_0
+- taus_charge_0
+- taus_fromPV_0
+- taus_eta_0
+- taus_pt_0
+- taus_numTrack_0
+
+# Don't use the outputs of the other classifiers
+
+# - taus_passEleBDT_0
+
+# - taus_JetRNNSigLoose_0
+# - taus_RNNJetScoreSigTrans_0
+# - taus_JetRNNSigMedium_0
+# - taus_RNNJetScore_0
+# - taus_JetRNNSigTight_0
+
+# - taus_DL1r_0
+
+- taus_width_0
+- best_Z_other_Mll
+- taus_passJVT_0
+- best_Z_other_MtLepMet
+- nTaus_OR

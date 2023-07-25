@@ -1,0 +1,12 @@
+-999:
+    - lep_Mtrktrk_atConvV_CO_0
+    - lep_Mtrktrk_atPV_CO_0
+    - lep_Mtrktrk_atPV_CO_1
+    - lep_Mtrktrk_atConvV_CO_1
+    - lep_nInnerPix_1
+    - lep_nInnerPix_0
+-1:
+    - lep_nTrackParticles_0
+    - lep_nTrackParticles_1
+-99:
+    - taus_passJVT_0

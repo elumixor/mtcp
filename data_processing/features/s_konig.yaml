@@ -1,0 +1,104 @@
+- taus_pt_0
+- taus_eta_0
+- taus_phi_0
+- taus_charge_0
+- taus_width_0
+- taus_decayMode_0
+
+- Mlb
+
+# Don't use the outputs of the other classifiers
+
+# - taus_BDTJetScore_0
+# - taus_BDTJetScoreSigTrans_0
+# - taus_JetBDTSigLoose_0
+# - taus_JetBDTSigMedium_0
+# - taus_JetBDTSigTight_0
+
+# - taus_RNNJetScore_0
+# - taus_RNNJetScoreSigTrans_0
+# - taus_JetRNNSigMedium_0
+# - taus_JetRNNSigTight_0
+
+# - taus_DL1r_0
+# - taus_passEleBDT_0
+# - nJets_OR_DL1r_77
+
+# Should these also be removed?
+- passPLIVTight_0
+- passPLIVTight_1
+
+- taus_numTrack_0
+- taus_fromPV_0
+- taus_passJVT_0
+- taus_passEleOLR_0
+- DeltaR_min_lep_jet
+- DeltaR_min_lep_jet_fwd
+- dEta_maxMjj_frwdjet
+- dilep_type
+- DRll01
+- eta_frwdjet
+
+- HT
+- HT_fwdJets
+- HT_inclFwdJets
+- HT_lep
+
+# - jet_eta0
+# - jet_eta1
+# - jet_eta2
+- jets_eta
+
+# - jet_pt0
+# - jet_pt1
+- jets_pt
+
+# - lep_DFCommonAddAmbiguity_0
+# - lep_DFCommonAddAmbiguity_1
+- lep_ambiguityType_0
+- lep_ambiguityType_1 # Probably these are a valid replacement
+
+- lep_E_0
+- lep_E_1
+- lep_Eta_0
+- lep_Eta_1
+- lep_EtaBE2_0
+- lep_EtaBE2_1
+- lep_ID_0
+- lep_ID_1
+- lep_Mtrktrk_atConvV_CO_0
+- lep_Mtrktrk_atConvV_CO_1
+- lep_Mtrktrk_atPV_CO_0
+- lep_Mtrktrk_atPV_CO_1
+- lep_nInnerPix_0
+- lep_nInnerPix_1
+- lep_nTrackParticles_0
+- lep_nTrackParticles_1
+- lep_Phi_0
+- lep_Phi_1
+- lep_Pt_0
+- lep_Pt_1
+- lep_sigd0PV_0
+- lep_sigd0PV_1
+- lep_Z0SinTheta_0
+- lep_Z0SinTheta_1
+- max_eta
+- met_met
+- met_phi
+- minDeltaR_LJ_0
+- minDeltaR_LJ_1
+- minDeltaR_LJ_2
+- mjjMax_frwdJet
+- MLepMet
+- Mll01
+- MtLepMet
+
+# - nFwdJets_OR_TauOR
+- nFwdJets_OR # <<-- nFwdJets_OR_TauOR  <<-- replaced
+# - nJets_OR_TauOR
+- nJets_OR # <<-- nJets_OR_TauOR     <<-- replaced
+
+- nTaus_OR_Pt25
+- Ptll01
+- sumPsbtag
+- total_charge

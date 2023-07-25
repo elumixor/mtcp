@@ -41,7 +41,7 @@ class Connection:
         return f"export MTCP_ROOT={self.root}/mtcp && \\\n" + \
             f"export MTCP_ARTIFACTS_DIR=$MTCP_ROOT/artifacts && \\\n" + \
             f"export MTCP_JOBS_DIR=$MTCP_ROOT/jobs && \\\n" + \
-            f"export MTCP_TREX_DIR=$MTCP_ROOT/jobs && \\\n" + \
+            f"export MTCP_TREX_DIR=$MTCP_ROOT/trex-fitter && \\\n" + \
             f"export MTCP_CLUSTER={self.cluster} && \\\n"
 
     def open(self):
@@ -96,7 +96,7 @@ class Connection:
                 # If it doesn't, clone the repo
                 self.log(red("Repo does not exist or is corrupted."), orange("Performing clean clone..."))
                 result = self.run_command("rm -rf $MTCP_ROOT && \\\n" +
-                                          "git clone https://github.com/elumixor/mtcp.git $MTCP_ROOT", debug=debug)
+                                          "git clone git@github.com:elumixor/mtcp.git $MTCP_ROOT", debug=debug)
                 if not result.success:
                     raise Exception(f"Failed to clone the repo.\n{result.stderr}")
 

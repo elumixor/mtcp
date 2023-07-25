@@ -1,0 +1,26 @@
+trex_config: ./configs/pre-fit.config
+region: "lep-pt-0"
+output_path: "output"
+samples:
+    - ttH
+    - ttW
+    - ttW_EW
+    - ttZ
+    - ttbar
+    - VV
+    - tZ
+    - WtZ
+    - tW
+    - threeTop
+    - fourTop
+    - ggVV
+    - VVV
+    - VH
+    - WttW
+    - tHjb
+    - tWH
+n_jets: 6
+features: ./features/merged.yaml
+categorical_features: ./features/categorical.yaml
+array_features: ./features/array.yaml
+invalid_values: ./features/invalid.yaml

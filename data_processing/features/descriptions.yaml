@@ -1,0 +1,93 @@
+jets_eta: The pseudorapidity of the jets (array).
+jets_pt: The transverse momentum of the jets (array).
+jets_e: The energy of the jets (array).
+jets_phi: The azimuthal angle (in radians) of the jets (array).
+
+max_eta: The maximum pseudorapidity among all particles in the event.
+met_met: The missing transverse energy in the event.
+met_phi: The azimuthal angle of the missing transverse energy in the event.
+
+HT: The scalar sum of the transverse momenta of all jets in the event.
+HT_fwdJets: The scalar sum of the transverse momenta of all forward jets in the event.
+HT_inclFwdJets: The scalar sum of the transverse momenta of all jets, including forward jets, in the event.
+HT_jets: The scalar sum of the transverse momenta of all jets (not forward jets) in the event.
+HT_lep: The scalar sum of the transverse momenta of all leptons in the event.
+HT_taus: Scalar sum of the transverse momenta (Pt) of all tau leptons in the event.
+
+best_Z_Mll: The invariant mass of the dilepton system that is closest to the Z boson mass.
+DeltaR_min_lep_jet: The minimum ΔR distance between a lepton and a jet in the event.
+DeltaR_min_lep_jet_fwd: The minimum ΔR distance between a lepton and a forward jet in the event.
+dEta_maxMjj_frwdjet: The maximum difference in pseudorapidity (η) between two forward jets.
+dilep_type: The type of dilepton event (e.g., ee, μμ, eμ).
+DRll01: The ΔR distance between the two leading leptons.
+eta_frwdjet: The pseudorapidity of the forward jet.
+minOSMll: The minimum invariant mass of oppositely-signed dilepton pairs.
+minOSSFMll: The minimum invariant mass of oppositely-signed, same-flavor dilepton pairs.
+mjjMax_frwdJet: The maximum invariant mass of a pair of forward jets.
+MLepMet: The invariant mass of a lepton and the missing transverse energy vector.
+Mll01: The invariant mass of the two leading leptons.
+Mlll012: The invariant mass of the three leading leptons.
+Mllll0123: The invariant mass of the four leading leptons.
+MtLepMet: The transverse mass of a lepton and the missing transverse energy vector.
+nFwdJets_OR: The number of overlapping-removed forward jets.
+nJets_OR: The number of overlapping-removed jets.
+nTaus_OR_Pt25: The number of overlapping-removed taus with a transverse momentum above 25 GeV.
+Ptll01: The transverse momentum of the dilepton system made up of the two leading leptons.
+sumPsbtag: The sum of b-tagging weights for jets in the event.
+total_charge: The sum of the electric charges of the particles in the event.
+total_leptons: The total number of leptons in the event.
+lep_E_X: The energy of the Xth lepton.
+lep_Eta_X: The pseudorapidity of the Xth lepton.
+lep_EtaBE2_X: The pseudorapidity of the Xth lepton in the second layer of the electromagnetic calorimeter.
+lep_ID_X: The identification number for the Xth lepton.
+lep_Phi_X: The azimuthal angle (in radians) of the Xth lepton.
+lep_Pt_X: The transverse momentum of the Xth lepton.
+lep_Z0SinTheta_X: The z0 impact parameter times the sine of the lepton's polar angle.
+minDeltaR_LJ_X: The minimum ΔR distance between the Xth lepton and any jet in the event.
+lep_nTrackParticles_X: The number of track particles associated with the Xth lepton.
+
+taus_passEleOLR_X: A boolean flag indicating whether the Xth tau passes the electron overlap removal.
+taus_decayMode_X: The decay mode of the Xth tau.
+taus_phi_X: The azimuthal angle (in radians) of the Xth tau.
+taus_charge_X: The charge of the Xth tau.
+taus_fromPV_X: A boolean flag indicating whether the Xth tau comes from the primary vertex.
+taus_eta_X: The pseudorapidity of the Xth tau.
+taus_pt_X: The transverse momentum of the Xth tau.
+taus_numTrack_X: The number of tracks associated with the Xth tau.
+taus_width_X: The width of the Xth tau.
+best_Z_other_Mll: The invariant mass of the dilepton system that is closest to the Z boson mass, not considering the leading leptons.
+taus_passJVT_X: A boolean flag indicating whether the Xth tau passes the jet vertex tightness (JVT) requirement.
+
+# The DL1r score is a type of b-tagging score used in high energy physics, and specifically in ATLAS and CMS experiments
+# at the Large Hadron Collider (LHC).
+
+# "B-tagging" is the process of identifying jets that originated from b-quarks, also known as "b-jets". This is
+# important because many processes of interest in particle physics, such as the production of top quarks or the Higgs
+# boson, often result in b-jets, so being able to identify these jets helps physicists identify these processes.
+
+# The DL1r algorithm is a particular type of b-tagging algorithm that uses a machine learning technique (specifically a
+# type of neural network) to distinguish b-jets from other types of jets. The "DL1r" name stands for "Deep Learning
+# 1-dimensional with a continuous reweighting", where "1-dimensional" means that it provides a single score for each
+# jet, and "continuous reweighting" refers to a technique used to balance the different types of jets in the training
+# data.
+
+# This DL1r score can be used to discriminate between b-jets, c-jets (jets originating from c-quarks), and light jets
+# (jets not originating from b or c quarks). A higher DL1r score means that the algorithm considers the jet more likely
+# to be a b-jet.
+taus_DL1r_X: The DL1r score for the Xth tau.
+
+DRjj_lead: DeltaR between the two leading jets. DeltaR is a distance metric in the η-φ space frequently used in particle physics.
+lep_ambiguityType_X: Type of ambiguity for lepton identification, where X refers to the lepton index. Ambiguity could arise from several factors, such as a single track matching with multiple reconstructed particles.
+flag_JetCleaning_LooseBad: A flag variable indicating whether a jet passes a loose cleaning cut to remove bad or noisy jets from the analysis.
+lep_nInnerPix_X: Number of hits in the inner pixel detector associated with the lepton, where X refers to the lepton index.
+lep_isolationLoose_VarRad_X: Indicates whether a lepton (where X refers to the lepton index) passes an isolation cut with a variable radius. Looser isolation cuts allow more nearby activity in the detector.
+MtLep1Met: Transverse mass between the leading lepton and missing transverse energy. Transverse mass is often used in searches for particles that decay to a lepton and a neutrino.
+nTaus_OR: Number of tau leptons that pass overlap removal. Overlap removal is a step in particle reconstruction where, for instance, an object identified as both a jet and a tau would be considered only as one or the other.
+DeltaR_max_lep_bjet77: The maximum DeltaR value between a lepton and a b-tagged jet. The "77" may refer to the working point of the b-tagging algorithm.
+lep_Mtrktrk_atConvV_CO_X: The invariant mass of track pairs at the conversion vertex for lepton X. This might be related to photon conversions into an electron-positron pair.
+lep_sigd0PV_X: Significance of the transverse impact parameter (d0) of the lepton X with respect to the primary vertex (PV). This is a common variable for distinguishing prompt particles produced in the primary collision from secondary particles produced in a decay.
+best_Z_other_MtLepMet: The transverse mass between the lepton and missing transverse energy for the event that best reconstructs a Z boson using other criteria.
+lep_Mtrktrk_atPV_CO_X: The invariant mass of track pairs at the primary vertex for lepton X. This could be related to certain types of particle decays happening at the primary collision vertex.
+MbX: Invariant mass associated with the leading b-jet in the event
+Mlb: Invariant mass of a lepton and a b-jet.
+passPLIVTight_X: Boolean flag indicating if a lepton with high transverse momentum passes the "tight" criteria of the Prompt Lepton Veto (PLIV), a tool for identifying non-prompt light leptons.
