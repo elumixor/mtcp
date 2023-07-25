@@ -1,0 +1,5 @@
+description: Produce pre-fit plots (n step)
+clusters: [cern]
+condor: true
+command: "$MTCP_JOB_DIR/run.sh"
+artifacts: [$MTCP_JOB_ARTIFACTS_DIR/outputs]
