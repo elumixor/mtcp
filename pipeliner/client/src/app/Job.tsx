@@ -24,6 +24,9 @@ export function Job(props: { cluster: string; jobData: IJobData }) {
     const [jobStatus] = mergeStates(jobStatusResponse, runJobResponse, interruptJobResponse);
 
     useEffect(() => void jobStatusRequest(), [props.cluster, props.jobData.name, deleteArtifactsResponse]);
+    // useEffect(() => {
+    //     if (!jobStatus.success) ...
+    // }, [jobStatus]);
 
     const { artifacts = {} } = jobStatusResponse ?? {};
     const numArtifacts = Object.keys(artifacts).length;

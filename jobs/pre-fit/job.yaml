@@ -1,0 +1,10 @@
+description: Produce pre-fit plots
+clusters: [cern]
+condor: true
+command: "$MTCP_JOB_DIR/run.sh"
+artifacts:
+    - $MTCP_TREX_DIR/outputs/$MTCP_JOB/Plots/lep-pt-0.png
+    - $MTCP_TREX_DIR/outputs/$MTCP_JOB/Plots/lep-pt-1.png
+    - $MTCP_TREX_DIR/outputs/$MTCP_JOB/Plots/n-jets.png
+    - $MTCP_TREX_DIR/outputs/$MTCP_JOB/Plots/n-bjets.png
+    - $MTCP_TREX_DIR/outputs/$MTCP_JOB/Plots/tau-width.png

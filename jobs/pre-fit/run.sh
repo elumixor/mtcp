@@ -7,4 +7,4 @@ source /eos/user/v/vyazykov/TRExFitter/setup.sh # And pray that it works...
 cd $MTCP_ROOT/trex-fitter
 
 # Run the trex-fitter
-trex-fitter n configs/prefit.config
+trex-fitter nwd configs/prefit.config

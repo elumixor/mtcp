@@ -51,7 +51,7 @@ class Server:
 
                         self.send_header('Content-type', 'application/json')
                         self.end_headers()
-                        self.wfile.write(json.dumps(response).encode())
+                        self.wfile.write(json.dumps(response, default=lambda x: x.__dict__).encode())
                         return
 
                 self.send_response(404)
