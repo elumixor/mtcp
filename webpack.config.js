@@ -1,5 +1,7 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const CopyPlugin = require("copy-webpack-plugin");
+
 const root = "./pipeliner/client";
 module.exports = {
     entry: {
@@ -29,6 +31,9 @@ module.exports = {
         new HtmlWebpackPlugin({
             title: "Pipeliner",
             template: `${root}/src/index.html`,
+        }),
+        new CopyPlugin({
+            patterns: [{ from: `${root}/icons`, to: "icons" }],
         }),
     ],
     resolve: {

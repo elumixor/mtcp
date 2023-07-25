@@ -40,7 +40,8 @@ class Connection:
     def exports(self):
         return f"export MTCP_ROOT={self.root}/mtcp && \\\n" + \
             f"export MTCP_ARTIFACTS_DIR=$MTCP_ROOT/artifacts && \\\n" + \
-            f"export MTCP_JOBS=$MTCP_ROOT/jobs && \\\n" + \
+            f"export MTCP_JOBS_DIR=$MTCP_ROOT/jobs && \\\n" + \
+            f"export MTCP_TREX_DIR=$MTCP_ROOT/jobs && \\\n" + \
             f"export MTCP_CLUSTER={self.cluster} && \\\n"
 
     def open(self):

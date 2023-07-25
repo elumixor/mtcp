@@ -37,10 +37,10 @@ class Job:
 
     @property
     def exports(self):
-        return f"export MTCP_JOB={self.name}" + \
-            f" && export MTCP_JOB_DIR=$MTCP_JOBS/$MTCP_JOB" + \
-            f" && export MTCP_JOB_ARTIFACTS_DIR=$MTCP_JOB_DIR/artifacts" + \
-            f" && export MTCP_JOB_LOGS_DIR=$MTCP_JOB_DIR/logs"
+        return f"export MTCP_JOB={self.name} && \\\n" + \
+            f"export MTCP_JOB_DIR=$MTCP_JOBS_DIR/$MTCP_JOB && \\\n" + \
+            f"export MTCP_JOB_ARTIFACTS_DIR=$MTCP_JOB_DIR/artifacts && \\\n" + \
+            f"export MTCP_JOB_LOGS_DIR=$MTCP_JOB_DIR/logs"
 
     @property
     def json(self):

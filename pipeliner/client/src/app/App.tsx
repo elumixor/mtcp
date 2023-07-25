@@ -8,7 +8,7 @@ export function App() {
     const [jobs, setJobs] = useState<IJobData[]>([]);
 
     useEffect(() => {
-        Promise.all([post<string[]>("/clusters"), post<IJobData[]>("/jobs")]).then(([clusters, jobs]) => {
+        Promise.all([post<string[]>("clusters"), post<IJobData[]>("jobs")]).then(([clusters, jobs]) => {
             setClusters(clusters);
             setJobs(jobs);
         });
