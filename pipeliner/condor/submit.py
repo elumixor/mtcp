@@ -8,7 +8,7 @@ from run_command import run_command
 # Get the submission command
 parser = argparse.ArgumentParser()
 parser.add_argument("command", help="The command to submit")
-parser.add_argument("--max-runtime", help="The time (in minute) to run the job for. Default is 30m", default="30")
+parser.add_argument("--max_runtime", help="The time (in minute) to run the job for. Default is 30m", default="30")
 
 args = parser.parse_args()
 command = args.command

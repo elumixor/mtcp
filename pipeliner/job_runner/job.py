@@ -73,7 +73,7 @@ class Job:
 
         color = orange if status_str == "running" else \
             green if status_str == "done" else \
-            red if status_str == "interrupted" \
+            magenta if status_str == "interrupted" \
             else cyan
 
         status_str = color(status_str)
