@@ -12,7 +12,7 @@ parser.add_argument("--max_runtime", help="The time (in minute) to run the job f
 
 args = parser.parse_args()
 command = args.command
-max_runtime = args.max_runtime * 60
+max_runtime = int(args.max_runtime) * 60
 
 # Get the job dir from the env
 mtcp_folder = os.environ["MTCP_ROOT"]
