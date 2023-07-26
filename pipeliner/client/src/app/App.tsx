@@ -7,19 +7,31 @@ export function App() {
     const [clusters, setClusters] = useState<string[]>([]);
     const [jobs, setJobs] = useState<IJobData[]>([]);
 
-    useEffect(() => {
-        Promise.all([post<string[]>("clusters"), post<IJobData[]>("jobs")]).then(([clusters, jobs]) => {
-            setClusters(clusters);
-            setJobs(jobs);
-        });
-    }, []);
+    const update = async () => {
+        const [clusters, jobs] = await Promise.all([post<string[]>("clusters"), post<IJobData[]>("jobs")]);
+
+        setClusters(clusters);
+        setJobs(jobs);
+    };
+
+    const sync = async () => {
+        setClusters([]);
+        setJobs([]);
+
+        const status = await post("git_sync", { debug: true });
+        console.log(status);
+
+        await update();
+    };
+
+    useEffect(() => void update(), []);
 
     return (
         <>
             <h1>
                 Pipeliner
                 <br />
-                <button onClick={() => post("git_sync", { debug: true })}>Sync</button>
+                <button onClick={sync}>Sync</button>
             </h1>
             <div id="clusters">
                 {/* <Cluster name="[local]" key="[local]" jobs={[]} /> */}
