@@ -39,9 +39,9 @@ class Connector:
         if cluster:
             try:
                 self[cluster].git_sync(debug=debug)
-                return { "success": True, cluster.name: dict(success=True) }
+                return { "success": True, cluster: dict(success=True) }
             except Exception as e:
-                return { "success": False, cluster.name: dict(success=False, message=str(e)) }
+                return { "success": False, cluster: dict(success=False, message=str(e)) }
 
         # If cluster is not specified, then sync everything.
 
