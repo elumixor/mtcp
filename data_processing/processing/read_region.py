@@ -1,4 +1,6 @@
 
+from __future__ import annotations
+
 from tqdm import tqdm
 import uproot
 import awkward as ak
