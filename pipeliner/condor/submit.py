@@ -1,11 +1,18 @@
 import sys
 import os
 import json
+import argparse
 
 from run_command import run_command
 
 # Get the submission command
-command = sys.argv[1]
+parser = argparse.ArgumentParser()
+parser.add_argument("command", help="The command to submit")
+parser.add_argument("--max-runtime", help="The time (in minute) to run the job for. Default is 30m", default="30")
+
+args = parser.parse_args()
+command = args.command
+max_runtime = args.max_runtime * 60
 
 # Get the job dir from the env
 mtcp_folder = os.environ["MTCP_ROOT"]
@@ -31,11 +38,6 @@ os.system(f"rm -rf {logs_home_folder}/*")
 
 # Copy the `on_done.py` script to the condor home folder
 on_done_file = os.path.join(mtcp_folder, "pipeliner/condor/on_done.py")
-on_done_home_file = os.path.join(condor_home_folder, "on_done.py")
-os.system(f"cp {on_done_file} {on_done_home_file}")
-
-# Make the `on_done.py` script executable
-os.system(f"chmod +x {on_done_home_file}")
 
 # Create the command home folder if it doesn't exist
 command_home_folder = os.path.join(job_home_folder, "commands")
@@ -67,8 +69,8 @@ initialdir            = {job_home_folder}
 getenv                = MTCP*
 
 +JobFlavour           = "espresso"
++MaxRuntime           = {max_runtime}
 
-# transfer_input_files  = {on_done_home_file}
 +PostCmd              = "/usr/bin/python3"
 +PostArguments        = "{on_done_file} {job_folder}"
 

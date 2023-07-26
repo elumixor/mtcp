@@ -29,7 +29,15 @@ class Job:
         self.allowed_clusters = job_config.clusters
         self.command = job_config.command
         self.artifacts = job_config.artifacts
-        self.condor = True if "condor" in job_config and job_config.condor else False
+
+        if "condor" in job_config:
+            if isinstance(job_config.condor, bool):
+                self.condor = dict(used=True, params={}) if job_config.condor else dict(used=False)
+            else:
+                self.condor = dict(used=True, params=job_config.condor)
+        else:
+            self.condor = dict(used=False)
+
         self.connector = inject(Connector)
 
     def __repr__(self):
@@ -83,10 +91,12 @@ class Job:
 
         self.log("Running the job...", cluster=cluster)
 
-        use_condor = self.condor and cluster == "cern"
+        use_condor = self.condor['used'] and cluster == "cern"
         if use_condor:
             self.log("Submitting to condor", cluster=cluster)
             condor_cmd = " python3 $MTCP_ROOT/pipeliner/condor/submit.py"
+            for key, value in self.condor['params'].items():
+                condor_cmd += f" --{key} {value}"
         else:
             condor_cmd = ""
 
