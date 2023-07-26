@@ -59,7 +59,7 @@ li {
 .job {
     position: relative;
     margin: 10px;
-    padding: 10px;
+    padding: 15px 20px;
     border: 1px solid #ccc;
     border-radius: 15px;
     width: 300px;
@@ -68,7 +68,14 @@ li {
     transition: all 0.2s ease-in-out;
 
     &.running {
-        border-color: #ffc107;
+        box-shadow: 0 0 10px 0 rgba(255, 230, 3, 0.35);
+    }
+
+    &.missing {
+        box-shadow: 0 0 10px 0 rgba(128, 128, 128, 0.538);
+        background-color: #eeeeee;
+        filter: saturate(0.3) brightness(1.2) contrast(0.3);
+        pointer-events: none;
     }
 
     &:hover {
@@ -85,6 +92,7 @@ li {
 
 .job-title {
     text-transform: capitalize;
+    margin: 5px 0;
 }
 
 .job-info {

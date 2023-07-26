@@ -1,0 +1,19 @@
+description: Process the nominal n-tuples into the numpy arrays for NN training.
+clusters: [cern]
+condor: true
+command: "$MTCP_JOB_DIR/run.sh"
+artifacts:
+    - $MTCP_ROOT/data_processing/output/event_numbers.npy
+    - $MTCP_ROOT/data_processing/output/map_categorical.npy
+    - $MTCP_ROOT/data_processing/output/x_categorical.npy
+    - $MTCP_ROOT/data_processing/output/x_continuous.npy
+    - $MTCP_ROOT/data_processing/output/y.npy
+    - $MTCP_ROOT/data_processing/output/w.npy
+    - $MTCP_ROOT/data_processing/output/mean.npy
+    - $MTCP_ROOT/data_processing/output/std.npy
+    - $MTCP_ROOT/data_processing/output/selected.npy
+    - $MTCP_ROOT/data_processing/output/x_names_categorical.npy
+    - $MTCP_ROOT/data_processing/output/x_names_continuous.npy
+    - $MTCP_ROOT/data_processing/output/y_names.npy
+    - $MTCP_ROOT/data_processing/output/map_categorical.npy
+    - $MTCP_ROOT/data_processing/output/event_numbers.npy

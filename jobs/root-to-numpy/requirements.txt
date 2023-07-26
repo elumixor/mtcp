@@ -1,0 +1,6 @@
+tqdm
+uproot
+awkward
+PyYAML
+autoroot
+autorootcwd

@@ -1,16 +1,17 @@
 import React from "react";
 import { ReactSVG } from "react-svg";
+import { JobRunState } from "responses";
 
-export function StatusIcon(props: { status: "..." | "not_started" | "done" | "warn" | "running" | "interrupted" }) {
-    const cssStatus = props.status === "..." ? "retrieving" : props.status;
+export function StatusIcon({ status }: { status: "..." | "warn" | JobRunState }) {
+    const cssStatus = status === "..." ? "retrieving" : status === "missing" ? "interrupted" : status;
     const className = "status-icon " + cssStatus;
-    const statusText = props.status.replace("_", " ");
+    const statusText = status.replace("_", " ");
     const svg =
-        props.status === "not_started" ? (
+        status === "not_started" ? (
             <ReactSVG src="icons/not-started.svg" className={className} />
-        ) : props.status === "done" ? (
+        ) : status === "done" ? (
             <ReactSVG src="icons/done.svg" className={className} />
-        ) : props.status === "running" || props.status === "..." ? (
+        ) : status === "running" || status === "..." ? (
             <ReactSVG src="icons/running.svg" className={className} />
         ) : (
             <ReactSVG src="icons/warning.svg" className={className} />
@@ -19,7 +20,7 @@ export function StatusIcon(props: { status: "..." | "not_started" | "done" | "wa
     return (
         <div className="status-container">
             {svg}
-            {props.status === "..." ? (
+            {status === "..." ? (
                 <span className="status-text retrieving">Retrieving status...</span>
             ) : (
                 <span className={"status-text " + cssStatus}>{statusText}</span>

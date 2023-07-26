@@ -1,6 +1,5 @@
 import paramiko
 from dataclasses import dataclass
-import json
 
 from pipeliner.utils import DotDict, green, yellow, red, cyan, orange
 
@@ -19,9 +18,9 @@ class Result:
         yield self.exit_code
 
 
-class Connection:
+class Cluster:
     def __init__(self, cluster: str, config: DotDict):
-        self.cluster = cluster
+        self.name = cluster
         self.hostname = config.hostname
         self.port = config.port
         self.username = config.username
@@ -42,7 +41,7 @@ class Connection:
             f"export MTCP_ARTIFACTS_DIR=$MTCP_ROOT/artifacts && \\\n" + \
             f"export MTCP_JOBS_DIR=$MTCP_ROOT/jobs && \\\n" + \
             f"export MTCP_TREX_DIR=$MTCP_ROOT/trex-fitter && \\\n" + \
-            f"export MTCP_CLUSTER={self.cluster} && \\\n"
+            f"export MTCP_CLUSTER={self.name} && \\\n"
 
     def open(self):
         if self.is_connected:
@@ -169,7 +168,7 @@ class Connection:
         self.is_connected = False
 
     def log(self, *args, **kwargs):
-        print(orange(f"[{self.cluster}]"), *args, **kwargs)
+        print(orange(f"[{self.name}]"), *args, **kwargs)
 
     def print_result(self, cmd: str, stdout: str, stderr: str, exit_code, log_command=False):
         # Print command

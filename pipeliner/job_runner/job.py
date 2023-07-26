@@ -74,7 +74,7 @@ class Job:
 
     def run_command(self, command: str, cluster: str, debug=False):
         result = self.connector[cluster].run_command(f"{self.exports} && \\\n{command}", debug=debug)
-        self.log(green("Success") if result.success else red("Failed"), cluster=cluster, error=not result.success)
+        # self.log(green("Success") if result.success else red("Failed"), cluster=cluster, error=not result.success)
         return result
 
     def run(self, cluster: str, clean=True, debug=False):
@@ -102,6 +102,11 @@ class Job:
     def check_status(self, cluster: str, debug=False):
         self.log("Checking status...", cluster=cluster)
 
+        # Check if the job-file is even present
+        result = self.run_command(f"ls $MTCP_JOB_DIR/job.yaml", cluster, debug=debug)
+        if not result.success:
+            return dict(status="missing")
+
         result = self.run_command(f"python3 $MTCP_ROOT/pipeliner/condor/check_status.py", cluster, debug=debug)
 
         if result.success:
@@ -119,16 +124,12 @@ class Job:
         return json.loads(stdout) if success else dict(error=exit_code, message=stderr)
 
     def delete_artifacts(self, cluster: str, debug=False):
-        results = {}
-
         artifacts_str = ", ".join([cyan(f"\"{artifact}\"") for artifact in self.artifacts])
         self.log(f"Deleting artifacts: {artifacts_str}", cluster=cluster)
 
+        results = {}
         for artifact in self.artifacts:
             result = self.run_command(f"rm -rf {artifact}", cluster, debug=debug)
-
-        if result.success:
-            self.log(green("Deleted") + " " + cyan(f"\"{artifact}\""), cluster=cluster)
             results[artifact] = not result.success
 
         return results

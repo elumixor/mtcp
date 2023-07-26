@@ -25,8 +25,8 @@ class Api:
         return {"connected": self.connector[cluster].open()}
 
     @post("/git_sync")
-    def git_sync(self, cluster, debug=False):
-        return self.connector[cluster].git_sync(debug=debug)
+    def git_sync(self, cluster=None, debug=False):
+        return self.connector.sync(cluster=cluster, debug=debug)
 
     @post("/job_status")
     def job_status(self, job, cluster, debug=False):

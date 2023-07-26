@@ -1,6 +1,5 @@
 import sys
 import os
-import subprocess
 import json
 
 from run_command import run_command
@@ -80,6 +79,11 @@ queue
 submit_file = os.path.join(job_folder, "condor_submit.sub")
 with open(submit_file, "w") as f:
     f.write(stdin_command)
+
+# Check if the pre-condor.sh file exists. If it does, run it
+pre_condor_file = os.path.join(job_folder, "pre-condor.sh")
+if os.path.exists(pre_condor_file):
+    run_command(f"bash {pre_condor_file}")
 
 # Call the condor_submit with the file
 stdout = run_command(f"condor_submit -terse {submit_file}")

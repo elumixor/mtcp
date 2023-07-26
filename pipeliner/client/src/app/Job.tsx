@@ -62,12 +62,16 @@ export function Job(props: { cluster: string; jobData: IJobData }) {
     const [artifactsShown, setArtifactsShown] = useState(true);
 
     return (
-        <div className="job">
-            <ReactSVG
-                className={"button job-refresh" + (blocked ? " disabled" : "")}
-                onClick={jobStatusRequest}
-                src="icons/refresh.svg"
-            />
+        <div className={`job ${status}`}>
+            {status === "missing" || status === "..." ? (
+                <></>
+            ) : (
+                <ReactSVG
+                    className={"button job-refresh" + (blocked ? " disabled" : "")}
+                    onClick={jobStatusRequest}
+                    src="icons/refresh.svg"
+                />
+            )}
             <div className="flex">
                 <div className="job-info text-left">
                     <h4 className="job-title">{props.jobData.name}</h4>
@@ -75,7 +79,7 @@ export function Job(props: { cluster: string; jobData: IJobData }) {
                 </div>
                 <div className="job-actions text-right">
                     <StatusIcon status={status} />
-                    {status !== "..." ? (
+                    {status !== "..." && status !== "missing" ? (
                         <button disabled={blocked && status !== "running"} onClick={onActionButton}>
                             {status === "done" || status === "interrupted"
                                 ? "Restart"

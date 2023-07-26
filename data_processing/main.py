@@ -1,7 +1,5 @@
 import autorootcwd  # Do not delete - adds the root of the project to the path
 
-import yaml
-import os
 from processing import read_region, process_data, save_data, ConfigParser, read_yaml
 
 

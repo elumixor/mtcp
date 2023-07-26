@@ -16,7 +16,11 @@ export function App() {
 
     return (
         <>
-            <h1>Pipeliner</h1>
+            <h1>
+                Pipeliner
+                <br />
+                <button onClick={() => post("git_sync", { debug: true })}>Sync</button>
+            </h1>
             <div id="clusters">
                 {/* <Cluster name="[local]" key="[local]" jobs={[]} /> */}
                 {clusters.map((cluster) => (
