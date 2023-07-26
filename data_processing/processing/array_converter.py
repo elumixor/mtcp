@@ -7,11 +7,11 @@ from typing import NamedTuple
 
 Data = NamedTuple("Data", [
     ("x", np.ndarray),
-    ("y", list[str] | None),
+    ("y", "list[str] | None"),
     ("w", np.ndarray),
     ("selected", np.ndarray),
     ("x_names", list[str]),
-    ("y_names", list[str] | None),
+    ("y_names", "list[str] | None"),
     ("event_numbers", np.ndarray),
 ])
 

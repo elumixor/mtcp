@@ -9,10 +9,12 @@ from run_command import run_command
 parser = argparse.ArgumentParser()
 parser.add_argument("command", help="The command to submit")
 parser.add_argument("--max_runtime", help="The time (in minute) to run the job for. Default is 30m", default="30")
+parser.add_argument("--max_retries", help="The number of times to retry the job. Default is 1", default="1")
 
 args = parser.parse_args()
 command = args.command
 max_runtime = int(args.max_runtime) * 60
+max_retries = int(args.max_retries)
 
 # Get the job dir from the env
 mtcp_folder = os.environ["MTCP_ROOT"]
@@ -68,11 +70,14 @@ log                   = {logs_home_folder}/log
 initialdir            = {job_home_folder}
 getenv                = MTCP*
 
-+JobFlavour           = "espresso"
 +MaxRuntime           = {max_runtime}
 
 +PostCmd              = "/usr/bin/python3"
 +PostArguments        = "{on_done_file} {job_folder}"
+
+on_exit_remove        = (ExitBySignal == False) && (ExitCode == 0)
+max_retries           = {max_retries}
+
 
 queue
 """

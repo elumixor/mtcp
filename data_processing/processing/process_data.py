@@ -11,15 +11,15 @@ from .array_converter import Data
 ProcessedData = NamedTuple("ProcessedData", [
     ("x_categorical", np.ndarray),
     ("x_continuous", np.ndarray),
-    ("y", list[str] | None),
+    ("y", "list[str] | None"),
     ("w", np.ndarray),
     ("mean", np.ndarray),
     ("std", np.ndarray),
     ("selected", np.ndarray),
     ("x_names_categorical", list[str]),
     ("x_names_continuous", list[str]),
-    ("y_names", list[str] | None),
-    ("map_categorical", dict[str, dict[int, str]] | None),
+    ("y_names", "list[str] | None"),
+    ("map_categorical", "dict[str, dict[int, str]] | None"),
     ("event_numbers", np.ndarray),
 ])
 
