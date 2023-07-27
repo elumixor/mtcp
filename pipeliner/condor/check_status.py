@@ -51,7 +51,7 @@ with open(status_file, "r") as f:
 
 # If the status contains "condor:id", then it is a condor job and we should include more information
 # print(status)
-if "condor" in status and status["status"] != "done":
+if "condor" in status:
     condor = status["condor"]
     condor_id = condor["id"]
 
@@ -62,17 +62,18 @@ if "condor" in status and status["status"] != "done":
             status["condor"]["log"] = f.read().strip()
 
     # If the state is still "running" then we should check the condor's status, otherwise set as done
-    output = run_command(f"condor_q {condor_id} -json")
-    if status["status"] == "running" and output.strip() != "":
-        output = json.loads(output)[0]
+    if status["status"] == "running":
+        output = run_command(f"condor_q {condor_id} -json")
+        if output.strip() != "":
+            output = json.loads(output)[0]
 
-        # Add the condor status to the status
-        job_status = output["JobStatus"]
-        status["condor"]["status"] = "hold" if job_status == 5 else \
-                                     "idle" if job_status == 1 else \
-                                     "running" if job_status == 2 else \
-                                     "done" if job_status == 4 else \
-                                     "error"
+            # Add the condor status to the status
+            job_status = output["JobStatus"]
+            status["condor"]["status"] = "hold" if job_status == 5 else \
+                                        "idle" if job_status == 1 else \
+                                        "running" if job_status == 2 else \
+                                        "done" if job_status == 4 else \
+                                        "error"
     else:
         status["condor"]["status"] = status["status"]
 
