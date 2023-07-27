@@ -1,4 +1,6 @@
-@import "animations";
+@use "animations" as animations;
+@use "colors" as colors;
+@use "variables" as variables;
 
 @mixin no-select {
     user-select: none;
@@ -10,18 +12,18 @@
 }
 
 .button {
-        @include button;
+    @include button;
 }
 
 button {
     @include button;
-    @include popping;
+    @include animations.popping;
 
     color: #fff;
-    background-color: $primary-color;
+    background-color: colors.$button;
     box-shadow: -2px 1px 2px rgba(0, 0, 0, 0.2);
     border: none;
-    border-radius: $border-radius;
+    border-radius: variables.$border-radius;
     padding: 7px 12px;
     margin: 2px;
 

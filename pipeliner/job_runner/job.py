@@ -39,6 +39,7 @@ class Job:
             self.condor = dict(used=False)
 
         self.connector = inject(Connector)
+        self.statuses: dict | None = None
 
     def __repr__(self):
         return f"Job(\"{self.name}\", clusters={self.allowed_clusters})"
@@ -80,12 +81,14 @@ class Job:
 
         self.log(f"Job ID: {cyan(id)}. Status: {status_str}", cluster=cluster)
 
-    def run_command(self, command: str, cluster: str, debug=False):
-        result = self.connector[cluster].run_command(f"{self.exports} && \\\n{command}", debug=debug)
+    def run_command(self, command: str, cluster: str, debug=False, silent=False):
+        result = self.connector[cluster].run_command(f"{self.exports} && \\\n{command}", debug=debug, silent=silent)
         # self.log(green("Success") if result.success else red("Failed"), cluster=cluster, error=not result.success)
         return result
 
     def run(self, cluster: str, clean=True, debug=False):
+        self.statuses = None
+
         if clean:
             self.delete_artifacts(cluster)
 
@@ -112,26 +115,29 @@ class Job:
     def check_status(self, debug=False):
         self.log("Checking status...")
 
-        statuses = {}
+        if self.statuses is None:
+            statuses = {}
 
-        for cluster in self.allowed_clusters:
-            # Check if the job-file is even present
-            result = self.run_command(f"ls $MTCP_JOB_DIR/job.yaml", cluster, debug=debug)
-            if not result.success:
-                statuses[cluster] = dict(status="missing")
-                continue
+            for cluster in self.connector.cluster_names:
+                # Check if the job-file is even present
+                job_exists = self.check_file(f"$MTCP_JOB_DIR/job.yaml", cluster, debug=debug)
+                if not job_exists:
+                    statuses[cluster] = dict(status="missing")
+                    continue
 
-            result = self.run_command(f"python3 $MTCP_ROOT/pipeliner/condor/check_status.py", cluster, debug=debug)
+                result = self.run_command(f"python3 $MTCP_ROOT/pipeliner/condor/check_status.py", cluster, debug=debug)
 
-            if result.success:
-                status = json.loads(result.stdout)
-                self.log_condor_status(cluster, status)
+                if result.success:
+                    status = json.loads(result.stdout)
+                    self.log_condor_status(cluster, status)
 
-                statuses[cluster] = status
-            else:
-                statuses[cluster] = dict(status="error", error=result.exit_code, message=result.stderr)
+                    statuses[cluster] = status
+                else:
+                    statuses[cluster] = dict(status="error", error=result.exit_code, message=result.stderr)
 
-        return statuses
+            self.statuses = statuses
+
+        return self.statuses
 
     def interrupt(self, cluster: str, debug=False):
         self.log("Interrupting...", cluster=cluster)
@@ -149,3 +155,32 @@ class Job:
             results[artifact] = not result.success
 
         return results
+
+    def check_file(self, file: str, cluster: str, debug=False):
+        result = self.run_command(f"ls {file}", cluster, debug=debug, silent=True)
+        return result.success
+
+    def delete_artifact(self, artifact, cluster, debug=False):
+        self.log(f"Deleting artifact: {cyan(artifact)} from {orange(cluster)}")
+        result = self.run_command(f"rm -rf {artifact}", cluster, debug=debug)
+
+        if result.success and self.statuses is not None:
+            self.statuses[cluster]["artifacts"][artifact] = False
+
+        return result
+
+    def download_artifact(self, artifact, cluster_to, cluster_from, debug=False):
+        self.log(f"Downloading artifact: {cyan(artifact)} from {orange(cluster_from)} to {orange(cluster_to)}")
+
+        cluster_to = self.connector[cluster_to]
+        cluster_from = self.connector[cluster_from]
+
+        try:
+            cluster_from.transfer_file(artifact, cluster_to, exports=self.exports, debug=debug)
+
+            if self.statuses is not None:
+                self.statuses[cluster_to.name]["artifacts"][artifact] = True
+
+            return dict(success=True)
+        except Exception as e:
+            return dict(success=False, message=str(e))

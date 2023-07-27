@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from time import sleep
 import paramiko
 from dataclasses import dataclass
@@ -68,7 +70,45 @@ class Cluster:
 
         return self.is_connected
 
-    def run_command(self, command: str, root=None, debug=False):
+    def transfer_file(self, file: str, cluster_to: Cluster, exports="", debug=False):
+        with self, cluster_to:
+            # First, we need to substitute all of the environment variables in the file
+            result = self.run_command(f"{exports} && \\\n" + \
+                                      f"echo {file}", debug=debug)
+            file_from = result.stdout.strip()
+
+            if debug:
+                self.log(f"Transferring {file_from} to {cluster_to.name}")
+
+            # Same for the file on the remote cluster
+            result = cluster_to.run_command(f"{exports} && \\\n" + \
+                                            f"echo {file}", debug=debug)
+            file_to = result.stdout.strip()
+
+            if debug:
+                cluster_to.log(f"File will be saved to {file_to}")
+
+            # We need to mkdir -p $(dirname $file_to) on the remote cluster in order to create the directory
+            # if it doesn't exist
+            result = cluster_to.run_command(f"{exports} && \\\n" + \
+                                            f"mkdir -p $(dirname {file_to})", debug=debug)
+            if not result.success:
+                raise Exception(f"Failed to create directory on remote cluster.\n{result.stderr}")
+
+            self_sftp = self.client.open_sftp()
+            cluster_to_sftp = cluster_to.client.open_sftp()
+
+            with self_sftp.open(file_from, "r") as local_file:
+                with cluster_to_sftp.open(file_to, "w") as remote_file:
+                    remote_file.write(local_file.read())
+
+            self_sftp.close()
+            cluster_to_sftp.close()
+
+            if debug:
+                self.log(green(f"Successfully transferred {file_from} to {cluster_to.name}"))
+
+    def run_command(self, command: str, root=None, stdin=None, debug=False, silent=False):
         if not self.is_connected:
             self.open()
 
@@ -79,7 +119,13 @@ class Cluster:
 
         # Run the command, get stdin, stdout, stderr
         command = f"{self.exports}{root_cmd}{command}"
-        _, stdout, stderr = self.client.exec_command(command)
+        stdin_, stdout, stderr = self.client.exec_command(command)
+
+        # If stdin is provided, write it to stdin
+        if stdin is not None:
+            stdin_.write(stdin)
+            stdin_.flush()
+            stdin_.channel.shutdown_write()
 
         # Get the exit code
         exit_code = stdout.channel.recv_exit_status()
@@ -90,7 +136,7 @@ class Cluster:
 
         success = exit_code == 0
 
-        if debug or not success:
+        if debug or (not silent and not success):
             self.print_result(command, stdout, stderr, exit_code, log_command=True)
 
         return Result(success, stdout, stderr, exit_code)

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import {
-    ArtifactsResponse,
+    IActionResponse,
     IConnectResponse,
     IGitSyncResponse,
     IJobData,
@@ -9,13 +9,17 @@ import {
 } from "responses";
 
 export interface IServerApi {
+    clusters(): string[];
     jobs(): IJobData[];
     connect(params: Params<{ cluster: string }>): IConnectResponse;
     git_sync(params?: Params<{ cluster?: string }>): IGitSyncResponse;
     job_status(params: Params<{ job: string }>): JobStatusesResponse;
     run_job(params: Params<{ cluster: string; job: string }>): IJobStatusResponse;
     interrupt_job(params: Params<{ cluster: string; job: string }>): IJobStatusResponse;
-    delete_artifacts(params: Params<{ cluster: string; job: string }>): ArtifactsResponse;
+    delete_artifact(params: Params<{ cluster: string; job: string; artifact: string }>): IActionResponse;
+    download_artifact(
+        params: Params<{ cluster_from: string; cluster_to: string; job: string; artifact: string }>,
+    ): IActionResponse;
 }
 
 // Adds the "debug" optional option

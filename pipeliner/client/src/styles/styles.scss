@@ -1,4 +1,6 @@
-@import "variables", "animations", "fonts";
+@use "fonts" as fonts;
+@import "variables";
+@import "disabled";
 @import "tag";
 @import "button";
 @import "job";
@@ -6,7 +8,7 @@
 
 // Styles
 body {
-    font-family: $font-family;
+    @include fonts.normal;
     margin: 0;
     padding: 0;
 }
@@ -29,22 +31,6 @@ body {
     border-radius: 15px;
     padding: 10px;
 }
-
-
-
-
-:disabled,.disabled {
-    filter: brightness(1.2) saturate(0.5) grayscale(0.4);
-    cursor: not-allowed;
-    pointer-events: none;
-
-    &:hover {
-        cursor: not-allowed;
-    }
-}
-
-
-
 
 .job-refresh {
     width: 20px;
@@ -130,12 +116,6 @@ body {
 
 .flex {
     display: flex;
-}
-
-.ellipsis {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
 }
 
 .text {

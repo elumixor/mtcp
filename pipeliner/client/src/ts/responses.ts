@@ -23,3 +23,7 @@ export interface IJobStatusResponse {
 }
 
 export type JobStatusesResponse = Record<string, IJobStatusResponse>;
+
+export interface IActionResponse {
+    success: boolean;
+}

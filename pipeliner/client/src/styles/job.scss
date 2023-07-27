@@ -46,6 +46,12 @@
         align-items: flex-end;
     }
 
+    &-artifacts-section {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+    }
+
     &-title {
         text-transform: capitalize;
         margin: 5px 0;

@@ -1,6 +1,7 @@
-@import "colors", "variables";
+@use "colors" as colors;
+@use "variables" as variables;
 
-@mixin tag($radius: $border-radius, $color: #e0ce9a) {
+@mixin tag($radius: variables.$border-radius, $color: colors.$neutral) {
     background-color: $color;
     border-radius: $radius;
     padding: 5px 10px;
@@ -12,16 +13,21 @@
 
     &.bad {
         color: white;
-        @include tag($color: $color-bad);
+        @include tag($color: colors.$bad);
     }
 
     &.good {
         color: white;
-        @include tag($color: $color-good);
+        @include tag($color: colors.$good);
     }
 
     &.pending {
         color: white;
-        @include tag($color: $color-pending);
+        @include tag($color: colors.$pending);
+    }
+
+    &.neutral {
+        color: white;
+        @include tag($color: colors.$neutral);
     }
 }

@@ -1,3 +1,7 @@
-@mixin text-code {
+@mixin normal {
+    font-family:  Arial, sans-serif;
+}
+
+@mixin code {
     font-family: JetBrains Mono, monospace;
 }

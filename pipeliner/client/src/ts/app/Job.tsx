@@ -1,49 +1,51 @@
-import React, { useEffect, useState } from "react";
-import { IJobData, IJobStatusResponse } from "responses";
-import { requests } from "server-api";
+import React, { createContext, useContext, useEffect, useState } from "react";
+import { IJobData, IJobStatusResponse, JobStatusesResponse } from "responses";
+import { post, requests } from "server-api";
 import { mergeStates } from "utils";
 import { Artifact } from "./Artifact";
 import { StatusIcon } from "./StatusIcon";
 import { ReactSVG } from "react-svg";
+import { ClustersContext } from "./ClustersContext";
 
 export function Job({ jobData }: { jobData: IJobData }) {
     const jobName = jobData.name;
     const clusters = jobData.clusters;
 
-    const [blocked, states] = requests(
-        { endpoint: "job_status" },
-        { endpoint: "run_job" },
-        { endpoint: "interrupt_job" },
-        { endpoint: "delete_artifacts" },
-    );
+    const allClusters = useContext(ClustersContext);
 
-    const [
-        [jobStatusResponse, jobStatusRequest],
-        [runJobResponse, runJobRequest],
-        [interruptJobResponse, interruptJobRequest],
-        [deleteArtifactsResponse, deleteArtifactsRequest],
-    ] = states;
+    const [jobStatus, setJobStatus] = useState<JobStatusesResponse>();
 
-    const [jobStatus] = mergeStates(runJobResponse, interruptJobResponse);
+    // const [blocked, states] = requests(
+    //     { endpoint: "job_status" },
+    //     { endpoint: "run_job" },
+    //     { endpoint: "interrupt_job" },
+    // );
 
-    useEffect(() => void jobStatusRequest({ job: jobName }), [jobName, deleteArtifactsResponse]);
+    // const [
+    //     [jobStatusResponse, jobStatusRequest],
+    //     [runJobResponse, runJobRequest],
+    //     [interruptJobResponse, interruptJobRequest],
+    // ] = states;
 
-    const jobStatuses = jobStatusResponse
-        ? jobData.clusters.map((cluster) => [cluster, jobStatusResponse[cluster].status] as const)
-        : [];
+    // const [jobStatus] = mergeStates(runJobResponse, interruptJobResponse);
+
+    const getJobStatus = async () => {
+        const status = await post("job_status", { job: jobName });
+        setJobStatus(status);
+    };
+
+    useEffect(() => void getJobStatus(), [jobName]);
 
     const artifacts = jobData.artifacts.map(
         (artifact) =>
             [
                 artifact,
                 Object.fromEntries(
-                    jobData.clusters.map((cluster) => [
-                        cluster,
-                        jobStatusResponse?.[cluster]?.artifacts?.[artifact] ?? null,
-                    ]),
+                    allClusters.map((cluster) => [cluster, jobStatus?.[cluster]?.artifacts?.[artifact] ?? null]),
                 ) as Record<string, boolean | null>,
             ] as const,
     );
+
     const numArtifacts = jobData.artifacts.length;
 
     // const status = jobStatus?.status;
@@ -52,13 +54,13 @@ export function Job({ jobData }: { jobData: IJobData }) {
     // const condorId = jobStatus?.condor?.id;
 
     const onActionButton = (cluster: string, status: string) => {
-        switch (cluster ?? "...") {
+        switch (status) {
             case "done":
             case "interrupted":
             case "not_started":
-                return runJobRequest({ job: jobName, cluster });
+            // return runJobRequest({ job: jobName, cluster });
             case "running":
-                return interruptJobRequest({ job: jobName, cluster });
+            // return interruptJobRequest({ job: jobName, cluster });
         }
     };
 
@@ -94,11 +96,12 @@ export function Job({ jobData }: { jobData: IJobData }) {
                 </div>
                 <div className="job-actions text-right">
                     {/* <StatusIcon status={status} /> */}
-                    {jobStatuses.map(([cluster, status]) =>
-                        status !== "missing" ? (
+                    {clusters.map((cluster) => {
+                        const status = jobStatus?.[cluster]?.status ?? "...";
+                        return status !== "missing" ? (
                             <button
                                 key={cluster}
-                                disabled={blocked && status !== "running"}
+                                disabled={status !== "running"}
                                 onClick={() => onActionButton(cluster, status)}
                             >
                                 {status === "done" || status === "interrupted"
@@ -111,15 +114,8 @@ export function Job({ jobData }: { jobData: IJobData }) {
                             </button>
                         ) : (
                             <></>
-                        ),
-                    )}
-                    {/* {numArtifacts > 0 ? (
-                        <button disabled={blockedDelete} onClick={deleteArtifactsRequest}>
-                            Delete Artifacts
-                        </button>
-                    ) : (
-                        <></>
-                    )} */}
+                        );
+                    })}
                 </div>
             </div>
             {numArtifacts > 0 ? (
@@ -134,7 +130,15 @@ export function Job({ jobData }: { jobData: IJobData }) {
             )}
             <div className="job-artifacts-section">
                 {artifactsShown ? (
-                    artifacts.map(([name, exists]) => <Artifact key={name} artifact={name} exists={exists} />)
+                    artifacts.map(([name, exists]) => (
+                        <Artifact
+                            key={name}
+                            job={jobName}
+                            artifact={name}
+                            exists={exists}
+                            setJobStatus={setJobStatus}
+                        />
+                    ))
                 ) : (
                     <></>
                 )}

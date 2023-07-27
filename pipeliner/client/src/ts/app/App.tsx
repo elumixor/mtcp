@@ -4,13 +4,17 @@ import { IConnectResponse, IJobData } from "responses";
 import { requests } from "server-api";
 import { Job } from "./Job";
 import { ReactSVG } from "react-svg";
+import { ClustersContext } from "./ClustersContext";
+import { all } from "utils";
 
 export function App() {
+    const [clusters, setClusters] = useState<string[]>([]);
     const [jobs, setJobs] = useState<IJobData[]>([]);
     const [blocked, setBlocked] = useState(false);
 
     const update = async () => {
-        const jobs = await post("jobs");
+        const [clusters, jobs] = await all(post("clusters"), post("jobs"));
+        setClusters(clusters);
         setJobs(jobs);
     };
 
@@ -27,23 +31,25 @@ export function App() {
 
     return (
         // {!connected ? (
-        // <></>
-        // ) : (
-        <div className={"jobs" + (blocked ? " disabled alpha-50" : "")}>
-            {jobs.map((job) => (
-                <Job key={job.name} jobData={job} />
-            ))}
-        </div>
+        <>
+            <h1>
+                MTCP
+                <br />
+                <button onClick={sync}>Sync</button>
+            </h1>
+            <ClustersContext.Provider value={clusters}>
+                <div className={"jobs" + (blocked ? " disabled alpha-50" : "")}>
+                    {jobs.map((job) => (
+                        <Job key={job.name} jobData={job} />
+                    ))}
+                </div>
+            </ClustersContext.Provider>
+        </>
         // )}
     );
 
     // return (
     //     <>
-    //         <h1>
-    //             MTCP
-    //             <br />
-    //             <button onClick={sync}>Sync</button>
-    //         </h1>
     //         <div id="clusters">
     //             {clusters.map((cluster) => (
     //                 <Cluster name={cluster} jobs={jobs.filter((job) => job.clusters.includes(cluster))} key={cluster} />

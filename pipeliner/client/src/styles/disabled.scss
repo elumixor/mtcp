@@ -1,0 +1,9 @@
+:disabled,.disabled {
+    filter: brightness(1.2) saturate(0.5) grayscale(0.4);
+    cursor: not-allowed;
+    pointer-events: none;
+
+    &:hover {
+        cursor: not-allowed;
+    }
+}

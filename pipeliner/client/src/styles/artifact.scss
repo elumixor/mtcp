@@ -1,4 +1,6 @@
-@import "fonts", "variables";
+@use "variables" as variables;
+@use "fonts" as fonts;
+@use "animations" as animations;
 
 .artifact {
     display: flex;
@@ -9,6 +11,7 @@
 
     text-align: left;
     min-width: 100%;
+    width: 100%;
     transition: all 0.1s ease-in-out;
     cursor: default;
 
@@ -17,7 +20,7 @@
 
         width: fit-content;
         background-color: #e7e7e7;
-        border-radius: $border-radius;
+        border-radius: variables.$border-radius;
     }
 
     &:hover {
@@ -27,16 +30,41 @@
     }
 
     &-name {
-        border-radius: $border-radius;
+        border-radius: variables.$border-radius;
 
-        @include text-code;
+        @include fonts.code;
 
         font-weight: 800;
         padding: 5px;
         margin: 5px;
+
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    &-statuses {
+        display: flex;
     }
 
     &-exists {
         @extend .tag;
+        display: flex;
+        align-items: center;
+
+    }
+
+    &-image  {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background-color: #00000042;
+        margin: 0px 5px 0 -5px;
+        padding: 2px;
+
+        &.button {
+            @include animations.popping;
+        }
     }
 }

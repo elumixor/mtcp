@@ -1,5 +1,3 @@
-import subprocess
-
 from pipeliner.utils import inject
 from pipeliner.connector import Connector
 from pipeliner.job_runner import JobRunner
@@ -15,6 +13,10 @@ class Api:
     @post("/connect")
     def connect(self, cluster):
         return {"connected": self.connector[cluster].open()}
+
+    @post("/clusters")
+    def get_clusters(self):
+        return self.connector.cluster_names
 
     @post("/jobs")
     def get_jobs(self):
@@ -32,9 +34,13 @@ class Api:
     def interrupt_job(self, job, cluster, debug=False):
         return self.job_runner[job].interrupt(cluster, debug=debug)
 
-    @post("/delete_artifacts")
-    def delete_artifacts(self, job, cluster, debug=False):
-        return self.job_runner[job].delete_artifacts(cluster, debug=debug)
+    @post("/delete_artifact")
+    def delete_artifact(self, artifact, job, cluster, debug=False):
+        return self.job_runner[job].delete_artifact(artifact, cluster, debug=debug)
+
+    @post("/download_artifact")
+    def download_artifact(self, artifact, job, cluster_to, cluster_from, debug=False):
+        return self.job_runner[job].download_artifact(artifact, cluster_to, cluster_from, debug=debug)
 
     @post("/run_job")
     def run_job(self, job, cluster, debug=False):

@@ -1,6 +1,6 @@
 import os
 
-from pipeliner.utils import read_yaml, auto_provided, orange
+from pipeliner.utils import read_yaml, auto_provided, orange, cyan
 
 from .cluster import Cluster
 
@@ -11,26 +11,30 @@ class Connector:
         # Read the ssh.yaml config file
         config = read_yaml(clusters_path)
 
-        self.connections = {
+        self.clusters = {
             key: Cluster(key, value)
             for key, value in config.items()
         }
 
-        for name, connection in self.connections.items():
+        for name, connection in self.clusters.items():
             setattr(self, name, connection)
 
     def __enter__(self):
         return self
 
     def __exit__(self, exc_type, exc_value, traceback):
-        for connection in self.connections.values():
+        for connection in self.clusters.values():
             connection.close()
 
     def __getitem__(self, key):
-        return self.connections[key]
+        return self.clusters[key]
 
     def __iter__(self):
-        yield from self.connections.values()
+        yield from self.clusters.values()
+
+    @property
+    def cluster_names(self):
+        return list(self.clusters.keys())
 
     def log(self, *args, **kwargs):
         print(orange(f"[local]"), *args, **kwargs)
