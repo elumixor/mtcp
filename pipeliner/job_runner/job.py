@@ -109,23 +109,29 @@ class Job:
 
         return result
 
-    def check_status(self, cluster: str, debug=False):
-        self.log("Checking status...", cluster=cluster)
+    def check_status(self, debug=False):
+        self.log("Checking status...")
 
-        # Check if the job-file is even present
-        result = self.run_command(f"ls $MTCP_JOB_DIR/job.yaml", cluster, debug=debug)
-        if not result.success:
-            return dict(status="missing")
+        statuses = {}
 
-        result = self.run_command(f"python3 $MTCP_ROOT/pipeliner/condor/check_status.py", cluster, debug=debug)
+        for cluster in self.allowed_clusters:
+            # Check if the job-file is even present
+            result = self.run_command(f"ls $MTCP_JOB_DIR/job.yaml", cluster, debug=debug)
+            if not result.success:
+                statuses[cluster] = dict(status="missing")
+                continue
 
-        if result.success:
-            status = json.loads(result.stdout)
-            self.log_condor_status(cluster, status)
+            result = self.run_command(f"python3 $MTCP_ROOT/pipeliner/condor/check_status.py", cluster, debug=debug)
 
-            return status
+            if result.success:
+                status = json.loads(result.stdout)
+                self.log_condor_status(cluster, status)
 
-        return result
+                statuses[cluster] = status
+            else:
+                statuses[cluster] = dict(status="error", error=result.exit_code, message=result.stderr)
+
+        return statuses
 
     def interrupt(self, cluster: str, debug=False):
         self.log("Interrupting...", cluster=cluster)

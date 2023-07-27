@@ -1,0 +1,42 @@
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(-360deg);
+    }
+}
+
+@keyframes blink {
+    0% {
+        opacity: 1
+    }
+    50% {
+        opacity: 0
+    }
+    100% {
+        opacity: 1
+    }
+}
+
+@mixin blink($duration: 1s) {
+    animation: blink $duration infinite;
+}
+
+.blink {
+    @include blink;
+}
+
+@mixin popping {
+    transition: all 0.2s cubic-bezier(0.165, 0.84, 0.44, 1);
+
+    &:not(:disabled):not(.disabled):hover {
+        transform: translate(2px, -2px) scale(1.05);
+        filter: brightness(1.05) contrast(1.05);
+        cursor: pointer;
+    }
+}
+
+.popping {
+    @include popping;
+}

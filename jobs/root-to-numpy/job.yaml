@@ -5,8 +5,6 @@ condor:
     max_retries: 3
 command: "$MTCP_JOB_DIR/run.sh"
 artifacts:
-    - $MTCP_ROOT/data_processing/output/event_numbers.npy
-    - $MTCP_ROOT/data_processing/output/map_categorical.npy
     - $MTCP_ROOT/data_processing/output/x_categorical.npy
     - $MTCP_ROOT/data_processing/output/x_continuous.npy
     - $MTCP_ROOT/data_processing/output/y.npy

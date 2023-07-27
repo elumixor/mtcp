@@ -1,3 +1,4 @@
+from time import sleep
 import paramiko
 from dataclasses import dataclass
 
@@ -34,6 +35,7 @@ class Cluster:
         self.client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 
         self.is_connected = False
+        self.is_connecting = False
 
     @property
     def exports(self):
@@ -44,14 +46,22 @@ class Cluster:
             f"export MTCP_CLUSTER={self.name} && \\\n"
 
     def open(self):
+        while self.is_connecting and not self.is_connected:
+            sleep(0.1)
+
         if self.is_connected:
             print(green(f"Already connected to {self.username}@{self.hostname}:{self.port}"))
             return True
 
         try:
+            self.is_connecting = True
+
             print(f"Connecting to {self.username}@{self.hostname}:{self.port}")
             self.client.connect(self.hostname, self.port, self.username, self.password)
+
             self.is_connected = True
+            self.is_connecting = False
+
             print(green(f"Connected to {self.username}@{self.hostname}:{self.port}"))
         except Exception as e:
             print(yellow(e))

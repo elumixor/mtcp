@@ -1,0 +1,27 @@
+@import "colors", "variables";
+
+@mixin tag($radius: $border-radius, $color: #e0ce9a) {
+    background-color: $color;
+    border-radius: $radius;
+    padding: 5px 10px;
+    margin: 2px;
+}
+
+.tag {
+    @include tag;
+
+    &.bad {
+        color: white;
+        @include tag($color: $color-bad);
+    }
+
+    &.good {
+        color: white;
+        @include tag($color: $color-good);
+    }
+
+    &.pending {
+        color: white;
+        @include tag($color: $color-pending);
+    }
+}

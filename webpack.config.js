@@ -5,7 +5,7 @@ const CopyPlugin = require("copy-webpack-plugin");
 const root = "./pipeliner/client";
 module.exports = {
     entry: {
-        index: `${root}/src/index.tsx`,
+        index: `${root}/src/ts/index.tsx`,
     },
     module: {
         rules: [
@@ -33,12 +33,16 @@ module.exports = {
             template: `${root}/src/index.html`,
         }),
         new CopyPlugin({
-            patterns: [{ from: `${root}/icons`, to: "icons" }],
+            patterns: [{ from: `${root}/src/assets`, to: "assets" }],
         }),
     ],
     resolve: {
         extensions: [".tsx", ".ts", ".js"],
-        modules: [path.resolve(__dirname, `${root}/src`), "node_modules"],
+        modules: [
+            path.resolve(__dirname, `${root}/src/ts`),
+            path.resolve(__dirname, `${root}/src/styles`),
+            "node_modules",
+        ],
     },
     output: {
         filename: "[name].bundle.js",
@@ -50,4 +54,5 @@ module.exports = {
         static: `${root}`,
         port: 8001,
     },
+    devtool: "inline-source-map",
 };

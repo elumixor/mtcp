@@ -2,6 +2,7 @@ export interface IJobData {
     name: string;
     description: string;
     clusters: string[];
+    artifacts: string[];
 }
 
 export type IConnectResponse = { connected: boolean };
@@ -13,10 +14,12 @@ export type ArtifactsResponse = Record<string, boolean>;
 
 export interface IJobStatusResponse {
     artifacts?: ArtifactsResponse;
-    status: JobRunState;
+    status: string;
     condor?: {
         status: CondorRunState;
         id: number;
         log?: string;
     };
 }
+
+export type JobStatusesResponse = Record<string, IJobStatusResponse>;
