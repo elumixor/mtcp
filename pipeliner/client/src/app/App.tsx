@@ -29,7 +29,7 @@ export function App() {
     return (
         <>
             <h1>
-                Pipeliner
+                MTCP
                 <br />
                 <button onClick={sync}>Sync</button>
             </h1>

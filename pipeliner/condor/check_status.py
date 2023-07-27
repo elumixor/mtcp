@@ -51,7 +51,7 @@ with open(status_file, "r") as f:
 
 # If the status contains "condor:id", then it is a condor job and we should include more information
 # print(status)
-if "condor" in status:
+if "condor" in status and status["status"] != "done":
     condor = status["condor"]
     condor_id = condor["id"]
 
