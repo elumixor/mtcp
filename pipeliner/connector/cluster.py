@@ -1,34 +1,22 @@
 from __future__ import annotations
 
 from time import sleep
-from typing import Literal
 import paramiko
-from dataclasses import dataclass
+
 
 from pipeliner.utils import DotDict, green, yellow, red, cyan, orange
 
-
-@dataclass
-class Result:
-    success: bool
-    stdout: str
-    stderr: str
-    exit_code: int
-
-    def __iter__(self):
-        yield self.success
-        yield self.stdout
-        yield self.stderr
-        yield self.exit_code
+from .result import Result
 
 
 class Cluster:
     def __init__(self, cluster: str, config: DotDict):
         self.name = cluster
+        self.root = config.root
+
         self.hostname = config.hostname
         self.username = config.username
         self.password = config.password
-        self.root = config.root
 
         # Create an SSH client
         self.client = paramiko.SSHClient()
@@ -70,7 +58,7 @@ class Cluster:
 
         return self.is_connected
 
-    def get_file(self, file: str, cluster_from: Cluster | Literal["local"], exports="", debug=False):
+    def get_file(self, file: str, cluster_from: Cluster, exports="", debug=False):
         with self, cluster_from:
             # First, we need to substitute all of the environment variables in the file
             result = cluster_from.run_command(f"{exports} && \\\n" + \
@@ -99,8 +87,7 @@ class Cluster:
             # and passing the file and the local path to it.
 
             result = self.run_command(f"{exports} && \\\n" + \
-                                      f"bash $MTCP_ROOT/pipeliner/remote/ensure_env.sh && \\\n" + \
-                                      f"source $MTCP_ROOT/venv/bin/activate && \\\n" + \
+                                      f"source $MTCP_ROOT/pipeliner/remote/ensure_env.sh && \\\n" + \
                                       f"python $MTCP_ROOT/pipeliner/remote/download.py \\\n" + \
                                       f"{cluster_from.hostname} {cluster_from.username} {cluster_from.password} " + \
                                       f"{file_from} {file_to}", debug=debug)
@@ -108,8 +95,7 @@ class Cluster:
             if not result.success:
                 raise Exception(f"Failed to transfer file.\n{result.stderr}")
 
-            if debug:
-                self.log(green(f"Successfully downloaded {file_from}"))
+            self.log(green(f"Successfully downloaded {file_from}"))
 
     def run_command(self, command: str, root=None, stdin=None, debug=False, silent=False):
         if not self.is_connected:
@@ -124,6 +110,15 @@ class Cluster:
         command = f"{self.exports}{root_cmd}{command}"
         stdin_, stdout, stderr = self.client.exec_command(command)
 
+        lines = []
+        while True:
+            line = stdout.readline()
+            if not line:
+                break
+
+            lines.append(line)
+            self.log(line, end="")
+
         # If stdin is provided, write it to stdin
         if stdin is not None:
             stdin_.write(stdin)
@@ -134,7 +129,7 @@ class Cluster:
         exit_code = stdout.channel.recv_exit_status()
 
         # Read the output
-        stdout = stdout.read().decode("utf-8")
+        stdout = "".join(lines)
         stderr = stderr.read().decode("utf-8")
 
         success = exit_code == 0

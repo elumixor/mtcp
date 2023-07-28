@@ -3,6 +3,7 @@ import os
 from pipeliner.utils import read_yaml, auto_provided, orange, cyan
 
 from .cluster import Cluster
+from .local_pseudo_cluster import LocalPseudoCluster
 
 
 @auto_provided
@@ -15,6 +16,8 @@ class Connector:
             key: Cluster(key, value)
             for key, value in config.items()
         }
+
+        self.clusters["local"] = LocalPseudoCluster()
 
         for name, connection in self.clusters.items():
             setattr(self, name, connection)

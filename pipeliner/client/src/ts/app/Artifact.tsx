@@ -33,7 +33,7 @@ export function Artifact({
                             : availableCluster
                             ? "download"
                             : "cross";
-                    const actionAvailable = clusterExists || availableCluster;
+                    const actionAvailable = clusterExists !== null && (clusterExists || availableCluster);
 
                     const action = async () => {
                         if (clusterExists) {
@@ -54,6 +54,7 @@ export function Artifact({
                                 job,
                                 cluster_to: cluster,
                                 cluster_from: availableCluster,
+                                debug: true,
                             });
 
                             if (success)

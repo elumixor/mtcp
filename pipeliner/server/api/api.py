@@ -39,7 +39,7 @@ class Api:
         return self.job_runner[job].delete_artifact(artifact, cluster, debug=debug)
 
     @post("/download_artifact")
-    def download_artifact(self, artifact, job, cluster_from, cluster_to=None, debug=False):
+    def download_artifact(self, artifact, job, cluster_from, cluster_to, debug=False):
         return self.job_runner[job].download_artifact(artifact, cluster_from, cluster_to, debug=debug)
 
     @post("/run_job")

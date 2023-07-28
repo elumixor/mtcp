@@ -135,6 +135,13 @@ class Job:
                 else:
                     statuses[cluster] = dict(status="error", error=result.exit_code, message=result.stderr)
 
+            # Check if the artifact exists locally
+            artifacts = {}
+            for artifact in self.artifacts:
+                artifacts[artifact] = self.check_file(artifact, "local", debug=debug)
+
+            statuses["local"] = dict(status="missing", artifacts=artifacts)
+
             self.statuses = statuses
 
         return self.statuses
@@ -169,13 +176,10 @@ class Job:
 
         return result
 
-    def download_artifact(self, artifact, cluster_from, cluster_to=None, debug=False):
-        if cluster_to is None:
-            cluster_to = "local"
-
+    def download_artifact(self, artifact: str, cluster_from: str, cluster_to: str, debug=False):
         self.log(f"Downloading artifact: {cyan(artifact)} from {orange(cluster_from)} to {orange(cluster_to)}")
 
-        cluster_to = self.connector[cluster_to] if cluster_to != "local" else "local"
+        cluster_to = self.connector[cluster_to]
         cluster_from = self.connector[cluster_from]
 
         try:
