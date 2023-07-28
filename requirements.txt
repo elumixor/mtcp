@@ -1,3 +1,5 @@
+appdirs @ file:///home/conda/feedstock_root/build_artifacts/appdirs_1603108395799/work
+autopep8 @ file:///home/conda/feedstock_root/build_artifacts/autopep8_1677845287175/work
 autoroot==1.0.0
 autorootcwd==1.0.0
 awkward @ file:///home/conda/feedstock_root/build_artifacts/awkward_1688622901297/work
@@ -7,9 +9,13 @@ Brotli @ file:///home/conda/feedstock_root/build_artifacts/brotli-split_16878840
 certifi==2023.7.22
 cffi @ file:///home/conda/feedstock_root/build_artifacts/cffi_1671179353105/work
 charset-normalizer @ file:///home/conda/feedstock_root/build_artifacts/charset-normalizer_1688813409104/work
+click @ file:///home/conda/feedstock_root/build_artifacts/click_1689751945043/work
 colorama @ file:///home/conda/feedstock_root/build_artifacts/colorama_1666700638685/work
 cryptography @ file:///home/conda/feedstock_root/build_artifacts/cryptography-split_1689055966651/work
+docker-pycreds==0.4.0
 filelock @ file:///home/conda/feedstock_root/build_artifacts/filelock_1686612785345/work
+gitdb @ file:///home/conda/feedstock_root/build_artifacts/gitdb_1669279893622/work
+GitPython @ file:///home/conda/feedstock_root/build_artifacts/gitpython_1689017552161/work
 gmpy2 @ file:///home/conda/feedstock_root/build_artifacts/gmpy2_1666808654411/work
 idna @ file:///home/conda/feedstock_root/build_artifacts/idna_1663625384323/work
 importlib-metadata @ file:///home/conda/feedstock_root/build_artifacts/importlib-metadata_1688754491823/work
@@ -22,7 +28,11 @@ networkx @ file:///home/conda/feedstock_root/build_artifacts/networkx_1680692919
 numpy @ file:///home/conda/feedstock_root/build_artifacts/numpy_1688887056611/work
 packaging @ file:///home/conda/feedstock_root/build_artifacts/packaging_1681337016113/work
 paramiko @ file:///home/conda/feedstock_root/build_artifacts/paramiko_1685074311662/work
+pathtools==0.1.2
 Pillow @ file:///home/conda/feedstock_root/build_artifacts/pillow_1675487172403/work
+protobuf==4.23.3
+psutil @ file:///home/conda/feedstock_root/build_artifacts/psutil_1681775027942/work
+pycodestyle @ file:///home/conda/feedstock_root/build_artifacts/pycodestyle_1669306857274/work
 pycparser @ file:///home/conda/feedstock_root/build_artifacts/pycparser_1636257122734/work
 PyNaCl @ file:///home/conda/feedstock_root/build_artifacts/pynacl_1666862613613/work
 pyrootutils==1.0.4
@@ -30,8 +40,12 @@ PySocks @ file:///home/conda/feedstock_root/build_artifacts/pysocks_166160483914
 python-dotenv==1.0.0
 PyYAML @ file:///home/conda/feedstock_root/build_artifacts/pyyaml_1666772395347/work
 requests @ file:///home/conda/feedstock_root/build_artifacts/requests_1684774241324/work
+sentry-sdk @ file:///home/conda/feedstock_root/build_artifacts/sentry-sdk_1689247857253/work
+setproctitle @ file:///home/conda/feedstock_root/build_artifacts/setproctitle_1666817094316/work
 six @ file:///home/conda/feedstock_root/build_artifacts/six_1620240208055/work
+smmap @ file:///home/conda/feedstock_root/build_artifacts/smmap_1611376390914/work
 sympy @ file:///home/conda/feedstock_root/build_artifacts/sympy_1684180540116/work
+tomli @ file:///home/conda/feedstock_root/build_artifacts/tomli_1644342247877/work
 torch==2.0.1
 torchaudio==2.0.2
 torchvision==0.15.2
@@ -40,6 +54,7 @@ triton==2.0.0
 typing_extensions @ file:///home/conda/feedstock_root/build_artifacts/typing_extensions_1688315532570/work
 uproot @ file:///home/conda/feedstock_root/build_artifacts/uproot_1688696148718/work
 urllib3 @ file:///home/conda/feedstock_root/build_artifacts/urllib3_1689789803562/work
+wandb @ file:///home/conda/feedstock_root/build_artifacts/wandb_1690307804953/work
 xxhash @ file:///home/conda/feedstock_root/build_artifacts/python-xxhash_1672695020159/work
 zipp @ file:///home/conda/feedstock_root/build_artifacts/zipp_1689374466814/work
 zstandard==0.19.0

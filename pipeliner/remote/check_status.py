@@ -3,6 +3,7 @@ import json
 
 from run_command import run_command
 
+
 def get_artifacts():
     # Also check job artifacts if they exist or no
     job_config = os.path.join(job_folder, "job.yaml")
@@ -27,6 +28,7 @@ def get_artifacts():
 
         return artifacts
 
+
 job_name = os.environ["MTCP_JOB"]
 job_folder = os.environ["MTCP_JOB_DIR"]
 
@@ -38,7 +40,7 @@ if not os.path.exists(status_file):
     # Check if artifacts exist on disk
     status = dict(
         status="not_started",
-        artifacts={ a: os.path.exists(os.path.expandvars(a)) for a in get_artifacts() }
+        artifacts={a: os.path.exists(os.path.expandvars(a)) for a in get_artifacts()}
     )
 
     print(json.dumps(status))
@@ -70,10 +72,10 @@ if "condor" in status:
             # Add the condor status to the status
             job_status = output["JobStatus"]
             status["condor"]["status"] = "hold" if job_status == 5 else \
-                                        "idle" if job_status == 1 else \
-                                        "running" if job_status == 2 else \
-                                        "done" if job_status == 4 else \
-                                        "error"
+                "idle" if job_status == 1 else \
+                "running" if job_status == 2 else \
+                "done" if job_status == 4 else \
+                "error"
     else:
         status["condor"]["status"] = status["status"]
 
@@ -89,7 +91,7 @@ if os.path.exists(err_file):
         status["err"] = f.read().strip()
 
 # Check if artifacts exist on disk
-status["artifacts"] = { a: os.path.exists(os.path.expandvars(a)) for a in get_artifacts() }
+status["artifacts"] = {a: os.path.exists(os.path.expandvars(a)) for a in get_artifacts()}
 
 # Print the status
 print(json.dumps(status))
