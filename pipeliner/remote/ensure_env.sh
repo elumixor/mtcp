@@ -30,6 +30,8 @@ $python_cmd -m venv $VENV_PATH
 # Activate venv
 source $VENV_PATH/bin/activate
 
+echo "ENV ACTIVATED"
+
 # Install pip and required packages (paramiko)
-python -m pip install --upgrade pip
+# python -m pip install --upgrade pip
 python -m pip install paramiko
