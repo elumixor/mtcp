@@ -25,3 +25,6 @@ pipeliner/client/dist/
 
 # Venv
 venv/
+
+# Weights and biases
+wandb/

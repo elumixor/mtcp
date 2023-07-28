@@ -1,0 +1,4 @@
+description: Train a simple NN
+clusters: [lambda]
+command: "$MTCP_JOB_DIR/run.sh"
+artifacts: []

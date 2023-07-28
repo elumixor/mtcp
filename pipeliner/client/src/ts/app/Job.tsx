@@ -132,6 +132,7 @@ export function RunButton({
         switch (status) {
             case "done":
             case "interrupted":
+            case "failed":
             case "not_started": {
                 setJobStatus((jobStatus) => {
                     const newJobStatus = { ...jobStatus };

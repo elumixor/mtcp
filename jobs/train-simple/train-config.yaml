@@ -1,0 +1,21 @@
+defaults:
+  model_type: "transformer"  # transformer or resnet
+  n_blocks: 2
+  n_heads: 4
+  n_embed: 256
+  dropout: 0.2
+  batch_size: 4096
+  merge_background: False
+  use_weights: False
+  seed: 0
+  trn_split: 0.8
+  epochs: 200
+  name: "[small]"
+  cuts:
+    other: "apply"
+
+  evaluations:
+    - feature_importance
+    - roc
+    - confusion_matrix
+    - significance
