@@ -59,7 +59,7 @@ class Cluster:
             self.is_connecting = True
 
             print(f"Connecting to {self.username}@{self.hostname}")
-            self.client.connect(self.hostname, self.port, self.username, self.password)
+            self.client.connect(self.hostname, 22, self.username, self.password)
 
             self.is_connected = True
             self.is_connecting = False
@@ -223,7 +223,7 @@ class Cluster:
     def close(self):
         self.client.close()
         if self.is_connected:
-            self.log(f"Disconnected from {self.username}@{self.hostname}:{self.port}")
+            self.log(f"Disconnected from {self.username}@{self.hostname}")
         self.is_connected = False
 
     def log(self, *args, **kwargs):

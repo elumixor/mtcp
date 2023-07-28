@@ -97,7 +97,7 @@ class Job:
         use_condor = self.condor['used'] and cluster == "cern"
         if use_condor:
             self.log("Submitting to condor", cluster=cluster)
-            condor_cmd = " python3 $MTCP_ROOT/pipeliner/condor/submit.py"
+            condor_cmd = " python3 $MTCP_ROOT/pipeliner/remote/submit.py"
             for key, value in self.condor['params'].items():
                 condor_cmd += f" --{key} {value}"
         else:
@@ -125,7 +125,7 @@ class Job:
                     statuses[cluster] = dict(status="missing")
                     continue
 
-                result = self.run_command(f"python3 $MTCP_ROOT/pipeliner/condor/check_status.py", cluster, debug=debug)
+                result = self.run_command(f"python3 $MTCP_ROOT/pipeliner/remote/check_status.py", cluster, debug=debug)
 
                 if result.success:
                     status = json.loads(result.stdout)
@@ -141,7 +141,7 @@ class Job:
 
     def interrupt(self, cluster: str, debug=False):
         self.log("Interrupting...", cluster=cluster)
-        result = self.run_command(f"python3 $MTCP_ROOT/pipeliner/condor/interrupt.py", cluster, debug=debug)
+        result = self.run_command(f"python3 $MTCP_ROOT/pipeliner/remote/interrupt.py", cluster, debug=debug)
         success, stdout, stderr, exit_code = result
         return json.loads(stdout) if success else dict(error=exit_code, message=stderr)
 
