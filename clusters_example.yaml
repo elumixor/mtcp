@@ -3,12 +3,10 @@ cern:
     hostname: lxplus.cern.ch
     username: username
     password: password
-    port: 22
     root: "/eos/user/${USER:0:1}/$USER"
 
 lambda:
     hostname: lambda.cluster.com
     username: username
     password: password
-    port: 22
     root: $HOME

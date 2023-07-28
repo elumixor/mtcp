@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from time import sleep
+from typing import Literal
 import paramiko
 from dataclasses import dataclass
 
@@ -25,7 +26,6 @@ class Cluster:
     def __init__(self, cluster: str, config: DotDict):
         self.name = cluster
         self.hostname = config.hostname
-        self.port = config.port
         self.username = config.username
         self.password = config.password
         self.root = config.root
@@ -52,25 +52,25 @@ class Cluster:
             sleep(0.1)
 
         if self.is_connected:
-            print(green(f"Already connected to {self.username}@{self.hostname}:{self.port}"))
+            print(green(f"Already connected to {self.username}@{self.hostname}"))
             return True
 
         try:
             self.is_connecting = True
 
-            print(f"Connecting to {self.username}@{self.hostname}:{self.port}")
+            print(f"Connecting to {self.username}@{self.hostname}")
             self.client.connect(self.hostname, self.port, self.username, self.password)
 
             self.is_connected = True
             self.is_connecting = False
 
-            print(green(f"Connected to {self.username}@{self.hostname}:{self.port}"))
+            print(green(f"Connected to {self.username}@{self.hostname}"))
         except Exception as e:
             print(yellow(e))
 
         return self.is_connected
 
-    def transfer_file(self, file: str, cluster_to: Cluster, exports="", debug=False):
+    def transfer_file(self, file: str, cluster_to: Cluster | Literal["local"], exports="", debug=False):
         with self, cluster_to:
             # First, we need to substitute all of the environment variables in the file
             result = self.run_command(f"{exports} && \\\n" + \
@@ -95,15 +95,18 @@ class Cluster:
             if not result.success:
                 raise Exception(f"Failed to create directory on remote cluster.\n{result.stderr}")
 
-            self_sftp = self.client.open_sftp()
-            cluster_to_sftp = cluster_to.client.open_sftp()
+            # We ar ready to transfer the file. We do it by calling the `download.py` script on the remote cluster
+            # and passing the file and the local path to it.
 
-            with self_sftp.open(file_from, "r") as local_file:
-                with cluster_to_sftp.open(file_to, "w") as remote_file:
-                    remote_file.write(local_file.read())
+            result = self.run_command(f"{exports} && \\\n" + \
+                                      f"bash $MTCP_ROOT/pipeliner/remote/ensure_env.sh && \\\n" + \
+                                      f"source $MTCP_ROOT/venv/bin/activate && \\\n" + \
+                                      f"python $MTCP_ROOT/pipeliner/remote/download.py \\\n" + \
+                                      f"{cluster_to.hostname} {cluster_to.username} {cluster_to.password} " + \
+                                      f"{file_from} {file_to}", debug=debug)
 
-            self_sftp.close()
-            cluster_to_sftp.close()
+            if not result.success:
+                raise Exception(f"Failed to transfer file.\n{result.stderr}")
 
             if debug:
                 self.log(green(f"Successfully transferred {file_from} to {cluster_to.name}"))

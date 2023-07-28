@@ -169,10 +169,13 @@ class Job:
 
         return result
 
-    def download_artifact(self, artifact, cluster_to, cluster_from, debug=False):
+    def download_artifact(self, artifact, cluster_from, cluster_to=None, debug=False):
+        if cluster_to is None:
+            cluster_to = "local"
+
         self.log(f"Downloading artifact: {cyan(artifact)} from {orange(cluster_from)} to {orange(cluster_to)}")
 
-        cluster_to = self.connector[cluster_to]
+        cluster_to = self.connector[cluster_to] if cluster_to != "local" else "local"
         cluster_from = self.connector[cluster_from]
 
         try:

@@ -22,3 +22,6 @@ node_modules/
 
 # Generated js bundle, map files, etc.
 pipeliner/client/dist/
+
+# Venv
+venv/
