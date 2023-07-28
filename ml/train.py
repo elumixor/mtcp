@@ -21,7 +21,7 @@ log.setLevel(logging.INFO)
 logging.basicConfig(format="[{levelname:.1s}] {funcName:^20s} :: {message}", style="{")
 
 parser = argparse.ArgumentParser(description='Train the model.')
-parser.add_argument('--config', type=str, default='config.yaml', help='Path to the config file')
+parser.add_argument('config', type=str, default='config.yaml', help='Path to the config file')
 args = parser.parse_args()
 
 # Hyperparameters (read from config file)

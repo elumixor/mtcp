@@ -13,14 +13,16 @@ echo "$GPUs_info" | while read GPU_free; do
         echo "GPU $i has $GPU_free MB free memory"
         break
     fi
+
+    i=$((i+1))
 done
 
 # If no GPU has enough memory, exit
-if [ $found ]; then
+if [ ! $found ]; then
     echo "No GPU has enough memory"
     exit 1
 fi
 
 export CUDA_VISIBLE_DEVICES=$i
 
-bash $MTCP_JOBS_DIR/common-scripts/tmux-run.sh $MTCP_ROOT/ml/train.sh --config $MTCP_JOB_DIR/train-config.yaml
+bash $MTCP_JOBS_DIR/common-scripts/tmux-run.sh $MTCP_ROOT/ml/train.sh $MTCP_JOB_DIR/train-config.yaml

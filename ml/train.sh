@@ -11,8 +11,18 @@ DIR=$(dirname "$0")
 if [ -z "$1" ]; then
     CONFIG="$DIR/configs/small.yaml"
 else
-    CONFIG="$DIR/configs/$1.yaml"
+    # Check if the file exists
+    if [ ! -f "$1" ]; then
+        CONFIG="$DIR/configs/$1.yaml"
+    else
+        CONFIG="$1"
+    fi
+
+    if [ ! -f "$CONFIG" ]; then
+        echo "Config file $CONFIG does not exist"
+        exit 1
+    fi
 fi
 
 # Run the training
-python "$DIR/train.py" --config "$CONFIG"
+python "$DIR/train.py" "$CONFIG"
