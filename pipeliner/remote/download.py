@@ -44,7 +44,7 @@ def print_progress(transferred, total):
     global percent
     new_percent = int(transferred / total * 100)
     if new_percent > percent:
-        print(f"Transferred: {size_str(transferred)}\tOut of: {size_str(total)}\t{new_percent}%", end="\r")
+        print(f"{file}: {size_str(transferred)}\t -- {new_percent}%")
 
 # Download the file
 sftp.get(file, local, callback=print_progress)
