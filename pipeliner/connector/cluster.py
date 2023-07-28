@@ -59,7 +59,7 @@ class Cluster:
             self.is_connecting = True
 
             print(f"Connecting to {self.username}@{self.hostname}")
-            self.client.connect(self.hostname, 22, self.username, self.password)
+            self.client.connect(hostname=self.hostname, username=self.username, password=self.password)
 
             self.is_connected = True
             self.is_connecting = False
@@ -70,30 +70,30 @@ class Cluster:
 
         return self.is_connected
 
-    def transfer_file(self, file: str, cluster_to: Cluster | Literal["local"], exports="", debug=False):
-        with self, cluster_to:
+    def get_file(self, file: str, cluster_from: Cluster | Literal["local"], exports="", debug=False):
+        with self, cluster_from:
             # First, we need to substitute all of the environment variables in the file
-            result = self.run_command(f"{exports} && \\\n" + \
-                                      f"echo {file}", debug=debug)
+            result = cluster_from.run_command(f"{exports} && \\\n" + \
+                                              f"echo {file}", debug=debug)
             file_from = result.stdout.strip()
 
             if debug:
-                self.log(f"Transferring {file_from} to {cluster_to.name}")
+                self.log(f"Getting {file_from} from {cluster_from.name}")
 
-            # Same for the file on the remote cluster
-            result = cluster_to.run_command(f"{exports} && \\\n" + \
-                                            f"echo {file}", debug=debug)
+            # Same for the file on the destination cluster (self)
+            result = self.run_command(f"{exports} && \\\n" + \
+                                      f"echo {file}", debug=debug)
             file_to = result.stdout.strip()
 
             if debug:
-                cluster_to.log(f"File will be saved to {file_to}")
+                self.log(f"File will be saved to {file_to}")
 
             # We need to mkdir -p $(dirname $file_to) on the remote cluster in order to create the directory
             # if it doesn't exist
-            result = cluster_to.run_command(f"{exports} && \\\n" + \
-                                            f"mkdir -p $(dirname {file_to})", debug=debug)
+            result = self.run_command(f"{exports} && \\\n" + \
+                                       f"mkdir -p $(dirname {file_to})", debug=debug)
             if not result.success:
-                raise Exception(f"Failed to create directory on remote cluster.\n{result.stderr}")
+                raise Exception(f"Failed to create directory on the destination cluster.\n{result.stderr}")
 
             # We ar ready to transfer the file. We do it by calling the `download.py` script on the remote cluster
             # and passing the file and the local path to it.
@@ -102,14 +102,14 @@ class Cluster:
                                       f"bash $MTCP_ROOT/pipeliner/remote/ensure_env.sh && \\\n" + \
                                       f"source $MTCP_ROOT/venv/bin/activate && \\\n" + \
                                       f"python $MTCP_ROOT/pipeliner/remote/download.py \\\n" + \
-                                      f"{cluster_to.hostname} {cluster_to.username} {cluster_to.password} " + \
+                                      f"{cluster_from.hostname} {cluster_from.username} {cluster_from.password} " + \
                                       f"{file_from} {file_to}", debug=debug)
 
             if not result.success:
                 raise Exception(f"Failed to transfer file.\n{result.stderr}")
 
             if debug:
-                self.log(green(f"Successfully transferred {file_from} to {cluster_to.name}"))
+                self.log(green(f"Successfully downloaded {file_from}"))
 
     def run_command(self, command: str, root=None, stdin=None, debug=False, silent=False):
         if not self.is_connected:

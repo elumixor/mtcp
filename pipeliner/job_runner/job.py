@@ -179,7 +179,7 @@ class Job:
         cluster_from = self.connector[cluster_from]
 
         try:
-            cluster_from.transfer_file(artifact, cluster_to, exports=self.exports, debug=debug)
+            cluster_to.get_file(artifact, cluster_from, exports=self.exports, debug=debug)
 
             if self.statuses is not None:
                 self.statuses[cluster_to.name]["artifacts"][artifact] = True
