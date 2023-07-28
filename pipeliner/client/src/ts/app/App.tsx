@@ -32,11 +32,10 @@ export function App() {
     return (
         // {!connected ? (
         <>
-            <h1>
-                MTCP
-                <br />
-                <button onClick={sync}>Sync</button>
-            </h1>
+            <h1 className="title">MTCP</h1>
+            <button onClick={sync} className="sync-button">
+                Sync
+            </button>
             <ClustersContext.Provider value={clusters}>
                 <div className={"jobs" + (blocked ? " disabled alpha-50" : "")}>
                     {jobs.map((job) => (

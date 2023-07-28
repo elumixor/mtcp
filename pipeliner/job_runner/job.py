@@ -82,9 +82,7 @@ class Job:
         self.log(f"Job ID: {cyan(id)}. Status: {status_str}", cluster=cluster)
 
     def run_command(self, command: str, cluster: str, debug=False, silent=False):
-        result = self.connector[cluster].run_command(f"{self.exports} && \\\n{command}", debug=debug, silent=silent)
-        # self.log(green("Success") if result.success else red("Failed"), cluster=cluster, error=not result.success)
-        return result
+        return self.connector[cluster].run_command(f"{self.exports} && \\\n{command}", debug=debug, silent=silent)
 
     def run(self, cluster: str, clean=True, debug=False):
         self.statuses = None
@@ -94,16 +92,20 @@ class Job:
 
         self.log("Running the job...", cluster=cluster)
 
+        # Add command to make artifacts directories if they don't exist
+        mkdir_cmd = "mkdir -p $MTCP_JOB_ARTIFACTS_DIR && \\\n" + \
+                    "mkdir -p $MTCP_ARTIFACTS_DIR && \\\n"
+
         use_condor = self.condor['used'] and cluster == "cern"
         if use_condor:
             self.log("Submitting to condor", cluster=cluster)
-            condor_cmd = " python3 $MTCP_ROOT/pipeliner/remote/submit.py"
-            for key, value in self.condor['params'].items():
-                condor_cmd += f" --{key} {value}"
+            condor_cmd = "python3 $MTCP_ROOT/pipeliner/remote/submit.py \\\n"
+            for key, value in self.condor["params"].items():
+                condor_cmd += f"--{key} {value} \\\n"
         else:
             condor_cmd = ""
 
-        result = self.run_command(f"{condor_cmd} {self.command}", cluster, debug=debug)
+        result = self.run_command(f"{mkdir_cmd}{condor_cmd}{self.command}", cluster, debug=debug)
 
         if use_condor and result.success:
             status = json.loads(result.stdout)

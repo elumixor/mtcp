@@ -77,9 +77,16 @@ export function Artifact({
                                 (clusterExists === null ? "pending" : clusterExists ? "good" : "neutral")
                             }
                         >
-                            <span className={"artifact-image" + (actionAvailable ? " button" : "")} onClick={action}>
-                                {clusterExists === null ? <></> : <ReactSVG src={`assets/${image}.svg`} />}
-                            </span>
+                            {clusterExists === null ? (
+                                <></>
+                            ) : (
+                                <span
+                                    className={"artifact-image" + (actionAvailable ? " button" : "")}
+                                    onClick={action}
+                                >
+                                    <ReactSVG src={`assets/${image}.svg`} />
+                                </span>
+                            )}
                             {cluster}
                         </span>
                     );

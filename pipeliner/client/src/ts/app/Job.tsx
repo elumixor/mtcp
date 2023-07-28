@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { IJobData, IJobStatusResponse, JobStatusesResponse } from "responses";
+import { IJobData, IJobStatusResponse, JobRunState, JobStatusesResponse } from "responses";
 import { post, requests } from "server-api";
 import { mergeStates } from "utils";
 import { Artifact } from "./Artifact";
@@ -9,7 +9,6 @@ import { ClustersContext } from "./ClustersContext";
 
 export function Job({ jobData }: { jobData: IJobData }) {
     const jobName = jobData.name;
-    const clusters = jobData.clusters;
 
     const allClusters = useContext(ClustersContext);
 
@@ -53,69 +52,36 @@ export function Job({ jobData }: { jobData: IJobData }) {
 
     // const condorId = jobStatus?.condor?.id;
 
-    const onActionButton = (cluster: string, status: string) => {
-        switch (status) {
-            case "done":
-            case "interrupted":
-            case "not_started":
-            // return runJobRequest({ job: jobName, cluster });
-            case "running":
-            // return interruptJobRequest({ job: jobName, cluster });
-        }
-    };
-
     // Set the interval to check for the status of the job
-    // useEffect(() => {
-    //     const interval = setInterval(() => {
-    //         if (status && Object.values(status).every((status) => status === "running")) {
-    //             console.log("checking job status...");
-    //             jobStatusRequest({ job: jobName });
-    //             console.log(jobStatus);
-    //         }
-    //     }, 1000);
-    //     return () => clearInterval(interval);
-    // }, [jobStatus]);
+    useEffect(() => {
+        const interval = setTimeout(async () => {
+            if (jobStatus && Object.values(jobStatus).some((cluster) => cluster.status === "running")) {
+                const newStatus = await post("job_status", { job: jobName });
+                setJobStatus(newStatus);
+            }
+        }, 1000);
+        return () => clearInterval(interval);
+    }, [jobStatus]);
 
     const [artifactsShown, setArtifactsShown] = useState(true);
 
     return (
         <div className="job">
-            {/* {status === "missing" || status === "..." ? (
-                <></>
-            ) : (
-                <ReactSVG
-                    className={"button job-refresh" + (blocked ? " disabled" : "")}
-                    onClick={() => jobStatusRequest({ job: jobName })}
-                    src="icons/refresh.svg"
-                />
-            )} */}
             <div className="job-main">
                 <div className="job-info text-left">
                     <h4 className="job-title">{jobName}</h4>
                     <div className="job-info">{jobData.description}</div>
                 </div>
                 <div className="job-actions text-right">
-                    {/* <StatusIcon status={status} /> */}
-                    {clusters.map((cluster) => {
-                        const status = jobStatus?.[cluster]?.status ?? "...";
-                        return status !== "missing" ? (
-                            <button
-                                key={cluster}
-                                disabled={status !== "running"}
-                                onClick={() => onActionButton(cluster, status)}
-                            >
-                                {status === "done" || status === "interrupted"
-                                    ? "Restart"
-                                    : status === "running"
-                                    ? "Interrupt"
-                                    : status === "not_started"
-                                    ? "Start"
-                                    : "..."}
-                            </button>
-                        ) : (
-                            <></>
-                        );
-                    })}
+                    {allClusters.map((cluster) => (
+                        <RunButton
+                            key={cluster}
+                            cluster={cluster}
+                            jobData={jobData}
+                            jobStatus={jobStatus}
+                            setJobStatus={setJobStatus}
+                        />
+                    ))}
                 </div>
             </div>
             {numArtifacts > 0 ? (
@@ -144,5 +110,78 @@ export function Job({ jobData }: { jobData: IJobData }) {
                 )}
             </div>
         </div>
+    );
+}
+
+export function RunButton({
+    cluster,
+    jobData: { name: jobName },
+    jobStatus,
+    setJobStatus,
+}: {
+    cluster: string;
+    jobData: IJobData;
+    jobStatus: JobStatusesResponse | undefined;
+    setJobStatus: React.Dispatch<React.SetStateAction<JobStatusesResponse | undefined>>;
+}) {
+    const status = jobStatus?.[cluster]?.status;
+    const actionPossible = status !== "missing" && status !== undefined;
+    const actionImage = "run";
+
+    const onActionButton = async () => {
+        switch (status) {
+            case "done":
+            case "interrupted":
+            case "not_started": {
+                setJobStatus((jobStatus) => {
+                    const newJobStatus = { ...jobStatus };
+                    newJobStatus[cluster].status = "pending";
+                    return newJobStatus;
+                });
+
+                const newStatus = await post("run_job", { job: jobName, cluster });
+
+                setJobStatus((jobStatus) => {
+                    const newJobStatus = { ...jobStatus };
+                    newJobStatus[cluster] = newStatus;
+                    return newJobStatus;
+                });
+
+                break;
+            }
+            case "running": {
+                setJobStatus((jobStatus) => {
+                    const newJobStatus = { ...jobStatus };
+                    newJobStatus[cluster].status = "pending";
+                    return newJobStatus;
+                });
+
+                const newStatus = await post("interrupt_job", { job: jobName, cluster });
+
+                setJobStatus((jobStatus) => {
+                    const newJobStatus = { ...jobStatus };
+                    newJobStatus[cluster] = newStatus;
+                    return newJobStatus;
+                });
+
+                break;
+            }
+        }
+    };
+
+    return (
+        <span
+            className={"job-action" + (actionPossible ? "" : " disabled")}
+            // className={"artifact-exists " + (clusterExists === null ? "pending" : clusterExists ? "good" : "neutral")}
+        >
+            {actionPossible ? (
+                <span className={"artifact-image" + (actionPossible ? " button" : "")} onClick={onActionButton}>
+                    <ReactSVG src={`assets/${actionImage}.svg`} />
+                </span>
+            ) : (
+                <></>
+            )}
+            {cluster}
+        </span>
     );
 }

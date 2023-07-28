@@ -61,7 +61,7 @@ class Cluster:
     def get_file(self, file: str, cluster_from: Cluster, exports="", debug=False):
         with self, cluster_from:
             # First, we need to substitute all of the environment variables in the file
-            result = cluster_from.run_command(f"{exports} && \\\n" + \
+            result = cluster_from.run_command(f"{exports} && \\\n" +
                                               f"echo {file}", debug=debug)
             file_from = result.stdout.strip()
 
@@ -69,7 +69,7 @@ class Cluster:
                 self.log(f"Getting {file_from} from {cluster_from.name}")
 
             # Same for the file on the destination cluster (self)
-            result = self.run_command(f"{exports} && \\\n" + \
+            result = self.run_command(f"{exports} && \\\n" +
                                       f"echo {file}", debug=debug)
             file_to = result.stdout.strip()
 
@@ -78,26 +78,27 @@ class Cluster:
 
             # We need to mkdir -p $(dirname $file_to) on the remote cluster in order to create the directory
             # if it doesn't exist
-            result = self.run_command(f"{exports} && \\\n" + \
-                                       f"mkdir -p $(dirname {file_to})", debug=debug)
+            result = self.run_command(f"{exports} && \\\n" +
+                                      f"mkdir -p $(dirname {file_to})", debug=debug)
             if not result.success:
                 raise Exception(f"Failed to create directory on the destination cluster.\n{result.stderr}")
 
             # We ar ready to transfer the file. We do it by calling the `download.py` script on the remote cluster
             # and passing the file and the local path to it.
 
-            result = self.run_command(f"{exports} && \\\n" + \
-                                      f"source $MTCP_ROOT/pipeliner/remote/ensure_env.sh && \\\n" + \
-                                      f"python $MTCP_ROOT/pipeliner/remote/download.py \\\n" + \
-                                      f"{cluster_from.hostname} {cluster_from.username} {cluster_from.password} " + \
-                                      f"{file_from} {file_to}", debug=debug)
+            result = self.run_command(f"{exports} && \\\n" +
+                                      f"source $MTCP_ROOT/pipeliner/remote/ensure_env.sh && \\\n" +
+                                      f"python $MTCP_ROOT/pipeliner/remote/download.py \\\n" +
+                                      f"{cluster_from.hostname} {cluster_from.username} {cluster_from.password} " +
+                                      f"{file_from} {file_to}", debug=debug,
+                                      pipe=True)
 
             if not result.success:
                 raise Exception(f"Failed to transfer file.\n{result.stderr}")
 
             self.log(green(f"Successfully downloaded {file_from}"))
 
-    def run_command(self, command: str, root=None, stdin=None, debug=False, silent=False):
+    def run_command(self, command: str, root=None, stdin=None, debug=False, pipe=False, silent=False):
         if not self.is_connected:
             self.open()
 
@@ -117,7 +118,9 @@ class Cluster:
                 break
 
             lines.append(line)
-            self.log(line, end="")
+
+            if pipe:
+                self.log(line, end="")
 
         # If stdin is provided, write it to stdin
         if stdin is not None:

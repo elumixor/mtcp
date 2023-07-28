@@ -14,7 +14,7 @@ export type ArtifactsResponse = Record<string, boolean>;
 
 export interface IJobStatusResponse {
     artifacts?: ArtifactsResponse;
-    status: string;
+    status: JobRunState | "pending";
     condor?: {
         status: CondorRunState;
         id: number;

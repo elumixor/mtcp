@@ -40,3 +40,31 @@
 .popping {
     @include popping;
 }
+
+@keyframes slide-in {
+   0% {
+        transform: translateY(50%);
+        filter: blur(10px);
+        opacity: 0;
+    }
+    100% {
+        transform: translateX(0);
+        text-shadow: 0 2px 10px #00000030;
+        opacity: 1;
+    }
+}
+
+
+@mixin title {
+    animation: slide-in 1s ease-out;
+    text-shadow: 0 2px 10px #00000030;
+    color: grey;
+    cursor: default;
+    transition: all 0.2s ease-in-out;
+
+    &:hover {
+        // Make a 3d effect
+        color: black;
+        text-shadow: 0px 3px 10px #000000;
+    }
+}

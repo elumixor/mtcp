@@ -1,4 +1,5 @@
 @use "fonts" as fonts;
+@use "animations" as animations;
 @import "variables";
 @import "disabled";
 @import "tag";
@@ -11,6 +12,22 @@ body {
     @include fonts.normal;
     margin: 0;
     padding: 0;
+}
+
+.title {
+    @include fonts.title;
+    @include animations.title;
+
+    text-align: center;
+    font-size: 4em;
+    margin: 25px auto;
+    line-height: 0.8em;
+    font-weight: 100;
+}
+
+.sync-button {
+    display: block;
+    margin: auto;
 }
 
 .cluster-title {

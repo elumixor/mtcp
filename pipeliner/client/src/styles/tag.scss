@@ -2,8 +2,10 @@
 @use "variables" as variables;
 
 @mixin tag($radius: variables.$border-radius, $color: colors.$neutral) {
+    color: white;
     background-color: $color;
     border-radius: $radius;
+    min-height: 25px;
     padding: 5px 10px;
     margin: 2px;
 }
@@ -12,22 +14,18 @@
     @include tag;
 
     &.bad {
-        color: white;
         @include tag($color: colors.$bad);
     }
 
     &.good {
-        color: white;
         @include tag($color: colors.$good);
     }
 
     &.pending {
-        color: white;
         @include tag($color: colors.$pending);
     }
 
     &.neutral {
-        color: white;
         @include tag($color: colors.$neutral);
     }
 }

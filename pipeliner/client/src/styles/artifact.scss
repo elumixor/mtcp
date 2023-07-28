@@ -1,6 +1,7 @@
 @use "variables" as variables;
 @use "fonts" as fonts;
 @use "animations" as animations;
+@use "images" as images;
 
 .artifact {
     display: flex;
@@ -51,17 +52,10 @@
         @extend .tag;
         display: flex;
         align-items: center;
-
     }
 
     &-image  {
-        display: inline-block;
-        width: 20px;
-        height: 20px;
-        border-radius: 50%;
-        background-color: #00000042;
-        margin: 0px 5px 0 -5px;
-        padding: 2px;
+        @include images.small;
 
         &.button {
             @include animations.popping;
