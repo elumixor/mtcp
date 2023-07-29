@@ -1,6 +1,7 @@
 @use "animations" as animations;
 @use "colors" as colors;
 @use "variables" as variables;
+@use "images" as images;
 
 @mixin no-select {
     user-select: none;
@@ -32,5 +33,14 @@ button {
         transform: translate(2px, -2px) scale(1.05);
         filter: brightness(1.05) contrast(1.05);
         cursor: pointer;
+    }
+}
+
+
+.icon-button  {
+    @include images.small;
+
+    &.button {
+        @include animations.popping;
     }
 }

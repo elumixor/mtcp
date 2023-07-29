@@ -1,6 +1,6 @@
 import React from "react";
 import { ReactSVG } from "react-svg";
-import { JobRunState } from "responses";
+import { JobRunState } from "server-api";
 
 export function StatusIcon({ status }: { status: "..." | "warn" | JobRunState }) {
     const cssStatus = status === "..." ? "retrieving" : status === "missing" ? "interrupted" : status;

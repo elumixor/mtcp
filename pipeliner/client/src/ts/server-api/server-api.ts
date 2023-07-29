@@ -6,7 +6,7 @@ import {
     IJobData,
     IJobStatusResponse,
     JobStatusesResponse,
-} from "responses";
+} from "./responses";
 
 export interface IServerApi {
     clusters(): string[];
@@ -28,19 +28,26 @@ type Params<T> = T & { debug?: boolean };
 const url = "http://localhost:8000";
 
 export async function post<T extends keyof IServerApi>(endpoint: T, ...requestParams: Parameters<IServerApi[T]>) {
-    const params = requestParams[0] ?? {};
-    const response = await fetch(`${url}/${endpoint}`, {
-        method: "POST",
-        body: JSON.stringify(params),
-    });
+    try {
+        const params = requestParams[0] ?? {};
+        const response = await fetch(`${url}/${endpoint}`, {
+            method: "POST",
+            body: JSON.stringify(params),
+        });
 
-    if (!response.ok) throw new Error("Request failed");
+        if (!response.ok) throw new Error("Request failed");
 
-    const data = await response.json();
+        const data = await response.json();
 
-    if (data.error) throw new Error(`Request failed. Error: ${data.error}`);
+        if (data.error) throw new Error(`Request failed. Error: ${data.error}`);
 
-    return data as ReturnType<IServerApi[T]>;
+        console.log(`%c${endpoint}`, "color: #88aaff; font-weight: bold", params, data);
+
+        return data as ReturnType<IServerApi[T]>;
+    } catch (e) {
+        console.log(`%c${endpoint}`, "color: #ff8888; font-weight: bold", requestParams[0], e);
+        throw e;
+    }
 }
 
 export function requests<TKeys extends (keyof IServerApi)[]>(...requests: getParams<TKeys>) {

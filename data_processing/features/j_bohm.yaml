@@ -7,17 +7,15 @@
 - taus_charge_0
 - taus_width_0
 
-# Don't use the outputs of the other classifiers
+- taus_passEleBDT_0
 
-# - taus_passEleBDT_0
+- taus_RNNJetScore_0
+- taus_RNNJetScoreSigTrans_0
+- taus_JetRNNSigLoose_0
+- taus_JetRNNSigMedium_0
+- taus_JetRNNSigTight_0
 
-# - taus_RNNJetScore_0
-# - taus_RNNJetScoreSigTrans_0
-# - taus_JetRNNSigLoose_0
-# - taus_JetRNNSigMedium_0
-# - taus_JetRNNSigTight_0
-
-# - taus_DL1r_0
+- taus_DL1r_0
 
 - taus_numTrack_0
 - taus_fromPV_0

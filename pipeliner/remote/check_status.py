@@ -57,12 +57,6 @@ if "condor" in status:
     condor = status["condor"]
     condor_id = condor["id"]
 
-    # Add the log
-    log_path = os.path.join(job_folder, "logs/log")
-    if os.path.exists(log_path):
-        with open(log_path, "r") as f:
-            status["condor"]["log"] = f.read().strip()
-
     # If the state is still "running" then we should check the condor's status, otherwise set as done
     if status["status"] == "running":
         output = run_command(f"condor_q {condor_id} -json")
@@ -76,8 +70,16 @@ if "condor" in status:
                 "running" if job_status == 2 else \
                 "done" if job_status == 4 else \
                 "error"
+        else:
+            status["condor"]["status"] = "done"
     else:
         status["condor"]["status"] = status["status"]
+
+# Add the log
+log_path = os.path.join(job_folder, "logs/log")
+if os.path.exists(log_path):
+    with open(log_path, "r") as f:
+        status["log"] = f.read().strip()
 
 # Add out and err from the files
 out_file = os.path.join(job_folder, "logs/out")

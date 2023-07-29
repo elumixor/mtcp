@@ -6,8 +6,12 @@
     background-color: $color;
     border-radius: $radius;
     min-height: 25px;
-    padding: 5px 10px;
+    padding: 5px;
     margin: 2px;
+
+    &>.tag-text {
+        margin: auto 5px;
+    }
 }
 
 .tag {

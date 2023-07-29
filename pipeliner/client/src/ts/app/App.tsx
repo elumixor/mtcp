@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { post } from "server-api";
-import { IConnectResponse, IJobData } from "responses";
+import { IConnectResponse, IJobData } from "server-api";
 import { requests } from "server-api";
 import { Job } from "./Job";
 import { ReactSVG } from "react-svg";

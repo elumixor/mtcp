@@ -1,21 +1,21 @@
 import React, { useContext, useState } from "react";
 import { ClustersContext } from "./ClustersContext";
 import { ReactSVG } from "react-svg";
-import { post } from "server-api";
-import { JobStatusesResponse } from "responses";
+import { JobStatusesResponse, post } from "server-api";
+import { JobDataContext } from "./JobContext";
+import { IconButton } from "./IconButton";
 
 export function Artifact({
     artifact,
     exists,
-    job,
     setJobStatus,
 }: {
     artifact: string;
-    job: string;
     exists: Record<string, boolean | null>;
     setJobStatus: React.Dispatch<React.SetStateAction<JobStatusesResponse | undefined>>;
 }) {
     const clusters = useContext(ClustersContext);
+    const { name: job } = useContext(JobDataContext);
 
     const availableCluster = Object.entries(exists).find(([, exists]) => exists === true)?.[0];
 
@@ -27,7 +27,7 @@ export function Artifact({
                     const clusterExists = exists[cluster];
                     const image =
                         clusterExists === null
-                            ? null
+                            ? undefined
                             : clusterExists
                             ? "trash"
                             : availableCluster
@@ -77,17 +77,12 @@ export function Artifact({
                                 (clusterExists === null ? "pending" : clusterExists ? "good" : "neutral")
                             }
                         >
-                            {clusterExists === null ? (
+                            {clusterExists === null || !image ? (
                                 <></>
                             ) : (
-                                <span
-                                    className={"artifact-image" + (actionAvailable ? " button" : "")}
-                                    onClick={action}
-                                >
-                                    <ReactSVG src={`assets/${image}.svg`} />
-                                </span>
+                                <IconButton image={image} disabled={!actionAvailable} onClick={action} />
                             )}
-                            {cluster}
+                            <span className="tag-text">{cluster}</span>
                         </span>
                     );
                 })}

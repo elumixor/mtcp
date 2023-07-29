@@ -1,3 +1,5 @@
+@use "colors" as colors;
+
 .jobs {
     margin: 15px;
     display: flex;
@@ -42,13 +44,57 @@
 
     &-actions {
         display: flex;
-        align-items: flex-end;
+        align-items: flex-start;
     }
 
+
     &-action {
-        @extend .tag;
         display: flex;
-        align-items: center;
+        align-items: flex-start;
+        flex-direction: column;
+        margin: 0 5px;
+
+        &-logs-container {
+            display: flex;
+        }
+
+
+        &-cluster {
+            @extend .tag;
+            display: flex;
+            align-items: center;
+
+            &.running {
+                $start: #4184b8;
+                $end: #7345b7;
+
+                @keyframes fade {
+                    0% {
+                        background-color: $start;
+                        opacity: 1;
+                    }
+                    50% {
+                        background-color: $end;
+                        opacity: 0.5;
+                    }
+                    100% {
+                        background-color: $start;
+                        opacity: 1;
+                    }
+                }
+
+                animation: fade 1.5s ease-in-out infinite;
+
+                &:hover {
+                    opacity: 1 !important;
+                }
+            }
+
+            &.failed {
+                background-color: colors.$bad;
+            }
+        }
+
     }
 
     &-artifacts-section {
