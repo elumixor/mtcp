@@ -1,0 +1,8 @@
+description: |
+    Train a big (5 blocks) NN on an extended training set configuration.
+    Use all the features available.
+    However, omit the selection cuts to train on all the events
+clusters: [lambda]
+command: "$MTCP_JOB_DIR/run.sh"
+artifacts: []
+require_memory: 25000 # MB

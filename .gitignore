@@ -28,3 +28,8 @@ venv/
 
 # Weights and biases
 wandb/
+
+# Checkpoints, saved models
+checkpoints/
+*.pt
+*.np[yz]

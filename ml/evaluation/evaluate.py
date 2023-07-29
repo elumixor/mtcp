@@ -48,12 +48,13 @@ class evaluate:
         with torch.no_grad():
             # Compute the loss on the training set
             batches = tqdm(trn.batches(batch_size, shuffle=False), desc=" - evaluation: trn", disable=not use_tqdm)
-            with torch.autocast(device_type=device, dtype=torch.float32 if not use_half else half, enabled=use_half):
+
+            with torch.autocast(device_type=device, dtype=torch.float16 if use_half or device == "cuda" else torch.bfloat16, enabled=use_half):
                 self.metrics["trn/loss"] = torch.stack([model(batch.to(device), return_loss=True) for batch in batches]).mean().item()
 
             # Evaluate the fixed model on the validation set
             batches = tqdm(val.batches(batch_size, shuffle=False), desc=" - evaluation: val", disable=not use_tqdm)
-            with torch.autocast(device_type=device, dtype=torch.float32 if not use_half else half, enabled=use_half):
+            with torch.autocast(device_type=device, dtype=torch.float16 if use_half or device == "cuda" else torch.bfloat16, enabled=use_half):
                 logits, loss = zip(*[model(batch.to(device), return_all=True) for batch in batches])
 
                 # Probabilities

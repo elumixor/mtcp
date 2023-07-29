@@ -1,4 +1,7 @@
-description: Train a simple NN
+description: |
+    Train a small (2 blocks) NN on a standard configuration. Use all the features available.
+    Apply all the selection cuts to train only inside the signal region.
 clusters: [lambda]
 command: "$MTCP_JOB_DIR/run.sh"
 artifacts: []
+require_memory: 15000 # MB

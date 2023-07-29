@@ -24,7 +24,7 @@ def train(model: Model,
           validate_freq: int,
           scheduler=None,
           batch_size=64,
-          checkpoints_dir="checkpoints",
+          checkpoints_dir="ml/checkpoints",
           run=None,
           restart=False,
           device="cpu",
@@ -88,7 +88,7 @@ def train(model: Model,
                 break
 
             # Training
-            with torch.autocast(device_type=device, dtype=torch.float32 if not use_half else half, enabled=use_half):
+            with torch.autocast(device_type=device, dtype=torch.float16 if use_half or device == "cuda" else torch.bfloat16, enabled=use_half):
                 loss = model(batch.to(device), return_loss=True)
 
             scaler.scale(loss).backward()

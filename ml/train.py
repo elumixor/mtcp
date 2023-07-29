@@ -36,13 +36,12 @@ if device != "cuda" and "require_cuda" in config and config["require_cuda"]:
 if device == "cuda":
     # Make sure that CUDA env is provided
     assert "CUDA_VISIBLE_DEVICES" in os.environ, "CUDA_VISIBLE_DEVICES not set"
-    cuda_devices = os.environ["CUDA_VISIBLE_DEVICES"]
-
-    device = f"cuda:{cuda_devices}"
 
 dtype = torch.float16
 use_compile = torch.cuda.get_device_capability()[0] >= 7
-checkpoints_dir = config["checkpoints_dir"] if "checkpoints_dir" in config else "checkpoints"
+checkpoints_dir = config["checkpoints_dir"] if "checkpoints_dir" in config else \
+    os.environ["MTCP_CHECKPOINTS_DIR"] if "MTCP_CHECKPOINTS_DIR" in os.environ else \
+    "ml/checkpoints"
 
 instance_configs = []
 defaults = config["defaults"]

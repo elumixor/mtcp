@@ -25,6 +25,8 @@ class JobStatus:
 class Job:
     def __init__(self, job_name, job_config):
         self.name = job_name
+        self.config = job_config
+
         self.description = job_config.description
         self.allowed_clusters = job_config.clusters
         self.command = job_config.command
@@ -46,10 +48,16 @@ class Job:
 
     @property
     def exports(self):
-        return f"export MTCP_JOB={self.name} && \\\n" + \
+        s = f"export MTCP_JOB={self.name} && \\\n" + \
             f"export MTCP_JOB_DIR=$MTCP_JOBS_DIR/$MTCP_JOB && \\\n" + \
             f"export MTCP_JOB_ARTIFACTS_DIR=$MTCP_JOB_DIR/artifacts && \\\n" + \
             f"export MTCP_JOB_LOGS_DIR=$MTCP_JOB_DIR/logs"
+
+        if "require_memory" in self.config:
+            s += f" && \\\n" + \
+                f"export MTCP_REQUIRE_MEMORY={self.config.require_memory}"
+
+        return s
 
     @property
     def json(self):
@@ -82,7 +90,8 @@ class Job:
         self.log(f"Job ID: {cyan(id)}. Status: {status_str}", cluster=cluster)
 
     def run_command(self, command: str, cluster: str, debug=False, silent=False):
-        return self.connector[cluster].run_command(f"{self.exports} && \\\n{command}", debug=debug, silent=silent)
+        return self.connector[cluster].run_command(f"{self.exports} && \\\n" +
+                                                   command, debug=debug, silent=silent)
 
     def run(self, cluster: str, clean=True, debug=False):
         self.statuses = None
@@ -94,7 +103,8 @@ class Job:
 
         # Add command to make artifacts directories if they don't exist
         mkdir_cmd = "mkdir -p $MTCP_JOB_ARTIFACTS_DIR && \\\n" + \
-                    "mkdir -p $MTCP_ARTIFACTS_DIR && \\\n"
+                    "([ ! -f $MTCP_ARTIFACTS_DIR ] && mkdir -p $MTCP_ARTIFACTS_DIR) && \\\n" + \
+                    "mkdir -p $MTCP_JOB_LOGS_DIR && \\\n"
 
         use_condor = self.condor['used'] and cluster == "cern"
         if use_condor:
