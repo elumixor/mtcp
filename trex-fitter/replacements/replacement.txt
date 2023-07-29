@@ -5,6 +5,7 @@ XXX_NtuplePaths: /eos/atlas/atlascerngroupdisk/phys-higgs/HSG8/multilepton_ttWtt
 XXX_SYS_NtuplePaths: /eos/atlas/atlascerngroupdisk/phys-higgs/HSG8/multilepton_ttWttH/v08/v0801/systematics-full/
 XXX_CENTRAL_NtuplePaths: /eos/atlas/atlascerngroupdisk/phys-higgs/HSG8/multilepton_ttWttH/v08/v0801/
 XXX_FriendPaths: /eos/user/v/vyazykov/added_condor_random/nominal/
+XXX_SYS_FriendPaths: /eos/user/v/vyazykov/added_condor_random/
 XXX_JES1: Sys1
 XXX_JES2: Sys2
 XXX_JES3: Sys3
