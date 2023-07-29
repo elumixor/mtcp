@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 export ENV_PATH=$MTCP_JOB_DIR/venv
 
 # Exit if the virtual environment does not exist

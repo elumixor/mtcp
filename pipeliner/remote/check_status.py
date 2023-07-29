@@ -70,8 +70,13 @@ if "condor" in status:
                 "running" if job_status == 2 else \
                 "done" if job_status == 4 else \
                 "error"
+
+            status["status"] = "error" if job_status == 5 else \
+                "running" if job_status == 1 else \
+                status["condor"]["status"]
         else:
             status["condor"]["status"] = "done"
+            status["status"] = "done"
     else:
         status["condor"]["status"] = status["status"]
 
