@@ -83,19 +83,16 @@ if "condor" in status:
 # Add the log
 log_path = os.path.join(job_folder, "logs/log")
 if os.path.exists(log_path):
-    with open(log_path, "r") as f:
-        status["log"] = f.read().strip()
+    status["log"] = log_path
 
 # Add out and err from the files
-out_file = os.path.join(job_folder, "logs/out")
-if os.path.exists(out_file):
-    with open(out_file, "r") as f:
-        status["out"] = f.read().strip()
+out_path = os.path.join(job_folder, "logs/out")
+if os.path.exists(out_path):
+    status["out"] = out_path
 
-err_file = os.path.join(job_folder, "logs/err")
-if os.path.exists(err_file):
-    with open(err_file, "r") as f:
-        status["err"] = f.read().strip()
+err_path = os.path.join(job_folder, "logs/err")
+if os.path.exists(err_path):
+    status["err"] = err_path
 
 # Check if artifacts exist on disk
 status["artifacts"] = {a: os.path.exists(os.path.expandvars(a)) for a in get_artifacts()}
