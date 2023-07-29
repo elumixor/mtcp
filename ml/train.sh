@@ -4,6 +4,9 @@
 eval "$(conda shell.bash hook)"
 conda activate tth
 
+# Enable some cuda stuff
+ml CUDA
+
 # Get the current directory
 DIR=$(dirname "$0")
 

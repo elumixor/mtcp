@@ -10,7 +10,7 @@ defaults:
     seed: 0
     trn_split: 0.8
     epochs: 200
-    name: "[small]"
+    name: "[big]"
     cuts:
         other: "discard"
 

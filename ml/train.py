@@ -37,6 +37,8 @@ if device == "cuda":
     # Make sure that CUDA env is provided
     assert "CUDA_VISIBLE_DEVICES" in os.environ, "CUDA_VISIBLE_DEVICES not set"
 
+    print(f"Using CUDA_VISIBLE_DEVICES={os.environ['CUDA_VISIBLE_DEVICES']}")
+
 dtype = torch.float16
 use_compile = torch.cuda.get_device_capability()[0] >= 7
 checkpoints_dir = config["checkpoints_dir"] if "checkpoints_dir" in config else \

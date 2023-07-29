@@ -9,7 +9,7 @@ fi
 
 # Require at least 20 GB
 # Get the GPUs info
-GPUs_info=$(nvidia-smi --query-gpu=memory.free --format=csv,noheader,nounits)
+GPUs_info=$(nvidia-smi --query-gpu=name,memory.free --format=csv,noheader,nounits)
 
 echo "Required memory: $MTCP_REQUIRE_MEMORY MB" | tee $MTCP_JOB_LOGS_DIR/log
 
@@ -21,6 +21,17 @@ max_mem=0
 max_mem_index=0
 
 while read GPU_free; do
+    # Split the line by commas
+    # Get the name and free memory
+    GPU_name=$(echo $GPU_free | cut -d ',' -f 1)
+    GPU_free=$(echo $GPU_free | cut -d ',' -f 2)
+
+    # Skip if $GPU_name contains "Display"
+    if [[ $GPU_name == *"Display"* ]]; then
+        echo "Skipping $GPU_name as it is a display GPU" | tee -a $MTCP_JOB_LOGS_DIR/log
+        continue
+    fi
+
     if [ $GPU_free -gt $MTCP_REQUIRE_MEMORY ]; then
         found=true
         echo "GPU $i has $GPU_free MB free memory (enough)" | tee -a $MTCP_JOB_LOGS_DIR/log

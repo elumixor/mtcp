@@ -4,13 +4,6 @@ echo "Running: $*" | tee -a $MTCP_JOB_LOGS_DIR/log
 
 
 # Run the command provided
-# (eval "$*" | tee -a $MTCP_JOB_LOGS_DIR/out; echo ${PIPESTATUS[0]} >&3) 3>&1 1>&2 2>&3 | tee -a $MTCP_JOB_LOGS_DIR/err
-
-# Update the status
-
-# Run the command provided
-# ((eval "$*"; echo $? > ${PIPESTATUS[0]}) | tee -a $MTCP_JOB_LOGS_DIR/out) 3>&1 1>&2 2>&3 | tee -a $MTCP_JOB_LOGS_DIR/err
-# (eval "$*" | tee -a $MTCP_JOB_LOGS_DIR/out) 3>&1 1>&2 2>&3 | tee -a $MTCP_JOB_LOGS_DIR/err
 ((eval "$*" ; echo > $MTCP_JOB_DIR/.exit_code $?) | tee -a $MTCP_JOB_LOGS_DIR/out) 3>&1 1>&2 2>&3 | tee -a $MTCP_JOB_LOGS_DIR/err
 
 # Read the exit code

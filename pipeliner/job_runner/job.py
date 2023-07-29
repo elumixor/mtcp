@@ -103,8 +103,8 @@ class Job:
 
         # Add command to make artifacts directories if they don't exist
         mkdir_cmd = "mkdir -p $MTCP_JOB_ARTIFACTS_DIR && \\\n" + \
-                    "([ ! -f $MTCP_ARTIFACTS_DIR ] && mkdir -p $MTCP_ARTIFACTS_DIR) && \\\n" + \
-                    "mkdir -p $MTCP_JOB_LOGS_DIR && \\\n"
+                    "mkdir -p $MTCP_ARTIFACTS_DIR && \\\n" + \
+                    "[ ! -f $MTCP_JOB_LOGS_DIR ] && mkdir -p $MTCP_JOB_LOGS_DIR || : && \\\n"
 
         use_condor = self.condor['used'] and cluster == "cern"
         if use_condor:
