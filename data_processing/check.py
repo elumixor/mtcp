@@ -1,11 +1,12 @@
 import autorootcwd  # Do not delete - adds the root of the project to the path
 
-# Load and test it
+import os
+
 from data_processing.processing import load_data
 
 
 def check(output_path: str):
-    data = load_data(output_path)
+    data = load_data(os.path.join("data_processing", output_path))
 
     total_raw = 0
     total_weighted = 0

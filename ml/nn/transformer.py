@@ -5,6 +5,7 @@ import torch.nn.functional as F
 from ml.data import Data
 
 from .model import Model
+from .my_embed import MyEmbed
 
 
 class Transformer(Model):
@@ -34,20 +35,22 @@ class Transformer(Model):
         self.name = name
         self.class_weights = nn.Parameter(class_weights, requires_grad=False) if class_weights is not None else None
 
-        self.nn = TransformerNN(
-            n_features_continuous,
-            categorical_sizes,
-            n_classes,
-            n_embed,
-            n_inner,
-            n_blocks,
-            n_heads,
-            activation,
-            dropout,
-        )
+        self.activation = nn.GELU(approximate="tanh") if activation is None else activation
+        self.embed = MyEmbed(n_features_continuous, categorical_sizes, n_embed)
+        self.blocks = nn.Sequential(*[
+            Block(n_embed, activation=self.activation, n_inner=n_inner, n_heads=n_heads, dropout=dropout)
+            for _ in range(n_blocks)
+        ]) if n_blocks > 0 else nn.Identity()
+        self.ln = nn.LayerNorm(n_embed)
+        self.logits = nn.Linear((n_features_continuous + len(categorical_sizes)) * n_embed, n_classes)
 
     def forward(self, batch: Data, return_loss=False, return_all=False):
-        logits = self.nn(batch.x_continuous, batch.x_categorical)
+        B = batch.x_continuous.shape[0]
+
+        x = self.embed(batch.x_continuous, batch.x_categorical)
+        x = self.blocks(x)
+        x = self.ln(x)
+        logits = self.logits(x.view(B, -1))
 
         loss = None
         if return_loss or return_all:
@@ -91,42 +94,6 @@ class Transformer(Model):
         probs_[:, signal_idx] = -1
         best_bg = probs_.argmax(dim=1)
         return torch.where(passed, signal_idx, best_bg)
-
-
-class TransformerNN(nn.Module):
-    def __init__(self,
-                 n_features_continuous: int,
-                 categorical_sizes: list[int],
-                 n_classes: int,
-                 n_embed=32,
-                 n_inner=None,
-                 n_blocks=1,
-                 n_heads=1,
-                 activation=None,
-                 dropout=0.3):
-        super().__init__()
-
-        if n_inner is None:
-            n_inner = n_embed * 4
-
-        self.activation = nn.GELU(approximate="tanh") if activation is None else activation
-        self.embed = MyEmbed(n_features_continuous, categorical_sizes, n_embed)
-        self.blocks = nn.Sequential(*[
-            Block(n_embed, activation=self.activation, n_inner=n_inner, n_heads=n_heads, dropout=dropout)
-            for _ in range(n_blocks)
-        ]) if n_blocks > 0 else nn.Identity()
-        self.ln = nn.LayerNorm(n_embed)
-        self.logits = nn.Linear((n_features_continuous + len(categorical_sizes)) * n_embed, n_classes)
-
-    def forward(self, x_continuous, x_categorical):
-        B = x_continuous.shape[0]
-
-        x = self.embed(x_continuous, x_categorical)
-        x = self.blocks(x)
-        x = self.ln(x)
-        x = self.logits(x.view(B, -1))
-
-        return x
 
 
 class Block(nn.Module):
@@ -194,35 +161,3 @@ class Attention(nn.Module):
         y = self.residual_dropout(self.residual_project(y))
 
         return y
-
-
-class MyEmbed(nn.Module):
-    def __init__(self, n_features_continuous: int, categorical_sizes: list[int], n_embed: int):
-        super().__init__()
-
-        # If we encounter NaN feature, we replace them with a learnable parameter
-        self.w_nan = nn.Parameter(torch.randn(n_features_continuous))
-
-        # Separate embedding for each categorical feature
-        self.register_buffer("offsets", torch.tensor([0] + categorical_sizes[:-1]).cumsum(dim=0))
-        self.w_categorical = nn.Parameter(torch.randn(sum(categorical_sizes), n_embed))
-        self.b_categorical = nn.Parameter(torch.randn(len(categorical_sizes), n_embed))
-
-        # Scale and shift for the continuous features
-        self.w_continuous = nn.Parameter(torch.randn(n_features_continuous, n_embed))
-        self.b_continuous = nn.Parameter(torch.randn(n_features_continuous, n_embed))
-
-    def forward(self, x_continuous, x_categorical):
-        # Embed continuous features
-        # Replace NaN with a learnable parameter
-        x_continuous = torch.where(torch.isnan(x_continuous), self.w_nan, x_continuous)
-
-        # Element-wise scale and shift
-        B, F = x_continuous.shape
-        x_continuous = x_continuous.view(B, F, 1) * self.w_continuous + self.b_continuous
-
-        # Embed categorical features
-        x_categorical = self.w_categorical[x_categorical + self.offsets] + self.b_categorical
-
-        # Concatenate all features
-        return torch.cat([x_continuous, x_categorical], dim=1)

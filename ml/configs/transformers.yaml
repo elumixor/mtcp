@@ -7,17 +7,16 @@ defaults:
   batch_size: 10000
   seed: 0
   trn_split: 0.8
-  epochs: 200
+  epochs: 150
   name: "transformer"
   cuts: "apply"
-  repeat: 5
+  repeat: 3
 
-  evaluations:
-    # - feature_importance
-    - roc
-
-    # - confusion_matrix
-    - significance
+  # evaluations:
+  #   - feature_importance
+  #   - roc
+  #   - confusion_matrix
+  #   - significance
 
 # compile: False
 
@@ -30,7 +29,9 @@ tags_include:
   - n_blocks
 
 variations:
-  n_embed: [32, 64, 128]
-  n_blocks: [2, 3, 4]
-  use_weights: [True, False]
-  use_binary: [True, False]
+  n_embed: [64, 128]
+  n_blocks: [2, 4]
+  # use_weights: [True, False]
+  use_weights: [True]  # Weights seem to not really help a lot
+  # use_binary: [True, False]
+  use_binary: [False]  # It looks like it's better to try and distinguish between all the classes

@@ -1,8 +1,6 @@
 from __future__ import annotations
 import torch
-import numpy as np
 import math
-import re
 
 
 class Data:
@@ -218,10 +216,9 @@ class Data:
         y_names = [self.y_names[i] for i in indices]
 
         return Data(x_continuous_selected, x_categorical_selected, y, w_selected, **{
-                **self.metadata,
-                "y_names": y_names
-            })
-
+            **self.metadata,
+            "y_names": y_names
+        })
 
     def select_features(self, names=None, indices=None):
         assert (names is None) != (indices is None), "Either names or indices must be specified"
@@ -268,4 +265,3 @@ class Data:
             return trn_data, val_data, tst_data
 
         return trn_data, val_data, tst_data, (i_trn, i_val, i_tst)
-

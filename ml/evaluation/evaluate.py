@@ -168,8 +168,9 @@ class evaluate:
             f"val/acc={self.metrics['val/acc/multi']:.2%}, " + \
             f"val/acc/bin={self.metrics['val/acc/bin']:.2%}, " + \
             f"val/f1={self.metrics['val/f1']:.2%}, " + \
-            f"AUC (mean)={self.metrics['val/auc/mean']:.3f}, " + \
-            f"AUC (ttH)={self.metrics['val/auc/ttH']:.3f}, " + \
+            f"AUC (mean)={self.metrics['val/auc_w/mean']:.3f}, " + \
+            f"AUC (ttH)={self.metrics['val/auc_w/ttH']:.3f}, " + \
+            f"AUC (ttH) [RAW]={self.metrics['val/auc/ttH']:.3f}, " + \
             f"significance={self.metrics['sig/significance']:.2f} " + \
             f"({self.metrics['sig/significance_percent']:.2%} of max possible " + \
             f"({self.metrics['sig/max_significance']:.2f})) @ threshold={self.metrics['sig/threshold']:.2f}"

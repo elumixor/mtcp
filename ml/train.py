@@ -1,13 +1,14 @@
-from copy import deepcopy
+import autorootcwd  # Do not delete - adds the root of the project to the path
+
 import os
 import torch
 import logging
 import wandb
 import yaml
-from tqdm import tqdm
 import argparse
-
-import autorootcwd  # Do not delete - adds the root of the project to the path
+import tempfile
+from copy import deepcopy
+from tqdm import tqdm
 
 from ml.data import load_data
 from ml.nn import Transformer, ResNet
@@ -324,22 +325,26 @@ for config in instance_configs:
             "categorical_sizes": trn.categorical_sizes,
             "map_categorical": trn.metadata["map_categorical"],
 
-            "threshold": thresholds[1] if len(thresholds) > 1 else 0.0,
+            "threshold": (thresholds[1] if len(thresholds) > 1 else 0.0) if "evaluations" in config else None,
             "y_names": trn.y_names,
             "mean": trn.metadata["mean"],
             "std": trn.metadata["std"],
         }
 
-        # Save to the temporary directory
-        torch.save(saved_data, "/tmp/saved_data.pt")
 
-        # Add this artifact to W&B
-        artifact = wandb.Artifact("saved_data", type="model")
-        artifact.add_file("/tmp/saved_data.pt")
-        wandb_run.log_artifact(artifact)
+        with tempfile.NamedTemporaryFile(delete=False) as tmp_file:
+            tmp_file_path = tmp_file.name
+
+            # Save to the temporary directory
+            torch.save(saved_data, tmp_file_path)
+
+            # Add this artifact to W&B
+            artifact = wandb.Artifact("saved_data", type="model")
+            artifact.add_file(tmp_file_path)
+            wandb_run.log_artifact(artifact)
 
         # Finish the run
         wandb_run.finish()
 
         # Delete the temporary file
-        os.remove("/tmp/saved_data.pt")
+        os.remove(tmp_file_path)

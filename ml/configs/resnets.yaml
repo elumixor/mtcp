@@ -12,14 +12,13 @@ defaults:
   epochs: 100
   name: "resnet"
   cuts: "apply"
-  repeat: 5
+  repeat: 3
 
-  evaluations:
-    # - feature_importance
-    - roc
-
-    # - confusion_matrix
-    - significance
+  # evaluations:
+  #   - feature_importance
+  #   - roc
+  #   - confusion_matrix
+  #   - significance
 
 tags_include:
   - model_type
@@ -28,6 +27,6 @@ tags_include:
   - use_binary
 
 variations:
-  n_blocks: [3, 4, 5,  6]
+  n_blocks: [3, 5, 7]
   use_weights: [True, False]
   use_binary: [True, False]
