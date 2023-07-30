@@ -98,6 +98,17 @@ class Cluster:
 
             self.log(green(f"Successfully downloaded {file_from}"))
 
+    def get_log(self, file_path: str, num_last_lines=100, debug=False):
+        with self:
+            try:
+                if num_last_lines is None:
+                    result = self.run_command(f"cat {file_path}", debug=debug)
+                else:
+                    result = self.run_command(f"tail -n {num_last_lines} {file_path}", debug=debug)
+                return dict(success=True, file_path=file_path, contents=result.stdout)
+            except Exception as e:
+                return dict(success=False, file_path=file_path, error=str(e))
+
     def run_command(self, command: str, root=None, stdin=None, debug=False, pipe=False, silent=False):
         if not self.is_connected:
             self.open()

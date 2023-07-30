@@ -25,6 +25,13 @@ export interface IJobStatusResponse {
     out?: string;
 }
 
+export interface ILogResponse {
+    success: boolean;
+    error?: string;
+    contents?: string;
+    file_path?: string;
+}
+
 export type JobStatusesResponse = Record<string, IJobStatusResponse>;
 
 export interface IActionResponse {

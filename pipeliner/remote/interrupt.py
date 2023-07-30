@@ -1,7 +1,8 @@
 import os
 import sys
 import json
-import subprocess
+
+from run_command import run_command
 
 # Get arguments
 mtcp_folder = os.environ["MTCP_ROOT"]
@@ -15,23 +16,20 @@ status_file = os.path.join(job_folder, "status.json")
 with open(status_file, "r") as f:
     status = json.load(f)
 
-# condor_rm `cluster_id`
-cluster_id = status["condor"]["id"]
+if "condor" in status:
+    if "id" not in status["condor"]:
+        raise Exception("Condor job has no id!")
 
-# Call the condor_submit with the file
-process = subprocess.Popen(
-    f"condor_rm {cluster_id}",
-    shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE
-)
+    # condor_rm `cluster_id`
+    cluster_id = status["condor"]["id"]
+    run_command(f"condor_rm {cluster_id}")
+elif "tmux" in status:
+    if "session" not in status["tmux"]:
+        raise Exception("Tmux job has no id!")
 
-stdout = process.stdout.read().decode("utf-8")
-stderr = process.stderr.read().decode("utf-8")
-exit_code = process.poll()
-
-if exit_code != 0:
-    print("condor_rm failed!", file=sys.stderr)
-    print(stderr, file=sys.stderr)
-    exit(1)
+    # tmux kill-session -t `session_name`
+    session_name = status["tmux"]["session"]
+    run_command(f"tmux kill-session -t {session_name}")
 
 # Change the status field to "interrupted"
 status["status"] = "interrupted"

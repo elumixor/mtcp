@@ -124,10 +124,10 @@ class Job:
 
         return result
 
-    def check_status(self, debug=False):
+    def check_status(self, clear_cache=False, debug=False):
         self.log("Checking status...")
 
-        if self.statuses is None:
+        if self.statuses is None or clear_cache:
             statuses = {}
 
             for cluster in self.connector.cluster_names:
@@ -162,7 +162,15 @@ class Job:
         self.log("Interrupting...", cluster=cluster)
         result = self.run_command(f"python3 $MTCP_ROOT/pipeliner/remote/interrupt.py", cluster, debug=debug)
         success, stdout, stderr, exit_code = result
-        return json.loads(stdout) if success else dict(error=exit_code, message=stderr)
+
+        if success:
+            if self.statuses is None:
+                self.check_status()
+
+            self.statuses[cluster]["status"] = "interrupted"
+            return self.statuses[cluster]
+
+        return dict(error=exit_code, message=stderr)
 
     def delete_artifacts(self, cluster: str, debug=False):
         artifacts_str = ", ".join([cyan(f"\"{artifact}\"") for artifact in self.artifacts])

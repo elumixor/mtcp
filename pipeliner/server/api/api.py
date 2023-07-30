@@ -28,7 +28,7 @@ class Api:
 
     @post("/job_status")
     def job_status(self, job, debug=False):
-        return self.job_runner[job].check_status(debug=debug)
+        return self.job_runner[job].check_status(clear_cache=True, debug=debug)
 
     @post("/interrupt_job")
     def interrupt_job(self, job, cluster, debug=False):
@@ -45,6 +45,10 @@ class Api:
     @post("/run_job")
     def run_job(self, job, cluster, debug=False):
         return self.job_runner[job].run(cluster, debug=debug)
+
+    @post("/get_log")
+    def get_log(self, file_path, cluster, num_last_lines=100, debug=False):
+        return self.connector[cluster].get_log(file_path, num_last_lines=num_last_lines, debug=debug)
 
     # @post("/get_commit")
     # def get_git_status(self):

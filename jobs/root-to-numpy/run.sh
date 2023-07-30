@@ -1,7 +1,5 @@
 #!/bin/bash
 
-set -e
-
 export ENV_PATH=$MTCP_JOB_DIR/venv
 
 # Exit if the virtual environment does not exist
@@ -11,7 +9,11 @@ if [ ! -d "$ENV_PATH" ]; then
 fi
 
 # Activate virtual environment
-source $MTCP_JOBS_DIR/common-scripts/activate-python-env.sh
+# We need to remove the extra arguments from the sourced script
+wrapper() {
+    source $MTCP_JOBS_DIR/common-scripts/activate-python-env.sh
+}
+wrapper
 
 # Run the data processing
 cd $MTCP_ROOT

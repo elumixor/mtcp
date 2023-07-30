@@ -18,8 +18,11 @@ export function JobActions({
     const hasErr = clusterStatus.err;
     const hasLog = clusterStatus.log;
 
-    const show = (what: "log" | "err" | "out") => {
-        console.log(clusterStatus[what]);
+    const show = async (what: "log" | "err" | "out") => {
+        const file_path = clusterStatus[what] as string;
+        const response = await post("get_log", { cluster, file_path });
+        const { contents } = response;
+        if (contents !== undefined) console.log(contents);
     };
 
     let status = jobStatuses?.[cluster]?.status;

@@ -57,21 +57,16 @@ export function Job({ jobData }: { jobData: IJobData }) {
 
     const numArtifacts = jobData.artifacts.length;
 
-    // const status = jobStatus?.status;
-    // const blockedDelete = blocked || status === "running";
-
-    // const condorId = jobStatus?.condor?.id;
-
     // Set the interval to check for the status of the job
-    // useEffect(() => {
-    //     const interval = setTimeout(async () => {
-    //         if (jobStatus && Object.values(jobStatus).some((cluster) => cluster.status === "running")) {
-    //             const newStatus = await post("job_status", { job: jobName });
-    //             setJobStatus(newStatus);
-    //         }
-    //     }, 1000);
-    //     return () => clearInterval(interval);
-    // }, [jobStatus]);
+    useEffect(() => {
+        const interval = setTimeout(async () => {
+            if (jobStatus && Object.values(jobStatus).some((cluster) => cluster.status === "running")) {
+                const newStatus = await post("job_status", { job: jobName });
+                setJobStatus(newStatus);
+            }
+        }, 5000);
+        return () => clearTimeout(interval);
+    }, [jobStatus]);
 
     const [artifactsShown, setArtifactsShown] = useState(true);
 

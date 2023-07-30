@@ -5,6 +5,7 @@ import {
     IGitSyncResponse,
     IJobData,
     IJobStatusResponse,
+    ILogResponse,
     JobStatusesResponse,
 } from "./responses";
 
@@ -20,6 +21,7 @@ export interface IServerApi {
     download_artifact(
         params: Params<{ cluster_from: string; cluster_to: string; job: string; artifact: string }>,
     ): IActionResponse;
+    get_log(params: Params<{ cluster: string; file_path: string }>): ILogResponse;
 }
 
 // Adds the "debug" optional option
