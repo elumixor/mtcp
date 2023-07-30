@@ -33,3 +33,6 @@ wandb/
 checkpoints/
 *.pt
 *.np[yz]
+
+# These files record the exit codes of the jobs
+.exit_code
