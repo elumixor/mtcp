@@ -1,6 +1,0 @@
-description: Create a simple file after 1 minute
-clusters: [cern, lambda]
-condor: true
-max_runtime: 1 # minutes
-command: "$MTCP_JOBS_DIR/$MTCP_JOB/touch.sh"
-artifacts: [$MTCP_JOB_ARTIFACTS_DIR/touched]

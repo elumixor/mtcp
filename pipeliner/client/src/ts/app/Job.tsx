@@ -68,7 +68,14 @@ export function Job({ jobData }: { jobData: IJobData }) {
         return () => clearTimeout(interval);
     }, [jobStatus]);
 
-    const [artifactsShown, setArtifactsShown] = useState(true);
+    const [artifactsShown, setArtifactsShown] = useState(() => {
+        const storedValue = localStorage.getItem(jobName + ".artifactsShown");
+        return storedValue ? JSON.parse(storedValue) : true;
+    });
+
+    useEffect(() => {
+        localStorage.setItem(jobName + ".artifactsShown", JSON.stringify(artifactsShown));
+    }, [artifactsShown]);
 
     return (
         <JobDataContext.Provider value={jobData}>

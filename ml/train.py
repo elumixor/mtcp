@@ -150,7 +150,10 @@ for config in instance_configs:
 
     # Also apply the fraction cut if needed
     if fraction < 1:
-        trn = trn[:int(fraction * trn.n_samples)]
+        n_samples = int(fraction * trn.n_samples)
+        # Shuffle the data
+        indices = torch.randperm(trn.n_samples)
+        trn = trn[indices]
 
     print(f"Training on {trn.n_samples} samples, validating on {val.n_samples}")
 
@@ -333,7 +336,7 @@ for config in instance_configs:
         "std": trn.metadata["std"],
     }
 
-    # Save to the tempraroy directory
+    # Save to the temporary directory
     torch.save(saved_data, "/tmp/saved_data.pt")
 
     # Add this artifact to W&B

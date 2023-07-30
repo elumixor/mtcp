@@ -1,6 +1,7 @@
 import autorootcwd  # Do not delete - adds the root of the project to the path
 
-from processing import read_region, process_data, save_data, ConfigParser, read_yaml
+from data_processing.processing import read_region, process_data, save_data, ConfigParser, read_yaml
+from data_processing.check import check
 
 
 # Read the config file
@@ -35,3 +36,6 @@ data = process_data(data, categorical, invalid)
 
 # Save all of it
 save_data(data, config["output_path"])
+
+# Check if all went well
+check(config["output_path"])

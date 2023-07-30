@@ -1,6 +1,5 @@
 import React, { useContext, useState } from "react";
 import { ClustersContext } from "./ClustersContext";
-import { ReactSVG } from "react-svg";
 import { JobStatusesResponse, post } from "server-api";
 import { JobDataContext } from "./JobContext";
 import { IconButton } from "./IconButton";
@@ -16,12 +15,13 @@ export function Artifact({
 }) {
     const clusters = useContext(ClustersContext);
     const { name: job } = useContext(JobDataContext);
+    const displayName = artifact.split("/").slice(-1)[0];
 
     const availableCluster = Object.entries(exists).find(([, exists]) => exists === true)?.[0];
 
     return (
         <div className="artifact">
-            <span className="artifact-name ellipsis">{artifact}</span>
+            <span className="artifact-name ellipsis">{displayName}</span>
             <span className="artifact-statuses">
                 {clusters.map((cluster) => {
                     const clusterExists = exists[cluster];

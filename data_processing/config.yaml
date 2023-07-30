@@ -1,4 +1,4 @@
-trex_config: ./configs/pre-fit.config
+trex_config: ./configs/training.config
 region: "lep-pt-0"
 output_path: "output"
 features: ./features/merged.yaml

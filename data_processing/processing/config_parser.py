@@ -7,7 +7,7 @@ from .read_file import read_file
 
 
 class ConfigParser:
-    def __init__(self, config_path: str, ignore_data=True):
+    def __init__(self, config_path: str):
         super().__init__()
 
         # This file is basically a yaml file but with % as an additional comment character, and INCLUDE commands
@@ -58,7 +58,10 @@ class ConfigParser:
                 continue
 
             # Otherwise, check for coma-separated values
-            key, value = [i.strip() for i in line.split(":")]
+            colon_index = line.find(":")
+            key = line[:colon_index].strip()
+            value = line[colon_index + 1:].strip()
+
             if "," in value:
                 value = "[" + value + "]"
             else:
@@ -169,7 +172,6 @@ class ConfigParser:
                 sample_selection = self._subs(sample_selection)
                 selection = f"({selection}) && ({sample_selection})"
                 # selection = sample_selection
-
 
         # First, we need to correctly handle "!". To do so we need to add "(" after it and ")" before the matching ")"
         # i = 0

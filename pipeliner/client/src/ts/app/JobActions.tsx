@@ -26,7 +26,7 @@ export function JobActions({
     };
 
     let status = jobStatuses?.[cluster]?.status;
-    if (status === "error") status = "failed";
+    if (status === "error" || status === "interrupted") status = "failed";
 
     const actionPossible = status !== "missing" && status !== undefined;
     const actionImage = status === undefined ? "trash" : status === "running" ? "stop" : "run";
@@ -34,7 +34,6 @@ export function JobActions({
     const onActionButton = async () => {
         switch (status) {
             case "done":
-            case "interrupted":
             case "failed":
             case "not_started": {
                 setJobStatus((jobStatus) => {
