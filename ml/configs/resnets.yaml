@@ -1,0 +1,33 @@
+defaults:
+  model_type: "resnet"  # transformer or resnet
+  # n_blocks: 2 # varied
+  # n_heads: 4
+  n_embed: 64
+  dropout: 0.0
+  batch_size: 10000
+  # merge_background: False
+  # use_weights: False
+  seed: 0
+  trn_split: 0.8
+  epochs: 100
+  name: "resnet"
+  cuts: "apply"
+  repeat: 5
+
+  evaluations:
+    # - feature_importance
+    - roc
+
+    # - confusion_matrix
+    - significance
+
+tags_include:
+  - model_type
+  - cuts
+  - use_weights
+  - use_binary
+
+variations:
+  n_blocks: [3, 4, 5,  6]
+  use_weights: [True, False]
+  use_binary: [True, False]

@@ -32,7 +32,7 @@ class Transformer(Model):
         self.dropout = dropout
         self.n_classes = n_classes
         self.name = name
-        self.class_weights = class_weights
+        self.class_weights = nn.Parameter(class_weights, requires_grad=False) if class_weights is not None else None
 
         self.nn = TransformerNN(
             n_features_continuous,

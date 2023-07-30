@@ -80,29 +80,29 @@ def evaluate_significance(model: Model, val: Data, F: int, batch_size: int, devi
     ax1.legend()
 
     # Second subfigure
-    fig, ax2 = plt.subplots(1, 1, figsize=(9, 8))
+    fig, ax = plt.subplots(1, 1, figsize=(9, 8))
 
     # Plot the significance
-    ax2.plot(thresholds, significances, label=r"$\frac{s}{\sqrt{s+b}}$")
-    ax2.plot(thresholds_simple, significances_simple, label=r"$\frac{s}{\sqrt{b}}$")
+    ax.plot(thresholds, significances, label=r"$\frac{s}{\sqrt{s+b}}$")
+    ax.plot(thresholds_simple, significances_simple, label=r"$\frac{s}{\sqrt{b}}$")
 
     # Plot the dashed vertical line at the best threshold and annotate it
-    ax2.axvline(threshold, linestyle="--", color="black")
-    ax2.annotate(f"threshold = ${threshold:.3f}$", (threshold, 0.5), (threshold + 0.05, 0.5), arrowprops=dict(arrowstyle="->"))
+    ax.axvline(threshold, linestyle="--", color="black")
+    ax.annotate(f"threshold = ${threshold:.3f}$", (threshold, 0.5), (threshold + 0.05, 0.5), arrowprops=dict(arrowstyle="->"))
 
-    ax2.axvline(threshold_simple, linestyle="--", color="black")
-    ax2.annotate(f"threshold = ${threshold_simple:.3f}$", (threshold_simple, 0.5), (threshold_simple + 0.05, 0.5), arrowprops=dict(arrowstyle="->"))
+    ax.axvline(threshold_simple, linestyle="--", color="black")
+    ax.annotate(f"threshold = ${threshold_simple:.3f}$", (threshold_simple, 0.5), (threshold_simple + 0.05, 0.5), arrowprops=dict(arrowstyle="->"))
 
     # Plot points at the significance at the best threshold and annotate it
-    ax2.scatter(threshold, significance, color="C0", zorder=10)
-    ax2.annotate(f"$S={significance:.3f}$", (threshold, significance), (threshold + 0.03, significance - 0.0))
+    ax.scatter(threshold, significance, color="C0", zorder=10)
+    ax.annotate(f"$S={significance:.3f}$", (threshold, significance), (threshold + 0.03, significance - 0.0))
 
-    ax2.scatter(threshold_simple, significance_simple, color="C1", zorder=10)
-    ax2.annotate(f"$S={significance_simple:.3f}$", (threshold_simple, significance_simple), (threshold_simple + 0.03, significance_simple - 0.0))
+    ax.scatter(threshold_simple, significance_simple, color="C1", zorder=10)
+    ax.annotate(f"$S={significance_simple:.3f}$", (threshold_simple, significance_simple), (threshold_simple + 0.03, significance_simple - 0.0))
 
-    ax2.legend(loc="lower left")
-    ax2.set_xlabel("Threshold")
-    ax2.set_ylabel("Significance");
+    ax.legend(loc="lower left")
+    ax.set_xlabel("Threshold")
+    ax.set_ylabel("Significance");
 
     if wandb_run is not None:
         # Log the image

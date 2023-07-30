@@ -15,6 +15,7 @@ class ResNet(Model):
                  n_blocks=1,
                  activation=None,
                  class_weights=None,
+                 dropout=0.3,
                  name="ResNet",
                  embed_nan=False,
                  **kwargs):
@@ -25,8 +26,10 @@ class ResNet(Model):
         self.n_classes = n_classes
         self.n_blocks = n_blocks
         self.name = name
+        self.dropout_p = dropout
 
         self.activation = nn.GELU(approximate="tanh") if activation is None else activation
+        self.dropout = nn.Dropout(dropout)
 
         layers = [nn.Linear(n_features, n_embed, bias=False)]
         for _ in range(n_blocks):
@@ -42,6 +45,16 @@ class ResNet(Model):
 
         self.class_weights = nn.Parameter(class_weights, requires_grad=False) if class_weights is not None else None
 
+    @property
+    def hyperparameters(self):
+        return {
+            "n_embed": self.n_embed,
+            "n_blocks": self.n_blocks,
+            "n_classes": self.n_classes,
+            "n_parameters": self.n_params,
+            "dropout": self.dropout_p,
+        }
+
     def forward(self, batch: Data, return_loss=False, return_all=False):
         x_continuous = batch.x_continuous
         x_categorical = batch.x_categorical
@@ -56,7 +69,7 @@ class ResNet(Model):
             ln = self.layers[i]
             linear = self.layers[i + 1]
 
-            x = x + linear(ln(self.activation(x)))
+            x = x + linear(ln(self.dropout(self.activation(x))))
 
             i += 2
 
@@ -75,16 +88,6 @@ class ResNet(Model):
         elif return_loss:
             return loss
         return logits
-
-    @property
-    def hyperparameters(self):
-        return {
-            "n_embed": self.n_embed,
-            "n_classes": self.n_classes,
-            "n_blocks": self.n_blocks,
-            "n_parameters": self.n_params,
-            "w_nan": self.w_nan is not None,
-        }
 
     @property
     def estimated_initial_loss(self):
