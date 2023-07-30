@@ -122,7 +122,12 @@ class Job:
             self.log_condor_status(cluster, status)
             return status
 
-        return result
+        if self.statuses is None:
+            self.check_status()
+
+        self.statuses[cluster]["status"] = "running"
+
+        return self.statuses[cluster]
 
     def check_status(self, clear_cache=False, debug=False):
         self.log("Checking status...")

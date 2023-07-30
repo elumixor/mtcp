@@ -58,12 +58,8 @@ if os.path.exists(logs_folder):
 # Create the symlink
 os.system(f"ln -s {logs_home_folder} {logs_folder}")
 
-# Get arguments
-arguments = "" if len(sys.argv) == 2 else " ".join(sys.argv[2:])
-
 stdin_command = f"""
 executable            = {command_home_file}
-arguments             = {arguments}
 output                = {logs_home_folder}/out
 error                 = {logs_home_folder}/err
 log                   = {logs_home_folder}/log

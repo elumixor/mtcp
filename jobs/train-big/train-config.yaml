@@ -3,8 +3,8 @@ defaults:
     n_blocks: 5
     n_heads: 4
     n_embed: 256
-    dropout: 0.0
-    batch_size: 4096
+    dropout: 0.2
+    batch_size: 3072
     merge_background: False
     use_weights: False
     seed: 0

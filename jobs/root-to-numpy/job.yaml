@@ -1,7 +1,7 @@
 description: Process the nominal n-tuples into the numpy arrays for NN training.
 clusters: [cern]
 condor:
-    max_runtime: 10 # minutes
+    max_runtime: 30 # minutes
     max_retries: 1
 command: "$MTCP_JOB_DIR/run.sh"
 artifacts:
