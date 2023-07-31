@@ -76,7 +76,12 @@ def process_data(data: Data, categorical: list[str], invalid: dict[int, list[str
     mean = mean[i_valid]
     std = std[i_valid]
     x_continuous = (x_continuous[:, i_valid] - mean) / std
+
+    dropped_names = "\n".join([name for i, name in enumerate(x_names_continuous) if not i_valid[i]])
+
     x_names_continuous = [name for i, name in enumerate(x_names_continuous) if i_valid[i]]
+
+    print(f"Dropped features with std = 0: {dropped_names}")
 
     assert len(x_names_continuous) == len(mean) == len(std) == x_continuous.shape[1]
     assert len(x_names_categorical) == x_categorical.shape[1]

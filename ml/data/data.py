@@ -221,10 +221,15 @@ class Data:
         })
 
     def select_features(self, names=None, indices=None):
-        assert (names is None) != (indices is None), "Either names or indices must be specified"
+        if (names is None) == (indices is None):
+            raise ValueError("Either names or indices must be specified")
 
         if names is None:
             names = [self.x_names[i] for i in indices]
+
+        not_found = [name for name in names if name not in self.x_names]
+        if not_found:
+            raise ValueError(f"Features not found: {not_found}. Features available: {self.x_names}")
 
         names_continuous = self.metadata["x_names_continuous"]
         names_categorical = self.metadata["x_names_categorical"]

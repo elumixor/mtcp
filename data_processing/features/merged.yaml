@@ -10,6 +10,7 @@
 - HT_lep
 - HT_taus
 - MLepMet
+- Mb0
 - Mb1
 - Mlb
 - Mll01
@@ -45,10 +46,16 @@
 - lep_Phi_1
 - lep_Pt_0
 - lep_Pt_1
+- lep_RadiusCO_0
+- lep_RadiusCO_1
 - lep_Z0SinTheta_0
 - lep_Z0SinTheta_1
 - lep_ambiguityType_0
 - lep_ambiguityType_1
+- lep_isMedium_0
+- lep_isMedium_1
+- lep_isTightLH_0
+- lep_isTightLH_1
 - lep_isolationLoose_VarRad_0
 - lep_isolationLoose_VarRad_1
 - lep_nInnerPix_0
@@ -68,6 +75,8 @@
 - mjjMax_frwdJet
 - nFwdJets_OR
 - nJets_OR
+- nJets_OR_DL1r_77
+- nJets_OR_DL1r_85
 - nTaus_OR
 - nTaus_OR_Pt25
 - passPLIVTight_0

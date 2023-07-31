@@ -42,7 +42,7 @@ class Transformer(Model):
             for _ in range(n_blocks)
         ]) if n_blocks > 0 else nn.Identity()
         self.ln = nn.LayerNorm(n_embed)
-        self.logits = nn.Linear((n_features_continuous + len(categorical_sizes)) * n_embed, n_classes)
+        self.logits = nn.Linear(n_embed, n_classes)
 
     def forward(self, batch: Data, return_loss=False, return_all=False):
         B = batch.x_continuous.shape[0]
@@ -50,7 +50,7 @@ class Transformer(Model):
         x = self.embed(batch.x_continuous, batch.x_categorical)
         x = self.blocks(x)
         x = self.ln(x)
-        logits = self.logits(x.view(B, -1))
+        logits = self.logits(x[:, 0, :])
 
         loss = None
         if return_loss or return_all:

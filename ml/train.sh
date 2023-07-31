@@ -10,6 +10,9 @@ ml CUDA
 # Get the current directory
 DIR=$(dirname "$0")
 
+# Get the absolute path
+DIR=$(realpath "$DIR")
+
 # Get the config file
 if [ -z "$1" ]; then
     CONFIG="$DIR/configs/small.yaml"

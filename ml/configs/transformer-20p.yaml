@@ -1,0 +1,45 @@
+defaults:
+  name: "transformer"  # transformer or resnet
+  n_blocks: 5
+  n_embed: 32
+  n_heads: 4
+
+  dropout: 0.0
+  batch_size: 12000
+
+  seed: 0
+  trn_split: 0.8
+
+  epochs: 200
+
+  repeat: 1
+
+  use_weights: False
+  use_binary: False
+
+  # Have no effect on the transformer
+  # use_embedding: False
+  # use_nan_w: True
+
+  cuts: "discard"
+  fraction: 0.2
+
+  # evaluations:
+  #   - feature_importance
+  #   - roc
+  #   - confusion_matrix
+  #   - significance
+
+tags_include:
+  - cuts
+  - use_weights
+  - use_binary
+  - use_embedding
+  - use_nan_w
+  - fraction
+
+# variations_complete:
+#   - use_nan_w: False
+
+#   - use_nan_w: False
+#     use_embedding: True

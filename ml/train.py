@@ -7,6 +7,7 @@ import wandb
 import yaml
 import argparse
 import tempfile
+import signal
 from copy import deepcopy
 from tqdm import tqdm
 
@@ -56,6 +57,7 @@ checkpoints_dir = config["checkpoints_dir"] if "checkpoints_dir" in config else 
 instance_configs = []
 defaults = config["defaults"]
 variations = config["variations"] if "variations" in config else {}
+variations_complete = config["variations_complete"] if "variations_complete" in config else []
 tags = config["tags"] if "tags" in config else []
 tags_include = config["tags_include"] if "tags_include" in config else []
 
@@ -73,7 +75,7 @@ for parameter, values in variations.items():
             {
                 **deepcopy(config),
                 parameter: value,
-                "name": f"{config['name']} {parameter}={'(' + str(len(value)) + ' values)' if isinstance(value, list) else value}"
+                "name": config["name"]
             } for config in instance_configs for value in values
         ]
     elif isinstance(values, dict):
@@ -81,11 +83,33 @@ for parameter, values in variations.items():
             {
                 **deepcopy(config),
                 parameter: value,
-                "name": f"{config['name']} {parameter}={key}"
+                "name": config['name']
             } for config in instance_configs for key, value in values.items()
         ]
 
+# Add the complete variations
+for variation_complete in variations_complete:
+    if "name" in variation_complete:
+        name = defaults["name"] + "/" + variation_complete["name"]
+    else:
+        name = defaults["name"]
+
+    instance_configs.append({
+        **deepcopy(defaults),
+        **variation_complete,
+        "name": name,
+    })
+
+model_type = defaults["name"]
+
 print(f"Total number of configurations: {len(instance_configs)}")
+
+# Register the handler for SIGINT
+interrupted = False
+def handler(_, __):
+    global interrupted
+    interrupted = True
+signal.signal(signal.SIGINT, handler)
 
 for config in instance_configs:
     wandb_run_name = config["name"]
@@ -100,7 +124,6 @@ for config in instance_configs:
     use_weights = config["use_weights"]
     use_binary = config["use_binary"]
     trn_split = config["trn_split"]
-    model_type = config["model_type"]
     fraction = config["fraction"] if "fraction" in config else 1
     classes = config["classes"] if "classes" in config else data.y_names
     features = config["features"] if "features" in config else data.x_names
@@ -109,12 +132,25 @@ for config in instance_configs:
 
     # For each tag_include, add the tag=value to the tags
     for tag_include in tags_include:
+        if tag_include not in config:
+            continue
+
         value = config[tag_include]
-        tags.append(f"{tag_include}={value}")
+
+        if not isinstance(value, bool):
+            if isinstance(value, list):
+                value = f"({len(value)} values)"
+
+            tags.append(f"{tag_include}={value}")
+        elif value:
+            tags.append(tag_include)
 
     torch.manual_seed(seed)  # For reproducibility
 
     for trial in range(repeat):
+        if interrupted:
+            break
+
         # Print all the hyperparameters
         hyperparameters = {
             **config,
@@ -160,6 +196,12 @@ for config in instance_configs:
         val = val.select_classes(classes)
         tst = tst.select_classes(classes)
 
+        print("Using " + \
+              ("all"
+                if len(features) == (len(data.x_names_categorical) + len(data.x_names_continuous))
+                else str(len(features))) + \
+                    " features")
+
         # Select features
         trn = trn.select_features(features)
         val = val.select_features(features)
@@ -189,13 +231,16 @@ for config in instance_configs:
 
             elif model_type == "resnet":
                 model = ResNet(
-                    trn.n_features,
+                    trn.n_features_continuous,
+                    trn.categorical_sizes,
                     trn.n_classes,
-                    embed_nan=True,
                     n_embed=n_embed,
                     n_blocks=n_blocks,
                     dropout=dropout,
                     class_weights=trn.class_weights if use_weights else None,
+                    use_embedding=config["use_embedding"] if "use_embedding" in config else False,
+                    use_nan_w=config["use_nan_w"] if "use_nan_w" in config else False,
+                    n_embed_categorical=config["n_embed_categorical"] if "n_embed_categorical" in config else 8,
                 )
 
             else:

@@ -22,7 +22,7 @@
 
 # - taus_DL1r_0
 # - taus_passEleBDT_0
-# - nJets_OR_DL1r_77
+- nJets_OR_DL1r_77
 
 # Should these also be removed?
 - passPLIVTight_0
@@ -82,6 +82,9 @@
 - lep_sigd0PV_1
 - lep_Z0SinTheta_0
 - lep_Z0SinTheta_1
+- lep_RadiusCO_0
+- lep_RadiusCO_1
+
 - max_eta
 - met_met
 - met_phi

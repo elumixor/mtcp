@@ -11,11 +11,11 @@ from argparse import ArgumentParser
 parser = ArgumentParser()
 parser.add_argument("mode", help="Mode to run in", choices=["check", "merge", "explain"])
 parser.add_argument("--ntuple", help="Path to the ntuple file to check the features",
-                    default="/home/elumixor/university/cern/ntuples/mc16a/p4498/346343.root")
+                    default="~/nominal/mc16a/p4498/346343.root")
 
 args = parser.parse_args()
 
-configs = ["j_bohm", "m_rames", "n_bruscino", "s_konig"]
+configs = ["j_bohm", "m_rames", "n_bruscino", "s_konig", "old"]
 merged_path = os.path.join(os.path.dirname(__file__), "merged.yaml")
 
 if args.mode == "check":

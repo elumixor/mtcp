@@ -14,16 +14,21 @@ class ResNet(Model):
                  categorical_sizes: list[int],
                  n_classes: int,
                  n_embed=32,
+                 n_embed_categorical=8,
                  n_blocks=1,
                  activation=None,
                  class_weights=None,
                  dropout=0.3,
                  name="ResNet",
                  use_embedding=False,
+                 use_nan_w=False,
                  **kwargs):
         super().__init__()
 
-        n_features = n_features_continuous + sum(categorical_sizes)
+        if not use_embedding:
+            n_features = n_features_continuous + len(categorical_sizes)
+        else:
+            n_features = n_features_continuous + len(categorical_sizes) * n_embed_categorical
 
         self.n_embed = n_embed
         self.n_classes = n_classes
@@ -34,7 +39,7 @@ class ResNet(Model):
         self.activation = nn.GELU(approximate="tanh") if activation is None else activation
         self.dropout = nn.Dropout(dropout)
 
-        layers = [nn.Linear(n_features if not use_embedding else n_embed, n_embed, bias=False)]
+        layers = [nn.Linear(n_features, n_embed, bias=False)]
         for _ in range(n_blocks):
             layers.append(nn.LayerNorm(n_embed))
             layers.append(nn.Linear(n_embed, n_embed, bias=False))
@@ -44,7 +49,8 @@ class ResNet(Model):
 
         self.layers = nn.ModuleList(layers)
 
-        self.embed = MyEmbed(n_features_continuous, categorical_sizes, n_embed) if use_embedding else None
+        self.embed = MyEmbed(n_features_continuous, categorical_sizes, n_embed_categorical, embed_continuous=False, use_nan_w=use_nan_w) if use_embedding else None
+        self.w_nan = nn.Parameter(torch.randn(n_features)) if use_nan_w else 0
 
         self.class_weights = nn.Parameter(class_weights, requires_grad=False) if class_weights is not None else None
 
@@ -65,7 +71,7 @@ class ResNet(Model):
             x = self.embed(x_continuous, x_categorical)
         else:
             x = torch.cat([x_continuous, x_categorical], dim=1)
-            x = torch.where(torch.isnan(x), 0, x)
+            x = torch.where(torch.isnan(x), self.w_nan, x)
 
         x = self.layers[0](x)
         i = 1
@@ -81,9 +87,6 @@ class ResNet(Model):
         linear = self.layers[i + 1]
 
         logits = linear(ln(self.activation(x)))
-
-        if self.embed is not None:
-            logits = logits.mean(dim=1)
 
         loss = None
         if return_loss or return_all:
