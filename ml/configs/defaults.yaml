@@ -1,0 +1,27 @@
+seed: 0
+use_wandb: True
+project_name: mtcp
+data_path: data_processing/output
+
+use_binary: False
+use_weights: False
+
+use_embedding: False
+use_nan_w: False
+
+dropout: 0.0
+n_embed_categorical: 8
+cuts: apply
+trn_split: 0.8
+fraction: 1
+
+
+compile: True
+use_half: True
+
+repeat: 1
+
+batch_size: 1024
+epochs: 200
+
+tags: []

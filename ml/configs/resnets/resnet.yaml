@@ -1,0 +1,5 @@
+extend: defaults
+
+model: resnet  # transformer or resnet
+n_blocks: 6
+n_embed: 64

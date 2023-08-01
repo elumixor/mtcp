@@ -1,0 +1,4 @@
+extend: resnets/resnet
+
+n_blocks: 10
+n_embed: 128

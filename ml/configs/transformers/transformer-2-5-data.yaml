@@ -1,0 +1,4 @@
+extend: transformers/transformer-2
+
+cuts: discard
+fraction: 0.05

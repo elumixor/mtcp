@@ -31,7 +31,7 @@ class evaluate:
                  half=None,
                  device="cpu"):
         if priority is None:
-            priority = ["val/auc/ttH", "sig/significance", "val/f1", "val/acc", "val/loss", "val/loss"]
+            priority = ["val/auc_w/ttH", "sig/significance", "val/f1", "val/acc", "val/loss", "val/loss"]
 
         self.metrics = dict()
         self.metrics["epoch"] = epoch

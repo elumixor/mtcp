@@ -1,0 +1,3 @@
+extend: resnets/resnet-8
+
+use_embedding: True

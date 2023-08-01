@@ -1,0 +1,4 @@
+extend: resnets/resnet-10-128
+
+cuts: discard
+fraction: 0.1

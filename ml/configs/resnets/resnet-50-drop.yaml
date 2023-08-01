@@ -1,0 +1,3 @@
+extend: resnets/resnet
+
+dropout: 0.5

@@ -1,0 +1,3 @@
+extend: resnets/resnet
+
+use_nan_w: True
