@@ -1,0 +1,3 @@
+extend: transformers/transformer-5
+
+cuts: discard
