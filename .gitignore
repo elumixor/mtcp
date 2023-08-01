@@ -41,3 +41,5 @@ checkpoints/
 
 # These files record the exit codes of the jobs
 .exit_code
+
+.micromamba/
