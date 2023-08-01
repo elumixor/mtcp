@@ -9,9 +9,14 @@ __pycache__/
 # Logs
 logs/
 
+# Artifacts
+artifacts/
+
+# Output
+output/
+outputs/
+
 # Job files
-jobs/**/artifacts/
-jobs/**/artifacts
 jobs/**/logs/
 jobs/**/logs
 jobs/**/status.json

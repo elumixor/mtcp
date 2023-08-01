@@ -3,7 +3,7 @@ import torch
 from pipeliner.utils import read_yaml, DotDict
 
 
-def get_config(config_path: str):
+def get_config(config_path: str, check_cuda_device=True):
     # Run name is the file name
     run_name = os.path.splitext(os.path.basename(config_path))[0]
 
@@ -41,8 +41,10 @@ def get_config(config_path: str):
 
     if config.device == "cuda":
         # Make sure that CUDA env is provided
-        assert "CUDA_VISIBLE_DEVICES" in os.environ, "CUDA_VISIBLE_DEVICES not set"
-        config.cuda_device = os.environ["CUDA_VISIBLE_DEVICES"]
+        if check_cuda_device and "CUDA_VISIBLE_DEVICES" not in os.environ:
+            raise ValueError("CUDA_VISIBLE_DEVICES not set")
+
+        config.cuda_device = os.environ["CUDA_VISIBLE_DEVICES"] if "CUDA_VISIBLE_DEVICES" in os.environ else 0
 
     config.dtype = torch.float16 if config.use_half else torch.float32
     config.compile = config.compile and torch.cuda.get_device_capability()[0] >= 7

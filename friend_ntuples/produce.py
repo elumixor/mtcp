@@ -1,8 +1,9 @@
+import autorootcwd  # Do not delete - adds the root of the project to the path
+
 from array import array
 import os
 import sys
 import numpy as np
-import yaml
 import shutil
 import importlib
 import uproot
@@ -10,9 +11,12 @@ from tqdm import tqdm
 
 from argparse import ArgumentParser
 
+from pipeliner.utils import read_yaml
+
 
 def str2bool(v):
     return v.lower() in ("yes", "true", "t", "1")
+
 
 def get_all_files(base_dir: str):
     """Gets the list of all the .root files in the base_dir and its subdirectories recursively"""
@@ -33,7 +37,7 @@ def get_all_files(base_dir: str):
 
 # Get the subdir as the first argument
 parser = ArgumentParser()
-parser.add_argument("--config", required=True, help="Path to the config file")
+parser.add_argument("--config", default="./friend_ntuples/config.yaml", help="Path to the config file")
 parser.add_argument("--restart", action="store_true", help="Restart from the beginning")
 parser.add_argument("--source-base-dir", help="Override the source base directory specified in the config file")
 parser.add_argument("--target-base-dir", help="Override the target base directory specified in the config file")
@@ -45,21 +49,23 @@ parser.add_argument("--file", help="Process only the specified file")
 args = parser.parse_args()
 
 # Read the config file
-with open(args.config, "r") as f:
-    config = yaml.safe_load(f)
+if args.config:
+    config = read_yaml(args.config)
+else:
+    config = {}
 
-source_base_dir = args.source_base_dir if args.source_base_dir else config["source_base_dir"]
-target_base_dir = args.target_base_dir if args.target_base_dir else config["target_base_dir"]
+source_base_dir = args.source_base_dir if args.source_base_dir else config.source_base_dir
+target_base_dir = args.target_base_dir if args.target_base_dir else config.target_base_dir
 
 files = [args.file] if args.file else config["files"] if "files" in config else get_all_files(source_base_dir)
 
 # Remove the source_base_dir prefix
-files = [file[len(source_base_dir):] for file in files]
+files = [file[len(source_base_dir):] if os.path.isabs(file) else file for file in files]
 
 added_branch_name = args.branch_name if args.branch_name else config["branch_name"]
 model_path = args.model_path if args.model_path else config["model_path"]
-batch_size = config["batch_size"] if "batch_size" in config else 10000
-batch_size = config["batch_size"] if "batch_size" in config else 10000
+batch_size = config.batch_size if "batch_size" in config else 10000
+batch_size = config.batch_size if "batch_size" in config else 10000
 include_original = args.include_original if args.include_original is not None else False
 
 # Check if the source directory exists
@@ -98,9 +104,9 @@ print("Model loaded successfully")
 
 # Get the features used
 features = model.features
-print("Using the following features:")
-for f in features:
-    print(f"- {f}")
+print(f"Using {len(features)} features")
+# for f in features:
+# print(f"- {f}")
 
 # Loop over all the files
 for i_file, file in enumerate(files):
@@ -144,11 +150,11 @@ for i_file, file in enumerate(files):
             # Get the branches specified by the model
             predictions_tree = []
             for batch in tqdm(
-                    tree.iterate(features, step_size=batch_size),
+                    tree.iterate(features, step_size=100),
                     disable=batch_size >= n_events,
-                    total=n_events // batch_size + 1,
+                    total=n_events // 100 + 1,
                     file=sys.stdout,
-                    ):
+            ):
                 # Get the model's predictions on this tree
                 predictions_tree.append(model(batch))
 
