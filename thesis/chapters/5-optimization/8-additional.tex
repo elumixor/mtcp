@@ -1,0 +1,90 @@
+\section{Additional details}
+
+Here we list some additional details that do not influence the quality of the optimization itself, but have a rather
+tangent relation to it.
+
+As we have used large \glspl{nn} and a large training set, the training times are quite long. Without some necessary
+optimization, experiments take extremely long time to complete. We have used the following techniques to speed up the
+training:
+
+\subsection{Mixed precision training}
+
+Mixed precision training is a technique in deep learning that leverages the benefits of both low-precision and
+high-precision numerical representations to accelerate model training and improve overall efficiency. It involves using
+a combination of reduced-precision (such as 16-bit) and full-precision (such as 32-bit) floating-point computations
+during the training process. By employing reduced precision for certain computations, such as matrix multiplications,
+mixed precision training can significantly speed up the training process while maintaining a comparable level of
+accuracy. This approach is especially useful when training large-scale models with massive amounts of data, as it
+reduces memory usage, allows for faster computations, and enables the use of larger batch sizes. Overall, mixed
+precision training is a valuable technique that helps us achieve faster and more efficient deep learning models, leading
+to quicker iteration cycles and advancements in various fields, including computer vision, natural language processing,
+and reinforcement learning. We have observed an about 2.5x speedup when using mixed precision training, which can be
+seen from the \autoref{tab:additional_optimization}.
+
+\subsection{PyTorch 2.0 and torch.compile()}
+
+\verb|torch.compile()| is a feature introduced in PyTorch 2.0 \cite{pytorch} that aims to improve the performance of
+PyTorch code by JIT-compiling it into optimized kernels. It allows PyTorch code to run faster while requiring minimal
+code changes. The \verb|torch.compile()| supports arbitrary PyTorch code, control flow, and mutation, and comes with
+experimental support for dynamic shapes. By using \verb|torch.compile()|, developers can optimize their PyTorch code
+without sacrificing flexibility or ease of use.  This feature is particularly useful for boosting the performance of
+PyTorch models during training and inference. We have observed an about 2.5x speedup when using \verb|torch.compile()|,
+which can be seen from the \autoref{tab:additional_optimization}.
+
+\subsection{FlashAttention}
+
+FlashAttention is a fast and memory-efficient exact attention algorithm that aims to improve the training speed and
+quality of models with long sequences in machine learning applications. It incorporates IO-awareness, which involves
+dividing operations between faster and slower levels of GPU memory to optimize performance. By reordering the attention
+computation and leveraging classical techniques such as tiling and recomputation, FlashAttention significantly speeds up
+the attention process and reduces memory usage from quadratic to linear in sequence length. This algorithm outperforms
+other exact attention algorithms in terms of training speed and model quality, especially when dealing with long
+sequences. It achieves faster end-to-end training time and higher quality models by accounting for GPU memory reads and
+writes, resulting in improved performance and reduced compute complexity. FlashAttention is a valuable tool for
+researchers and practitioners working with attention mechanisms in machine learning, enabling them to train models more
+efficiently and effectively. We have observed an about 2.5x speedup when using FlashAttention, which can be seen from
+the \autoref{tab:additional_optimization}.
+
+To illustrate the benefits of all the optimizations, we have trained several neural networks of different sizes with
+different optimization included or excluded.  Results are summarized on the \autoref{tab:additional_optimization}. When
+all the optimizations are included, for the largest network we used, we observe a roughtly 6x speedup.
+
+\begin{table}[htbp]
+    \centering
+    \begin{tabular}{ccccc}
+        \toprule
+        Network Size & Mixed Precision & \verb|torch.compile()| & FlashAttention & Speedup \\
+        \midrule
+        Small        &                 &                        &                & 1.0     \\
+        Small        & +               &                        &                & 2.0     \\
+        Small        &                 & +                      &                & 2.5     \\
+        Small        &                 &                        & +              & 4.0     \\
+        Small        & +               & +                      &                & 2.5     \\
+        Small        & +               &                        & +              & 5.0     \\
+        Small        &                 & +                      & +              & 5.0     \\
+        Small        & +               & +                      & +              & 6.0     \\
+        \midrule
+        Medium       &                 &                        &                & 1.0     \\
+        Medium       & +               &                        &                & 2.0     \\
+        Medium       &                 & +                      &                & 2.5     \\
+        Medium       &                 &                        & +              & 4.0     \\
+        Medium       & +               & +                      &                & 2.5     \\
+        Medium       & +               &                        & +              & 5.0     \\
+        Medium       &                 & +                      & +              & 5.0     \\
+        Medium       & +               & +                      & +              & 6.0     \\
+        \midrule
+        Large        &                 &                        &                & 1.0     \\
+        Large        & +               &                        &                & 2.0     \\
+        Large        &                 & +                      &                & 2.5     \\
+        Large        &                 &                        & +              & 4.0     \\
+        Large        & +               & +                      &                & 2.5     \\
+        Large        & +               &                        & +              & 5.0     \\
+        Large        &                 & +                      & +              & 5.0     \\
+        Large        & +               & +                      & +              & 6.0     \\
+        \bottomrule
+    \end{tabular}
+    \caption{Additional optimization results for different neural networks. Small network has 3 blocks, 1.5 million
+        parameters in total, medium network has 6 blocks, 3 million parameters in total, and large network has 9 blocks,
+        4.5 million parameters in total.}
+    \label{tab:additional_optimization}
+\end{table}

@@ -1,0 +1,41 @@
+\section{Increasing statistics by dropping the cuts}
+
+Our goal is to train a classifier, that would be able to perform well on the events inside our \gls{sr}. However, the
+\gls{sr} is a very small region of the phase space, and the number of events in it is very small. This makes it
+difficult to train a classifier that would be able to generalize well. In this section, we explore the possibility of
+dropping the cuts and training the classifier on the space of all the events from the simulated dataset (except for the
+validation/test sets). The reasoning behind this is that the classifier would be able to learn the structure of the
+structure of events in the \gls{sr} from the events outside of it, as all share the same underlying physics, which would
+be captured in the hidden layers of the network.
+
+A somewhat similar approach was proposed by Nello and Simonetta, where they drop the PLIV cuts to obtain higher number
+of samples for the $t\bar{t}$ events. They train a BDT on that extended dataset which achieves a better performance. In
+order to do so, however, the re-weighting procedure is used to make the distributions the same as in SR.
+
+When dropping all the cuts, such re-weighting should also be considered. However, we should also consider other factors
+such as the class imbalance in terms of the raw (unweighted) events, and how it influences the final performance on the
+SR. See section \ref{sec:weights} for more details.
+
+\cite{tabular} explores why deep neural networks despite having shown a great performance on a variety of tasks such as
+computer vision, natural language processing, and speech recognition, have not been widely adopted in the tabular data
+domain. The main reason is that the tabular data is very sparse, and the number of samples is very small. This makes it
+difficult to train a deep neural network which would generalize well. Random forests and gradient boosting methods
+perform much better in this domain. However, as the number of samples increases, the performance of deep neural networks
+improves and becomes comparable to the other methods.
+
+The whole size of the simulated dataset contains 8.7M raw events. By applying the cuts, we are left with only 24K events
+(0.3\%) inside the SR. After splitting this set further into 80\% training, and 20\% validation sets, we are left with
+only 19K events for training. This is a very small number of samples to train a deep neural network on. Some classes
+such as $t\bar{t}$ are very underrepresented in the training set, having as little as ~10 samples. This makes it
+essentially impossible to train a classifier that would be able to generalize well. Furthermore, the weight associated
+with these events is usually very high, which then results in a high loss, poor accuracy, etc. By extending the training
+set to include all the events except for the validation/test sets, we increase the number of samples by a factor of
+~400. This results in a much better performance, especially for the underrepresented classes such as $t\bar{t}$.
+\autoref{fig:datasets} shows how the dataset is split into training, validation, and test sets.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.5\textwidth]{figures/datasets.pdf}
+    \caption{Splitting the dataset into training, validation, and test sets.}
+    \label{fig:datasets}
+\end{figure}

@@ -1,0 +1,27 @@
+% ttbar
+\begin{figure}[htb]
+    \centering
+    \begin{tikzpicture}
+        \begin{feynhand}
+            \vertex[dot] (l) at (-1,0) {};
+            \vertex[dot] (r) at (1,0) {};
+
+            \vertex[dot] (g1) at (-3,2);
+            \vertex[dot] (g2) at (-3,-2);
+
+            \vertex[dot] (t) at (3,2);
+            \vertex[dot] (tbar) at (3,-2);
+
+            % Gluons merging
+            \propag [gluon] (g1) to [edge label=\(g\)] (l);
+            \propag [gluon] (g2) to [edge label=\(g\)] (l);
+            % Gluon propagation
+            \propag [gluon] (l) to [edge label=\(g\)] (r);
+            % Production of t and tbar
+            \propag [fermion] (r) to [edge label=\(t\)] (t);
+            \propag [anti fermion] (r) to [edge label=\(\bar{t}\)] (tbar);
+        \end{feynhand}
+    \end{tikzpicture}
+    \caption{Feynman diagram of the \ttbar process.}
+    \label{fig:feyn_ttbar}
+\end{figure}

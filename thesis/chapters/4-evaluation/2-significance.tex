@@ -1,0 +1,99 @@
+\section{Calculating Significance}
+
+The significance of a signal in a particle physics analysis quantifies the confidence level of a result or observation.
+It is a measure of how unlikely a result is to have occurred by chance, assuming the null hypothesis is true. In our
+case, the null hypothesis is that there is no ttH process, and any observed excess of events is due to statistical
+fluctuations in the data.
+
+\subsection{Poisson Distribution}
+
+The starting point for calculating the significance is the assumption that the number of events follows a Poisson
+distribution. The Poisson distribution is a discrete probability distribution that expresses the probability of a given
+number of events occurring in a fixed interval of time or space, if these events occur with a known constant mean rate
+and independently of the time since the last event.
+
+The probability mass function of the Poisson distribution is given by:
+
+\begin{equation}
+    P(k; \lambda) = \frac{\lambda^k e^{-\lambda}}{k!}
+\end{equation}
+
+where k is the number of events, $\lambda$ is the mean number of events, and e is the base of the natural logarithm.
+
+\subsection{Significance Calculation for a Single Bin}
+
+In the simplest case of a single bin, the significance can be calculated using the formula:
+
+\begin{equation}
+    Z = \frac{N_{obs} - N_{bkg}}{\sqrt{N_{bkg}}}
+\end{equation}
+
+where $N_{obs}$ is the number of observed events, $N_{bkg}$ is the number of expected background events, and
+$sqrt{N_{bkg}}$ is the standard deviation of the Poisson distribution assumed for the background. This formula is
+derived from the properties of the Poisson distribution and gives the number of standard deviations (or "sigmas") that
+the observed number of events is away from the expected number of background events.
+
+\subsection{Significance Calculation for Multiple Bins}
+
+In the case of multiple bins, the calculation of the significance becomes more complex. One common method is to use a
+likelihood ratio test. The likelihood L under a given hypothesis is the probability of observing the data given that
+hypothesis. For a Poisson distribution, the likelihood of observing $N_{obs}$ events given an expected number $\lambda$
+of events is:
+
+\begin{equation}
+    L(N_{obs}; \lambda) = \frac{\lambda^{N_{obs}} e^{-\lambda}}{N_{obs}!}
+\end{equation}
+
+We calculate the likelihoods under two hypotheses: the background-only hypothesis ($L_{bkg}$), where $\lambda = N_{bkg}$
+, and the signal+background hypothesis ($L_{sig+bkg}$), where $\lambda = N_{bkg} + N_{sig}$ and $N_{sig}$ is the
+expected number of signal events.
+
+We then form the test statistic q as the ratio of these two likelihoods:
+
+\begin{equation}
+    q = -2 \ln\left(\frac{L_{bkg}}{L_{sig+bkg}}\right)
+\end{equation}
+
+The distribution of q under the null hypothesis can be approximated by a chi-square distribution, from which the p-value
+and Z-score can be calculated. The Z-score gives the significance of the signal.
+
+In conclusion, the calculation of the significance is a crucial step in our analysis that allows us to quantify the
+confidence level of our results. It involves the use of statistical methods based on the properties of the Poisson
+distribution, and takes into account both the observed data and our expectations for the signal and background.
+
+\subsection{Signal Strength and Maximum Likelihood Estimation}
+
+The signal strength, often denoted by $\mu$, is a crucial parameter in our analysis. It quantifies the magnitude of the
+signal in the real data relative to the simulated data. In other words, it is a measure of how much the observed data
+deviates from the expectations based on the simulation.
+
+The signal strength is typically estimated using the method of Maximum Likelihood Estimation (MLE). The likelihood $L$
+under a given hypothesis is the probability of observing the data given that hypothesis. For a Poisson distribution, the
+likelihood of observing $N_{\text{obs}}$ events given an expected number $\lambda$ of events is:
+
+\begin{equation}
+    L(N_{\text{obs}}; \lambda) = \frac{\lambda^{N_{\text{obs}}} e^{-\lambda}}{N_{\text{obs}}!}
+\end{equation}
+
+In the case of the signal+background hypothesis, $\lambda$ is given by $N_{\text{bkg}} + \mu N_{\text{sig}}$, where
+$N_{\text{bkg}}$ is the expected number of background events, $N_{\text{sig}}$ is the expected number of signal events
+in the simulation, and $\mu$ is the signal strength.
+
+The MLE of $\mu$ is the value that maximizes the likelihood. It can be found by taking the derivative of the
+log-likelihood with respect to $\mu$, setting it equal to zero, and solving for $\mu$. This gives:
+
+\begin{equation}
+    \mu_{\text{MLE}} = \frac{N_{\text{obs}} - N_{\text{bkg}}}{N_{\text{sig}}}
+\end{equation}
+
+This formula shows that the MLE of the signal strength is the ratio of the observed excess of events over the expected
+background to the expected number of signal events in the simulation. It provides a measure of how much the observed
+data deviates from the expectations based on the simulation, normalized by the expected signal.
+
+In the case of multiple bins, the MLE of $\mu$ is found by maximizing the product of the likelihoods for each bin. This
+can be done numerically using optimization algorithms.
+
+In conclusion, the signal strength provides a measure of the magnitude of the signal in the real data relative to the
+simulated data, and is estimated using the method of Maximum Likelihood Estimation. This allows us to quantify the
+deviation of the observed data from the expectations based on the simulation, and provides a crucial input to the
+calculation of the significance.

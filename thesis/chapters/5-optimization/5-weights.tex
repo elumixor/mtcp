@@ -1,0 +1,66 @@
+\section{Using (or not using?) event weights \em{correctly}}
+\label{sec:weights}
+
+First of all, we would like to remind the reader about the meaning of the \gls{mc} weights. The weight is assigned to
+each event so that the total number of events in the simulated sample is the same as the number of events in the real
+data, given the same experiment duration. This essentially makes the class distribution in the simulated sample the same
+as in the real data.
+
+Thus, when evaluating the classifier (accuracy, ROCs, etc.), the weights should always be used.
+Otherwise the results would potentially be much different than in the real data.
+
+But what about the training? When training the classifier on the multi-class prediction task, the usual choice is to use
+the cross-entropy loss function. The cross-entropy loss function is defined as:
+
+$$
+    \text{Cross-Entropy Loss} = -\sum_{i=1}^{N} \sum_{j=1}^{M} y_{ij} \log(p_{ij})
+$$
+
+Where $N$ is the number of events, $M$ is the number of classes, $y_{ij}$ is the true label of the $i$-th event for the
+$j$-th class, and $p_{ij}$ is the predicted probability of the $i$-th event for the $j$-th class.
+
+This definition treats all classes. We can, however, assign a weight to each class. This would mean that some classes
+are essentially prioritized over the others. The cross-entropy loss function with weights is defined as:
+
+$$
+    \text{Cross-Entropy Loss}_\text{W} = -\sum_{i=1}^{N} \sum_{j=1}^{M} w_j y_{ij} \log(p_{ij})
+$$
+
+Where $w_j$ is the weight of the $j$-th class. As mentioned, this puts more emphasis on correctly classifying classes
+with higher weights. This is useful, for example, when there is an imbalance among the classes. A trivial example
+considers spam/not spam prediction problem where: class $\textbf{Not Spam}$ that contains 99\% of the events, and the
+class $\textbf{Spam}$ contains only 1\%. If we use the standard cross-entropy loss function, the classifier would be
+incentivized to simply always predict $\textbf{Not Spam}$. However, if we assign a weight of 99 to class
+$\textbf{Spam}$, and a weight of 1 to class $\textbf{Not Spam}$, the classifier would be incentivized to treat both
+classes equally and would learn to discriminate between them much better.
+
+In our case, each singular event has a weight, that can differ from the weight of another event in the same class. This
+leads us to the following definition of a sample-wise weighted Cross-Entropy loss function:
+
+$$
+    \text{Cross-Entropy Loss}_\text{SW} = -\sum_{i=1}^{N} \sum_{j=1}^{M} w_{ij} y_{ij} \log(p_{ij})
+$$
+
+Where $w_{ij}$ is the weight of the $i$-th event for the $j$-th class. Essentially, this is a more general definition of
+the weighted Cross-Entropy loss function where each event is allowed a different weight. Then when classifying event
+with the higher weight, the classifier would be incentivized to classify it correctly.
+
+Which approach should be used? To answer this question empirically, we have trained the same classifier with the same
+random seed, but with different loss functions. The results are shown in \autoref{tab:weights}. The classifier
+that used the sample-wise weighted Cross-Entropy loss function performed the best having achieved the highest accuracy
+of 88\%, $\text{AUC}_\text{mean}$ of 0.94, and $\text{AUC}_\ttH$ of 0.98.
+
+\begin{table}[htbp]
+    \centering
+    \begin{tabular}{ccc}
+        \toprule
+        Loss Function                      & Accuracy & AUC  \\
+        \midrule
+        Cross-Entropy                      & 0.85     & 0.91 \\
+        Cross-Entropy with Class Weights   & 0.87     & 0.93 \\
+        Sample-wise Weighted Cross-Entropy & 0.88     & 0.94 \\
+        \bottomrule
+    \end{tabular}
+    \caption{Comparison of different loss functions.}
+    \label{tab:weights}
+\end{table}

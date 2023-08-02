@@ -1,0 +1,30 @@
+% ttH
+\begin{figure}[htb]
+    \centering
+    \begin{tikzpicture}
+        \begin{feynhand}
+            \vertex[dot] (c) at (0,0) {};
+            \vertex[dot] (h) at (2,0) {};
+            \vertex[dot] (g1) at (-1.5, 1) {};
+            \vertex[dot] (g11) at (-3.5,2);
+            \vertex[dot] (t) at (2,2);
+            \vertex[dot] (g2) at (-1.5, -1) {};
+            \vertex[dot] (g21) at (-3.5,-2);
+            \vertex[dot] (tbar) at (2,-2);
+
+            % Production of H
+            \propag [scalar] (c) to [edge label=\(H\)] (h);
+            \propag [anti fermion] (g1) to [edge label=\(\bar{t}\)] (c);
+            \propag [fermion] (g2) to [edge label=\(t\)] (c);
+            % Production of t
+            \propag [fermion] (g1) to [edge label=\(t\)] (t);
+            % Production of tbar
+            \propag [anti fermion] (g2) to [edge label=\(\bar{t}\)] (tbar);
+            % Gluon splitting
+            \propag [gluon] (g11) to [edge label=\(g\)] (g1);
+            \propag [gluon] (g21) to [edge label=\(g\)] (g2);
+        \end{feynhand}
+    \end{tikzpicture}
+    \caption{Feynman diagram of the \ttH process.}
+    \label{fig:feyn_tth}
+\end{figure}

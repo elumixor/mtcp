@@ -1,0 +1,15 @@
+# Generated latex files
+*.aux
+*.acn
+*.bbl
+*.blg
+*.fls
+*.log
+*.out
+*.lot
+*.toc
+*.loa
+*.lof
+*.ist
+*.gz
+*.fdb_latexmk

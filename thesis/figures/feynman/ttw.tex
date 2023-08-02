@@ -1,0 +1,34 @@
+% ttW
+\begin{figure}[htb]
+    \centering
+    \begin{tikzpicture}
+        \begin{feynhand}
+            \vertex[dot] (gl) at (-1,1) {};
+            \vertex[dot] (gr) at (0.5,1) {};
+            \vertex[dot, label=\(\bar{t}\)] (tbar) at (2,1.5);
+            \vertex[dot, label=\(t\)] (t) at (2,0.5);
+            \vertex[dot] (dbar) at (-3,1.5);
+
+            \vertex[dot] (d) at (-1,-0.75) {};
+            \vertex[dot] (u) at (-3,-1.5);
+            \vertex[dot, label=\(W^+\)] (w) at (2,-1.5);
+
+            % Down to gluon
+            \propag [fermion] (d) to [edge label=\(d\)] (gl);
+            % Up to down
+            \propag [fermion] (u) to [edge label=\(u\)] (d);
+            % Anti down to gluon
+            \propag [anti fermion] (dbar) to [edge label=\(\bar{d}\)] (gl);
+            % Gluon to gluon
+            \propag [gluon] (gl) to [edge label=\(g\)] (gr);
+            % Gluon to top
+            \propag [fermion] (gr) to (t);
+            % Gluon to topbar
+            \propag [anti fermion] (gr) to (tbar);
+            % Down to W
+            \propag [gluon] (d) to (w);
+        \end{feynhand}
+    \end{tikzpicture}
+    \caption{Feynman diagram of the \ttW process.}
+    \label{fig:feyn_ttw}
+\end{figure}

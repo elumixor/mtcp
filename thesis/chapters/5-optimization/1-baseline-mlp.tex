@@ -1,0 +1,84 @@
+\section{Baseline model}
+
+\subsection[MLP]{\gls{mlp}}
+
+In previous work, Severin utilized \glspl{mlp} as the primary model architecture.
+While he experimented with combining multiple \glspl{mlp}, this approach is essentially equivalent to using a single,
+larger \gls{mlp}. This can be formalized as in \cite{ft-transformer}:
+
+$$
+    \text{MLP(x)} = \text{MLP(x)} + \text{MLP(x)}
+$$
+
+The benefit of using the staged network, however, is that each sub-\gls{mlp} can be trained on a different set of
+features. This can potentially reduce the systematical uncertainties, associated with the final prediction.
+
+
+
+\subsection[resnet]{\gls{resnet}}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.5\textwidth]{figures/resnet.pdf}
+    \caption{Resnet architecture.}
+    \label{fig:resnet_architecture}
+\end{figure}
+
+We compare Severin's staged network to a slightly improved version of \gls{mlp} that introduces residual/skip
+connections between the layers (see \autoref{fig:resnet_architecture}).
+Those connections improve the training of deep neural networks, as the gradients can flow unimpeded back to the first
+layers. This helps combat the vanishing gradients problem. We can formalize this as in
+\cite{ft-transformer}:
+
+$$
+    \text{ResNet(x)} = \text{MLP(x)} + \text{MLP(x)}
+$$
+
+ResNets are very fast to train, and more efficient than mlps. The best results obtained with Resnets were 85\% accuracy,
+0.85 $\text{AUC}_\text{mean}$ and 0.85 $\text{AUC}_{t\bar{t}H}$ (see \autoref{fig:resnet_results}).
+
+While keeping the number of trainable parameters the same, it's better to have deeper networks than wider networks.
+Although wide NNs are fast to train, they are extremely prone to overfitting, as the starting layers essentially
+memorize the training data.
+
+We introduce a few other changes to the training procedure:
+
+\begin{enumerate}
+    \item We use a \verb|AdamW| optimizer \cite{adamw}
+    \item We use \verb|GELU| activation \cite{gelu}
+    \item The categorical features are one-hot encoded. Invalid/missing values are treated as a separate class.
+    \item Similarly, for the continuous feature, the invalid/missing values are replaced with learnable parameters.
+    \item We introduce \verb|LayerNorm| \cite{layernorm} before each \verb|Linear| layer.
+\end{enumerate}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{figures/resnet_results.pdf}
+    \caption{Resnet results.}
+    \label{fig:resnet_results}
+\end{figure}
+
+
+\subsection{Pre-processing and embedding}
+
+In previous work, all the features were treated as continuous variables. Before feeding them to the network, they were
+normalized to have zero mean and unit variance. This is essential for the training of deep neural networks, as it
+prevents the gradients from exploding or vanishing.
+
+However, this approach is far from optimal when working with the categorical features. We standard way of dealing with
+categorical features is to ues embeddings. An embedding is a mapping from a discrete variable to a continuous vector
+space. The embedding is learned during the training of the network. The embedding layer is essentially a lookup table,
+where each row corresponds to a single category.
+
+Furthermore, the dataset sometimes contains missing or invalid values for some samples. To properly handle those, we
+introduce a separate category for them when the feature is categorical. For continuous features, we replace the missing
+values with a learnable parameter.
+
+The whole structure of the pre-processing layer is shown on the \autoref{fig:preprocessing}.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.5\textwidth]{example-image-a}
+    \caption{Pre-processing layer.}
+    \label{fig:preprocessing}
+\end{figure}
