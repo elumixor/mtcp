@@ -1,0 +1,3 @@
+extend: transformers/transformer-2-100-data-safe-5000-batch
+
+n_blocks: 5

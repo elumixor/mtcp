@@ -1,0 +1,139 @@
+extend: transformers/transformer-2
+
+cuts: discard
+fraction: 0.1
+
+features:
+   - DRjj_lead
+   - DRll01
+   - DeltaR_max_lep_bjet77
+   - DeltaR_min_lep_jet
+   - DeltaR_min_lep_jet_fwd
+   - HT
+   - HT_fwdJets
+   - HT_inclFwdJets
+   - HT_jets
+   - HT_lep
+   - HT_taus
+   - MLepMet
+   - Mb0
+   - Mb1
+   - Mlb
+   - Mll01
+   - Mlll012
+   - Mllll0123
+   - MtLep1Met
+   - MtLepMet
+   - Ptll01
+   # - bTagSF_weight_DL1r_77
+   # - bTagSF_weight_DL1r_85
+   - best_Z_Mll
+   # - best_Z_other_Mll # Has 0 std and is thus remobed
+   - best_Z_other_MtLepMet
+   # - custTrigMatch_LooseID_FCLooseIso_DLT
+   # - custTrigSF_TightElMediumMuID_FCLooseIso_DLT
+   - dEta_maxMjj_frwdjet
+   - dilep_type
+   - eta_frwdjet
+   - flag_JetCleaning_LooseBad
+
+   - jets_e_0
+   - jets_e_1
+   - jets_e_2
+   - jets_e_3
+   - jets_e_4
+   - jets_e_5
+
+   - jets_eta_0
+   - jets_eta_1
+   - jets_eta_2
+   - jets_eta_3
+   - jets_eta_4
+   - jets_eta_5
+
+   - jets_phi_0
+   - jets_phi_1
+   - jets_phi_2
+   - jets_phi_3
+   - jets_phi_4
+   - jets_phi_5
+
+   - jets_pt_0
+   - jets_pt_1
+   - jets_pt_2
+   - jets_pt_3
+   - jets_pt_4
+   - jets_pt_5
+
+   - lep_E_0
+   - lep_E_1
+   - lep_EtaBE2_0
+   - lep_EtaBE2_1
+   - lep_Eta_0
+   - lep_Eta_1
+   - lep_ID_0
+   - lep_ID_1
+   - lep_Mtrktrk_atConvV_CO_0
+   - lep_Mtrktrk_atConvV_CO_1
+   - lep_Mtrktrk_atPV_CO_0
+   - lep_Mtrktrk_atPV_CO_1
+   - lep_Phi_0
+   - lep_Phi_1
+   - lep_Pt_0
+   - lep_Pt_1
+   - lep_RadiusCO_0
+   - lep_RadiusCO_1
+   - lep_Z0SinTheta_0
+   - lep_Z0SinTheta_1
+   - lep_ambiguityType_0
+   - lep_ambiguityType_1
+   # - lep_chargeIDBDTResult_recalc_rel207_tight_0 # what is this?
+   - lep_isMedium_0
+   - lep_isMedium_1
+   - lep_isTightLH_0
+   - lep_isTightLH_1
+   - lep_isolationLoose_VarRad_0
+   - lep_isolationLoose_VarRad_1
+   - lep_nInnerPix_0
+   - lep_nInnerPix_1
+   - lep_nTrackParticles_0
+   - lep_nTrackParticles_1
+   - lep_sigd0PV_0
+   - lep_sigd0PV_1
+   - max_eta
+   - met_met
+   - met_phi
+   - minDeltaR_LJ_0
+   - minDeltaR_LJ_1
+   - minDeltaR_LJ_2
+   - minOSMll
+   - minOSSFMll
+   - mjjMax_frwdJet
+   - nFwdJets_OR
+   - nJets_OR
+   - nJets_OR_DL1r_77
+   - nJets_OR_DL1r_85
+   - nTaus_OR
+   - nTaus_OR_Pt25
+   - passPLIVTight_0
+   - passPLIVTight_1
+   - sumPsbtag
+   - taus_DL1r_0
+   - taus_JetRNNSigLoose_0
+   - taus_JetRNNSigMedium_0
+   - taus_JetRNNSigTight_0
+   - taus_RNNJetScoreSigTrans_0
+   - taus_RNNJetScore_0
+   - taus_charge_0
+   - taus_decayMode_0
+   - taus_eta_0
+   - taus_fromPV_0
+   - taus_numTrack_0
+   - taus_passEleBDT_0
+   - taus_passEleOLR_0
+   - taus_passJVT_0
+   - taus_phi_0
+   - taus_pt_0
+   - taus_width_0
+   - total_charge
+   - total_leptons

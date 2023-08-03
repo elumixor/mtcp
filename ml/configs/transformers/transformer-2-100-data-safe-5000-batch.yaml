@@ -1,0 +1,4 @@
+extend: transformers/transformer-2-10-data-safe
+
+fraction: 1
+barch_size: 5000
