@@ -46,9 +46,20 @@ class Transformer(Model):
         self.ln = nn.LayerNorm(n_embed)
         self.logits = nn.Linear(n_embed, n_classes)
 
-    def forward(self, batch: Data, return_loss=False, return_all=False):
-        B = batch.x_continuous.shape[0]
+    @classmethod
+    def from_saved(cls, path: str, device="cpu"):
+        saved_data = torch.load(path, map_location=device)
+        n_features_continuous = len(saved_data["x_names_continuous"])
+        return cls(n_features_continuous=n_features_continuous,
+                   categorical_sizes=saved_data["categorical_sizes"],
+                   n_classes=saved_data["n_classes"],
+                   n_embed=saved_data["n_embed"],
+                   n_inner=saved_data["n_inner"],
+                   n_blocks=saved_data["n_blocks"],
+                   n_heads=saved_data["n_heads"],
+                   dropout=saved_data["dropout"])
 
+    def forward(self, batch: Data, return_loss=False, return_all=False):
         x = self.embed(batch.x_continuous, batch.x_categorical)
         x = self.blocks(x)
         x = self.ln(x)

@@ -1,9 +1,10 @@
-\section[ft-transformer]{\gls{ftt}}
+\subsection{\gls{ftt}}
+\label{sec:ftt}
 
 We adopt the \gls{ftt} proposed in \cite{ft-transformer} architecture, which uses the transformer \cite{transformer}
 architecture at its core.
 
-\subsection{Transformer architecture}
+\subsubsection{Transformer architecture}
 
 The transformer architecture was originally proposed for natural language processing tasks, but has since been applied
 to almost every domain of machine learning. The transformer architecture is a fully-attentional architecture, which
@@ -15,7 +16,7 @@ projected to the desired dimensionality. The \verb|FeedForward| consists of two 
 activation in-between. To improve and stabilize the training \verb|LayerNorm| \cite{layernorm} layers are used. And
 residual connections are introduced to improve with the training of deep networks.
 
-\subsection{Post-norm vs pre-norm formulation}
+\subsubsection{Post-norm vs pre-norm formulation}
 
 Since the original paper \cite{transformer}, not many things have changed with the transformer design. The notable
 change is that \verb|LayerNorm| layer has been moved from after the \verb|Attention| and \verb|FeedForward| layers
@@ -29,7 +30,7 @@ stable and easier to train \cite{pre-norm}. We also adopt this change, following
     \label{fig:ftt}
 \end{figure}
 
-\subsection{Flatten last layers ?}
+\subsubsection{Flatten last layers ?}
 
 \placeholder{TODO}
 

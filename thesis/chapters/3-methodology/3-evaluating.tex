@@ -20,6 +20,16 @@ is the predicted label.
 
 \subsection{Validation and Test Sets: Generalization Checkpoints}
 
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figures/plots/ml/losses.png}
+    \caption{Training and validation losses during the training process. \gls{ftt} with 2 blocks and embedding size
+        of 256 was used on the plot (see \autoref{sec:ftt}). Around the 30th epoch, the training loss starts to
+        decrease while the validation loss starts to increase, indicating that the model is overfitting to
+        the training data. It is at this point that the checkpoint is saved and used for evaluation.}
+    \label{fig:losses}
+\end{figure}
+
 To assess the generalization ability of the classifier, the dataset is typically divided into three subsets: training,
 validation, and test sets. The training set is used to adjust the model's parameters, the validation set is used to tune
 the hyperparameters and provide an unbiased evaluation of the model during training, and the test set is used to assess
@@ -28,8 +38,8 @@ the performance of the fully-trained model.
 During training, not only is the training loss monitored, but also the validation loss. The validation loss provides an
 unbiased estimate of the model's performance on unseen data and is crucial for preventing overfitting. If the training
 loss continues to decrease while the validation loss starts to increase, the model is likely overfitting to the training
-data and failing to generalize to unseen data. The point at which the validation loss is minimized is typically chosen
-as the stopping point for training (early stopping).
+data and failing to generalize to unseen data (see \autoref{fig:losses}). The point at which the validation loss is
+minimized is typically chosen as the stopping point for training (early stopping).
 
 \subsubsection{Performance Metrics: More than Accuracy}
 

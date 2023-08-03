@@ -5,10 +5,21 @@ import wandb
 
 from ml.utils import get_config
 
-# Download the model from wandb
 
+def download_model(config: str, clean=False):
+    config = get_config(config, check_cuda_device=False)
+    project_name = config.project_name
+    run_name = config.run_name
 
-def download_model(project_name: str, run_name: str):
+    file_name = f"ml/artifacts/{run_name}/model.pt"
+
+    # Return the path to the model file if it exists
+    if os.path.exists(file_name):
+        if not clean:
+            return file_name
+
+        os.remove(file_name)
+
     # Get the artifacts of the run
     api = wandb.Api()
 
@@ -35,7 +46,6 @@ def download_model(project_name: str, run_name: str):
     model_artifact_dir = artifact.download(root=f"ml/artifacts/{run_name}")
 
     # Rename it to "model.pt"
-    file_name = f"{model_artifact_dir}/model.pt"
     os.rename(f"{model_artifact_dir}/{artifact.files()[0].name}", file_name)
 
     # Get the model file
@@ -48,11 +58,10 @@ if __name__ == "__main__":
     import argparse
 
     # Parse the arguments
-    parser = argparse.ArgumentParser(description='Train the model.')
-    parser.add_argument('config', type=str, default='config.yaml', help='Path to the config file')
+    parser = argparse.ArgumentParser(description="Download the trained model")
+    parser.add_argument("config", type=str, default="config.yaml", help="Path to the config file")
+    parser.add_argument("--clean", action="store_true", help="Clean the model directory")
     args = parser.parse_args()
 
     # Read the config
-    config = get_config(args.config, check_cuda_device=False)
-
-    model = download_model(config.project_name, config.run_name)
+    model = download_model(args.config, clean=args.clean)
