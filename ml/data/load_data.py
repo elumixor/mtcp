@@ -44,7 +44,6 @@ def load_data(path: str):
         event_numbers = np.load(os.path.join(path, "event_numbers.npy"))
         pbar.update()
 
-
     # Split into selected and not selected
     return Data(
         x_continuous=torch.from_numpy(x_continuous),
@@ -59,3 +58,58 @@ def load_data(path: str):
         map_categorical=map_categorical,
         event_numbers=event_numbers.tolist(),
     ), torch.from_numpy(selected)
+
+
+def load_from_config(config):
+    data, selected = load_data(config.data_path)
+    data_cut = data[selected]
+    data_uncut = data[~selected]
+
+    classes = config.classes if "classes" in config else data.y_names
+    features = config.features if "features" in config else data.x_names
+
+    # Take the trn_split of the selected samples
+    # 20% of that is the validation set
+    trn_cut, val, tst = data_cut.split(config.trn_split)
+    trn_uncut = trn_cut + data_uncut
+
+    # Here we determine the training set we're using
+    assert config.cuts in ["apply", "discard"]
+    trn = trn_uncut if config.cuts == "discard" else trn_cut
+
+    # Also apply the fraction cut if needed
+    if config.fraction < 1:
+        n_samples = int(config.fraction * trn.n_samples)
+        # Shuffle the data
+        indices = torch.randperm(trn.n_samples)[:n_samples]
+        trn = trn[indices]
+
+    print()
+    print(f"Training set: {trn.n_samples} samples")
+    print(f"Validation set: {val.n_samples} samples")
+    print()
+
+    # Select classes
+    trn = trn.select_classes(classes)
+    val = val.select_classes(classes)
+    tst = tst.select_classes(classes)
+
+    using_all_features = len(features) == (
+        len(data.x_names_categorical) + len(data.x_names_continuous)
+    )
+    print(f"Using {len(features)} features{' (all)' if using_all_features else ''}")
+    print()
+
+    # Select features
+    trn = trn.select_features(features)
+    val = val.select_features(features)
+    tst = tst.select_features(features)
+
+    # Merge all the background classes (everything excepr ttH) into one
+    if config.use_binary:
+        background_classes = [c for c in trn.y_names if c != "ttH"]
+        trn = trn.merge_classes(names=background_classes, new_class_name="background")
+        val = val.merge_classes(names=background_classes, new_class_name="background")
+        tst = tst.merge_classes(names=background_classes, new_class_name="background")
+
+    return trn, val, tst

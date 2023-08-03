@@ -6,20 +6,20 @@ import wandb
 import argparse
 import tempfile
 import signal
-from tqdm import tqdm
 
-from ml.data import load_data
+from ml.data import load_from_config
 from ml.nn import Transformer, ResNet
-from ml.evaluation import evaluate, evaluate_rocs, evaluate_confusion_matrices, evaluate_significance, evaluate_feature_importance
+from ml.evaluation import evaluate
 from ml.training import find_lr, train, load_checkpoint
 from ml.utils import get_config
+from ml.evaluate import evaluate as evaluate_final
 
 
 # Parse the arguments
-parser = argparse.ArgumentParser(description='Train the model.')
-parser.add_argument('config', type=str, default='config.yaml', help='Path to the config file')
-parser.add_argument('--tags', type=str, nargs='+', default=[], help='Tags to add to the run')
-parser.add_argument('--repeat', type=int, default=None, help='Number of times to repeat the training')
+parser = argparse.ArgumentParser(description="Train the model.")
+parser.add_argument("config", type=str, default="config.yaml", help="Path to the config file")
+parser.add_argument("--tags", type=str, nargs="+", default=[], help="Tags to add to the run")
+parser.add_argument("--repeat", type=int, default=None, help="Number of times to repeat the training")
 args = parser.parse_args()
 
 # Read the config
@@ -28,15 +28,8 @@ config = get_config(args.config)
 # Reproducibility
 torch.manual_seed(config.seed)
 
-# Get data
-data, selected = load_data(config.data_path)
-data_cut = data[selected]
-data_uncut = data[~selected]
-
-classes = config.classes if "classes" in config else data.y_names
-features = config.features if "features" in config else data.x_names
-
 repeat = args.repeat if args.repeat is not None else config.repeat
+
 
 # Model definition
 def get_model():
@@ -76,15 +69,21 @@ def get_model():
 
     return model
 
+
 # Optimizer definition
 def Optim(params, lr):
     return torch.optim.AdamW(params, lr=lr)
 
+
 # Register the handler for SIGINT
 interrupted = False
+
+
 def handler(_, __):
     global interrupted
     interrupted = True
+
+
 signal.signal(signal.SIGINT, handler)
 
 # Begin trials
@@ -92,48 +91,8 @@ for trial in range(repeat):
     if interrupted:
         break
 
-    # Take the trn_split of the selected samples
-    # 20% of that is the validation set
-    trn_cut, val, tst = data_cut.split(config.trn_split)
-    trn_uncut = trn_cut + data_uncut
-
-    # Here we determine the training set we're using
-    assert config.cuts in ["apply", "discard"]
-    trn = trn_uncut if config.cuts == "discard" else trn_cut
-
-    # Also apply the fraction cut if needed
-    if config.fraction < 1:
-        n_samples = int(config.fraction * trn.n_samples)
-        # Shuffle the data
-        indices = torch.randperm(trn.n_samples)[:n_samples]
-        trn = trn[indices]
-
-    print()
-    print(f"Training set: {trn.n_samples} samples")
-    print(f"Validation set: {val.n_samples} samples")
-    print()
-
-    # Select classes
-    trn = trn.select_classes(classes)
-    val = val.select_classes(classes)
-    tst = tst.select_classes(classes)
-
-    using_all_features = len(features) == (len(data.x_names_categorical) + len(data.x_names_continuous))
-    print(f"Using {len(features)} features{' (all)' if using_all_features else ''}")
-    print()
-
-    # Select features
-    trn = trn.select_features(features)
-    val = val.select_features(features)
-    tst = tst.select_features(features)
-
-    # Merge all the background classes (everything excepr ttH) into one
-    if config.use_binary:
-        background_classes = [c for c in trn.y_names if c != "ttH"]
-        trn = trn.merge_classes(names=background_classes, new_class_name="background")
-        val = val.merge_classes(names=background_classes, new_class_name="background")
-        tst = tst.merge_classes(names=background_classes, new_class_name="background")
-
+    # Get data
+    trn, val, tst = load_from_config(config)
 
     model = get_model()
 
@@ -143,12 +102,18 @@ for trial in range(repeat):
             val_size=val.n_samples,
             n_classes=trn.n_classes,
             n_parameters=model.n_params,
-            **config)
+            **config,
+        )
 
         del wandb_config["run_name"]
 
         tags = config.tags + args.tags
-        wandb_run = wandb.init(project=config.project_name, name=config.run_name, config=wandb_config, tags=tags)
+        wandb_run = wandb.init(
+            project=config.project_name,
+            name=config.run_name,
+            config=wandb_config,
+            tags=tags,
+        )
         print()
 
         # Define min/max metrics for W&B
@@ -168,14 +133,16 @@ for trial in range(repeat):
     else:
         wandb_run = None
 
-    lr, min_loss = find_lr(model,
-                        trn,
-                        Optim,
-                        batch_size=config.batch_size,
-                        lr_divisions=100,
-                        device=config.device,
-                        run=wandb_run,
-                        half=config.dtype)
+    lr, min_loss = find_lr(
+        model,
+        trn,
+        Optim,
+        batch_size=config.batch_size,
+        lr_divisions=100,
+        device=config.device,
+        run=wandb_run,
+        half=config.dtype,
+    )
 
     print(f"Found lr={lr:.8f} with min_loss={min_loss:.8f}")
     print()
@@ -183,7 +150,9 @@ for trial in range(repeat):
     model = get_model()
 
     optim = Optim(model.parameters(), lr)
-    scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optim, patience=50000, factor=0.1, threshold=0.01, verbose=True, min_lr=1e-7)
+    scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
+        optim, patience=50000, factor=0.1, threshold=0.01, verbose=True, min_lr=1e-7
+    )
 
     # Train. Obtain the checkpoints of the best and the last models
     model.train()
@@ -227,32 +196,20 @@ for trial in range(repeat):
     # Run evaluations
     if "evaluations" in config:
         print(f"Best model loaded. Evaluations: {evaluator(-1)}")
-
         print(f'Running the following evaluations: {config["evaluations"]}')
 
-        if "roc" in config["evaluations"]:
-            evaluate_rocs(model, val, batch_size=config.batch_size, device=config.device, wandb_run=wandb_run)
-
-        thresholds = [0.0]
-
-        if "significance" in config["evaluations"]:
-            print("Evaluating significance")
-            threshold, threshold_simple = evaluate_significance(model, val, F,
-                                                                batch_size=config.batch_size,
-                                                                device=config.device,
-                                                                wandb_run=wandb_run)
-            thresholds = [0.0, threshold, threshold_simple]
-
-        if "confusion_matrix" in config["evaluations"]:
-            for threshold in tqdm(thresholds, desc="Evaluating confusion matrices"):
-                evaluate_confusion_matrices(model, val,
-                                            threshold=threshold,
-                                            batch_size=config.batch_size,
-                                            device=config.device,
-                                            wandb_run=wandb_run)
-
-        if "feature_importance" in config["evaluations"]:
-            evaluate_feature_importance(model, val, device=config.device, wandb_run=wandb_run)
+        thresholds = evaluate_final(
+            model=model,
+            val=val,
+            batch_size=config.batch_size,
+            device=config.device,
+            wandb_run=wandb_run,
+            F=F,
+            roc="roc" in config.evaluations,
+            significance="significance" in config.evaluations,
+            confusion_matrix="confusion_matrix" in config.evaluations,
+            feature_importance="feature_importance" in config.evaluations,
+        )
 
     # Save everything to create the NN:
     print("Saving the model")
@@ -263,19 +220,17 @@ for trial in range(repeat):
     # - mean and std of the features
     saved_data = {
         **model.hyperparameters,
-
         "weights": model.state_dict(),
         "x_names_continuous": trn.x_names_continuous,
         "x_names_categorical": trn.x_names_categorical,
+        "n_features_continuous": trn.n_features_continuous,
         "categorical_sizes": trn.categorical_sizes,
         "map_categorical": trn.metadata["map_categorical"],
-
         "threshold": (thresholds[1] if len(thresholds) > 1 else 0.0) if "evaluations" in config else None,
         "y_names": trn.y_names,
         "mean": trn.metadata["mean"],
         "std": trn.metadata["std"],
     }
-
 
     with tempfile.NamedTemporaryFile(delete=False) as tmp_file:
         tmp_file_path = tmp_file.name

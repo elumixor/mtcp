@@ -3,7 +3,7 @@ import torch
 from pipeliner.utils import read_yaml, DotDict
 
 
-def get_config(config_path: str, check_cuda_device=True):
+def get_config(config_path: str, check_cuda_device=True, silent=False):
     # Run name is the file name
     run_name = os.path.splitext(os.path.basename(config_path))[0]
 
@@ -52,8 +52,9 @@ def get_config(config_path: str, check_cuda_device=True):
         os.environ["MTCP_CHECKPOINTS_DIR"] if "MTCP_CHECKPOINTS_DIR" in os.environ else \
         "ml/checkpoints"
 
-    print(f"\n{' Config ':-^80}\n")
-    print(config)
-    print(f"\n{'':-^80}\n")
+    if not silent:
+        print(f"\n{' Config ':-^80}\n")
+        print(config)
+        print(f"\n{'':-^80}\n")
 
     return config

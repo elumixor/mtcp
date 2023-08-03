@@ -16,20 +16,22 @@ from .checkpoints import save_checkpoint, load_checkpoint
 log = logging.getLogger(__name__)
 
 
-def train(model: Model,
-          optim: torch.optim.Optimizer,
-          trn: Data,
-          evaluate_fn: Callable[[int], evaluate],
-          epochs: int,
-          validate_freq: int,
-          scheduler=None,
-          batch_size=64,
-          checkpoints_dir="ml/checkpoints",
-          run=None,
-          restart=False,
-          device="cpu",
-          use_tqdm=True,
-          half=None):
+def train(
+    model: Model,
+    optim: torch.optim.Optimizer,
+    trn: Data,
+    evaluate_fn: Callable[[int], evaluate],
+    epochs: int,
+    validate_freq: int,
+    scheduler=None,
+    batch_size=64,
+    checkpoints_dir="ml/checkpoints",
+    run=None,
+    restart=False,
+    device="cpu",
+    use_tqdm=True,
+    half=None,
+):
     # Let's estimate the initial loss
     initial_loss = model.estimated_initial_loss
     log.debug(f"Initial loss should be somewhere around {initial_loss:.5f}")
@@ -74,6 +76,7 @@ def train(model: Model,
     def handler(_, __):
         nonlocal interrupted
         interrupted = True
+
     signal.signal(signal.SIGINT, handler)
 
     # Track the time between the epochs
@@ -83,12 +86,18 @@ def train(model: Model,
     first_epoch = stats[-1].epoch + 1
     for epoch in range(first_epoch, first_epoch + epochs):
         batches = trn.batches(batch_size)
-        for batch in tqdm(batches, desc=f"Training (epoch {epoch})", disable=not use_tqdm):
+        for batch in tqdm(
+            batches, desc=f"Training (epoch {epoch})", disable=not use_tqdm
+        ):
             if interrupted:
                 break
 
             # Training
-            with torch.autocast(device_type=device, dtype=torch.float16 if use_half or device == "cuda" else torch.bfloat16, enabled=use_half):
+            with torch.autocast(
+                device_type=device,
+                dtype=torch.float16 if use_half or device == "cuda" else torch.bfloat16,
+                enabled=use_half,
+            ):
                 loss = model(batch.to(device), return_loss=True)
 
             scaler.scale(loss).backward()
@@ -126,17 +135,22 @@ def train(model: Model,
                 # Record the best data
                 model_best = model.state_dict()
                 optim_best = optim.state_dict()
-                scheduler_best = scheduler.state_dict() if scheduler is not None else None
+                scheduler_best = (
+                    scheduler.state_dict() if scheduler is not None else None
+                )
 
             # Add the SIGINT handler again because the evaluation uses the same handler
             def handler(_, __):
                 nonlocal interrupted
                 interrupted = True
+
             signal.signal(signal.SIGINT, handler)
 
     # Save the checkpoints - best and last
     checkpoint_last = save_checkpoint(last_path, model, optim, scheduler, stats)
-    checkpoint_best = save_checkpoint(best_path, model_best, optim_best, scheduler_best, stats_best)
+    checkpoint_best = save_checkpoint(
+        best_path, model_best, optim_best, scheduler_best, stats_best
+    )
 
     if run is not None:
         # Log the artifacts

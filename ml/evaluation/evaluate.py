@@ -16,22 +16,24 @@ from .find_significance_threshold import find_significance_threshold
 
 
 class evaluate:
-    def __init__(self,
-                 model: Model,
-                 trn: Data,
-                 val: Data,
-                 signal_idx: int,
-                 epoch: int,
-                 F: float,
-                 batch_size: int,
-                 max_significance: float,
-                 use_tqdm=True,
-                 priority=None,
-                 n_significance_thresholds=100,
-                 half=None,
-                 device="cpu"):
+    def __init__(
+        self,
+        model: Model,
+        trn: Data,
+        val: Data,
+        signal_idx: int,
+        epoch: int,
+        F: float,
+        batch_size: int,
+        max_significance: float,
+        use_tqdm=True,
+        priority=None,
+        n_significance_thresholds=100,
+        half=None,
+        device="cpu",
+    ):
         if priority is None:
-            priority = ["val/loss", "sig/significance", "val/f1", "val/acc", "val/loss", "val/loss"]
+            priority = ["val/auc_w/ttH"]
 
         self.metrics = dict()
         self.metrics["epoch"] = epoch
@@ -47,15 +49,39 @@ class evaluate:
 
         with torch.no_grad():
             # Compute the loss on the training set
-            batches = tqdm(trn.batches(batch_size, shuffle=False), desc=" - evaluation: trn", disable=not use_tqdm)
+            batches = tqdm(
+                trn.batches(batch_size, shuffle=False),
+                desc=" - evaluation: trn",
+                disable=not use_tqdm,
+            )
 
-            with torch.autocast(device_type=device, dtype=torch.float16 if use_half or device == "cuda" else torch.bfloat16, enabled=use_half):
-                self.metrics["trn/loss"] = torch.stack([model(batch.to(device), return_loss=True) for batch in batches]).mean().item()
+            with torch.autocast(
+                device_type=device,
+                dtype=torch.float16 if use_half or device == "cuda" else torch.bfloat16,
+                enabled=use_half,
+            ):
+                self.metrics["trn/loss"] = (
+                    torch.stack(
+                        [model(batch.to(device), return_loss=True) for batch in batches]
+                    )
+                    .mean()
+                    .item()
+                )
 
             # Evaluate the fixed model on the validation set
-            batches = tqdm(val.batches(batch_size, shuffle=False), desc=" - evaluation: val", disable=not use_tqdm)
-            with torch.autocast(device_type=device, dtype=torch.float16 if use_half or device == "cuda" else torch.bfloat16, enabled=use_half):
-                logits, loss = zip(*[model(batch.to(device), return_all=True) for batch in batches])
+            batches = tqdm(
+                val.batches(batch_size, shuffle=False),
+                desc=" - evaluation: val",
+                disable=not use_tqdm,
+            )
+            with torch.autocast(
+                device_type=device,
+                dtype=torch.float16 if use_half or device == "cuda" else torch.bfloat16,
+                enabled=use_half,
+            ):
+                logits, loss = zip(
+                    *[model(batch.to(device), return_all=True) for batch in batches]
+                )
 
                 # Probabilities
                 probs = torch.cat(logits, dim=0).softmax(dim=1)
@@ -66,7 +92,10 @@ class evaluate:
             w = val.w.to(device)
 
             # Now let's check all the thresholds where the significance is the highest
-            self.metrics["sig/threshold"], self.metrics["sig/significance"] = find_significance_threshold(
+            (
+                self.metrics["sig/threshold"],
+                self.metrics["sig/significance"],
+            ) = find_significance_threshold(
                 probs,
                 y,
                 w,
@@ -74,10 +103,15 @@ class evaluate:
                 F,
                 n_significance_thresholds=n_significance_thresholds,
             )
-            self.metrics["sig/significance_percent"] = self.metrics["sig/significance"] / max_significance
+            self.metrics["sig/significance_percent"] = (
+                self.metrics["sig/significance"] / max_significance
+            )
 
             # Now let's check all the thresholds where the significance is the highest
-            self.metrics["sig/threshold_simple"], self.metrics["sig/significance_simple"] = find_significance_threshold(
+            (
+                self.metrics["sig/threshold_simple"],
+                self.metrics["sig/significance_simple"],
+            ) = find_significance_threshold(
                 probs,
                 y,
                 w,
@@ -102,7 +136,9 @@ class evaluate:
             self.metrics["val/acc/bin"] = cm_binary.trace() / cm_binary.sum()
 
             # Compute the raw (unweighted) accuracy (binary)
-            self.metrics["val/acc/bin_raw"] = ((y_pred == signal_idx) == (y == signal_idx)).float().mean().item()
+            self.metrics["val/acc/bin_raw"] = (
+                ((y_pred == signal_idx) == (y == signal_idx)).float().mean().item()
+            )
 
             # Compute F1 score
             tp = cm_binary[0, 0]
@@ -122,7 +158,9 @@ class evaluate:
                 fpr, tpr, _ = roc_curve(val.y, probs[:, i], pos_label=i)
                 auc = np.trapz(tpr, fpr)
 
-                fprw, tprw, _ = roc_curve(val.y, probs[:, i], pos_label=i, sample_weight=val.w)
+                fprw, tprw, _ = roc_curve(
+                    val.y, probs[:, i], pos_label=i, sample_weight=val.w
+                )
                 aucw = np.trapz(tprw, fprw)
 
                 self.metrics[f"val/auc/{val.y_names[i]}"] = auc
@@ -146,7 +184,7 @@ class evaluate:
 
     @property
     def scheduler_metric(self):
-        return self.metrics["val/auc/ttH"]
+        return self.metrics[self.priority[0]]
 
     def __gt__(self, other):
         assert isinstance(other, evaluate)
@@ -162,22 +200,32 @@ class evaluate:
         return False
 
     def __str__(self):
-        s = f"Epoch {self.metrics['epoch']}: " + \
-            f"val/loss={self.metrics['val/loss']:.4f}, " + \
-            f"trn/loss={self.metrics['trn/loss']:.4f}, " + \
-            f"val/acc={self.metrics['val/acc/multi']:.2%}, " + \
-            f"val/acc/bin={self.metrics['val/acc/bin']:.2%}, " + \
-            f"val/f1={self.metrics['val/f1']:.2%}, " + \
-            f"AUC (mean)={self.metrics['val/auc_w/mean']:.3f}, " + \
-            f"AUC (ttH)={self.metrics['val/auc_w/ttH']:.3f}, " + \
-            f"significance={self.metrics['sig/significance']:.2f} " + \
-            f"({self.metrics['sig/significance_percent']:.2%} of max possible " + \
-            f"({self.metrics['sig/max_significance']:.2f})) @ threshold={self.metrics['sig/threshold']:.2f}"
+        s = (
+            f"Epoch {self.metrics['epoch']}: "
+            + f"val/loss={self.metrics['val/loss']:.4f}, "
+            + f"trn/loss={self.metrics['trn/loss']:.4f}, "
+            + f"val/acc={self.metrics['val/acc/multi']:.2%}, "
+            + f"val/acc/bin={self.metrics['val/acc/bin']:.2%}, "
+            + f"val/f1={self.metrics['val/f1']:.2%}, "
+            + f"AUC (mean)={self.metrics['val/auc_w/mean']:.3f}, "
+            + f"AUC (ttH)={self.metrics['val/auc_w/ttH']:.3f}, "
+            + f"significance={self.metrics['sig/significance']:.2f} "
+            + f"({self.metrics['sig/significance_percent']:.2%} of max possible "
+            + f"({self.metrics['sig/max_significance']:.2f})) @ threshold={self.metrics['sig/threshold']:.2f}"
+        )
 
         return s
 
     @staticmethod
-    def using(model: nn.Module, trn: Data, val: Data, signal: int | str, batch_size: int, F: float | None = None, **kwargs):
+    def using(
+        model: nn.Module,
+        trn: Data,
+        val: Data,
+        signal: int | str,
+        batch_size: int,
+        F: float | None = None,
+        **kwargs,
+    ):
         F = (trn.n_samples + val.n_samples) / val.n_samples if F is None else F
         signal_idx = signal if isinstance(signal, int) else val.y_names.index(signal)
         perfect_cm = confusion_matrix(val.y, val.y, val.w, signal=signal_idx)
@@ -192,7 +240,7 @@ class evaluate:
             F,
             batch_size,
             max_significance=max_significance,
-            **kwargs
+            **kwargs,
         )
 
     @classmethod

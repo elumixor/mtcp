@@ -1,4 +1,3 @@
-
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -9,26 +8,30 @@ from .my_embed import MyEmbed
 
 
 class ResNet(Model):
-    def __init__(self,
-                 n_features_continuous: int,
-                 categorical_sizes: list[int],
-                 n_classes: int,
-                 n_embed=32,
-                 n_embed_categorical=8,
-                 n_blocks=1,
-                 activation=None,
-                 class_weights=None,
-                 dropout=0.3,
-                 name="ResNet",
-                 use_embedding=False,
-                 use_nan_w=False,
-                 **kwargs):
+    def __init__(
+        self,
+        n_features_continuous: int,
+        categorical_sizes: list[int],
+        n_classes: int,
+        n_embed=32,
+        n_embed_categorical=8,
+        n_blocks=1,
+        activation=None,
+        class_weights=None,
+        dropout=0.3,
+        name="ResNet",
+        use_embedding=False,
+        use_nan_w=False,
+        **kwargs
+    ):
         super().__init__()
 
         if not use_embedding:
             n_features = n_features_continuous + len(categorical_sizes)
         else:
-            n_features = n_features_continuous + len(categorical_sizes) * n_embed_categorical
+            n_features = (
+                n_features_continuous + len(categorical_sizes) * n_embed_categorical
+            )
 
         self.n_embed = n_embed
         self.n_classes = n_classes
@@ -36,7 +39,9 @@ class ResNet(Model):
         self.name = name
         self.dropout_p = dropout
 
-        self.activation = nn.GELU(approximate="tanh") if activation is None else activation
+        self.activation = (
+            nn.GELU(approximate="tanh") if activation is None else activation
+        )
         self.dropout = nn.Dropout(dropout)
 
         layers = [nn.Linear(n_features, n_embed, bias=False)]
@@ -49,10 +54,24 @@ class ResNet(Model):
 
         self.layers = nn.ModuleList(layers)
 
-        self.embed = MyEmbed(n_features_continuous, categorical_sizes, n_embed_categorical, embed_continuous=False, use_nan_w=use_nan_w) if use_embedding else None
+        self.embed = (
+            MyEmbed(
+                n_features_continuous,
+                categorical_sizes,
+                n_embed_categorical,
+                embed_continuous=False,
+                use_nan_w=use_nan_w,
+            )
+            if use_embedding
+            else None
+        )
         self.w_nan = nn.Parameter(torch.randn(n_features)) if use_nan_w else 0
 
-        self.class_weights = nn.Parameter(class_weights, requires_grad=False) if class_weights is not None else None
+        self.class_weights = (
+            nn.Parameter(class_weights, requires_grad=False)
+            if class_weights is not None
+            else None
+        )
 
     @property
     def hyperparameters(self):
@@ -102,12 +121,3 @@ class ResNet(Model):
     @property
     def estimated_initial_loss(self):
         return -torch.tensor(1 / self.n_classes).log()
-
-    def predict(self, batch, available_classes=None):
-        logits = self(batch)
-
-        if available_classes is not None:
-            forbidden_classes = torch.tensor([i for i in range(self.n_classes) if i not in available_classes])
-            logits[:, forbidden_classes] = -torch.inf
-
-        return torch.argmax(logits, dim=1)
