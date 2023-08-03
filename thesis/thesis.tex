@@ -13,6 +13,7 @@
 \usepackage{longtable}
 \usepackage{biblatex}
 \usepackage{xspace}
+\usepackage[english]{babel}
 \usepackage[compat=1.1.0]{tikz-feynhand}
 
 \makeglossaries
@@ -25,7 +26,7 @@
 
 % Metadata of the work
 \author{Bc. Vladyslav Yazykov}
-\title{Optimization of the \ttH Selection Including Systematics Using Machine Learning with ATLAS Data}
+\title{Optimization of the \tth Selection Including Systematics Using Machine Learning with ATLAS Data}
 
 \supervisor{prof. Dr. Ing. Jan Kybic}
 \supervisorAffiliation{
@@ -48,15 +49,24 @@
 \date{August 2023}
 
 
-% \includeonly{
-% 	chapters/0-abstract,
-% }
+\includeonly{
+	chapters/abstract,
+	chapters/acknowledgements,
+	chapters/1-structure,
+	chapters/2-introduction/0-chapter,
+	chapters/3-methodology/0-chapter,
+	chapters/4-uncertainties/0-chapter,
+	chapters/5-conclusions/0-chapter,
+}
 
 \begin{document}
 
 % Introductory pages
 \maketitle
-\include{chapters/0-abstract}
+
+\include{chapters/abstract}
+\newpage
+\include{chapters/acknowledgements}
 
 % Auto-generated glossary
 \listoftables
@@ -68,16 +78,16 @@
 % Main chapters
 \mainmatter
 \spacing{1.3}
-\include{chapters/1-introduction/0-chapter}
-\include{chapters/2-physics/0-chapter}
-\include{chapters/3-data/0-chapter}
-\include{chapters/4-evaluation/0-chapter}
-\include{chapters/5-optimization/0-chapter}
-\include{chapters/6-results/0-chapter}
+
+\include{chapters/1-structure}
+\include{chapters/2-introduction/0-chapter}
+\include{chapters/3-methodology/0-chapter}
+\include{chapters/4-uncertainties/0-chapter}
+\include{chapters/5-conclusions/0-chapter}
 
 % Appendices
 \appendix
-\include{chapters/7-appendix/0-chapter}
+\include{chapters/6-appendix/0-chapter}
 
 \singlespacing
 

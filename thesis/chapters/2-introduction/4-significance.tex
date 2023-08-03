@@ -1,0 +1,96 @@
+\section{Significance}
+
+\subsection{Poisson Distribution}
+
+In particle physics, data collected from collision events are often analyzed using statistical methods, as these events
+occur randomly and independently, following the principles of a Poisson distribution. A Poisson distribution is a
+discrete probability distribution that expresses the probability of a given number of events occurring in a fixed
+interval of time or space, given a fixed average rate of these events.
+
+For a Poisson process, the average number of events in an interval is designated by the parameter $\lambda$, which is
+the rate parameter. The probability of observing k events in an interval is given by the equation:
+
+\begin{equation}
+    P(k \text{ events in interval}) = \frac{\lambda^k e^{-\lambda}}{k!}
+\end{equation}
+
+Where $e$ is the base of the natural logarithm, and $k!$ is the factorial of $k$.
+
+\subsection{Central Limit Theorem}
+
+The Poisson distribution and the Gaussian (or Normal) distribution are linked by the Central Limit Theorem, one of the
+fundamental theorems in probability theory and statistics.
+
+The Central Limit Theorem (CLT) states that the sum of a large number of independent and identically distributed random
+variables, each of which may be arbitrarily distributed, will approximately follow a Gaussian distribution, regardless
+of the shape of the original distribution. This is true provided the mean and variance of the original distributions are
+finite.
+
+For a Poisson process, consider that each event occurs independently. So, we can imagine that our $\lambda$ (average
+number of events in a given time period) is the sum of several smaller, independent rates. For instance, $\lambda$ could
+be the result of $n$ independent processes each with a rate of $\lambda/n$. Thus, our Poisson process with rate
+$\lambda$ can be viewed as the sum of $n$ Poisson processes each with a rate $\lambda/n$.
+
+So, what happens when $n$ is large and $\lambda/n$ is small? Each individual Poisson process will rarely contribute an
+event to the sum, but there are a lot of them ($n$ is large). This is precisely the sort of condition under which the
+Central Limit Theorem operates. As such, we'd expect, for large $\lambda$, that the Poisson distribution will start to
+look more and more like a Gaussian distribution, as the Poisson distribution is the sum of many independent and
+identically distributed random variables.
+
+Mathematically, a random variable $X$ that is Poisson-distributed with mean $\lambda$ can be approximated by a Gaussian
+distribution with mean $\lambda$ and variance $\lambda$, if $\lambda$ is large. This is usually taken to mean $\lambda >
+    20$ or $30$. Thus, for a Poisson distribution with large $\lambda$, it can be approximated as:
+
+\begin{equation}
+    X \sim N(\lambda, \sqrt{\lambda})
+\end{equation}
+
+This allows us to use Gaussian statistics for large $\lambda$, which are mathematically more tractable. In the context
+of particle physics, the number of events is often large, so the Poisson distribution can be approximated by a Gaussian
+distribution, allowing us to use Gaussian statistics to analyze the data.
+
+In our context, each collision event in the LHC could either be a signal (in our case, a ttH event) or part of the
+background (any other process). The events are counted, and the count follows a Poisson distribution.
+
+\subsection{Significance}
+
+In the context of particle physics, and scientific experiments in general, significance plays a crucial role in
+hypothesis testing. Hypothesis testing is a statistical method used to make inferences or draw conclusions about a
+population based on a sample of data. The methodology of hypothesis testing involves the formulation of two competing
+hypotheses, the null hypothesis (H0) and the alternative hypothesis (H1). The null hypothesis is a statement about the
+population that will be accepted if the sample data do not provide sufficient evidence that it is false. On the other
+hand, the alternative hypothesis is a claim about the population that will be accepted if the sample data provide
+sufficient evidence that it is true.
+
+The process of hypothesis testing involves collecting data and calculating a test statistic which is then compared to a
+critical value to decide whether to accept or reject the null hypothesis. This is where the p-value comes into play. The
+p-value is a probability that provides a measure of the evidence against the null hypothesis provided by the data. A
+smaller p-value provides stronger evidence against the null hypothesis. If the p-value is below a predetermined
+significance level, typically 0.05 or 0.01, the null hypothesis is rejected in favor of the alternative hypothesis.
+
+In particle physics, the null hypothesis often refers to the background-only hypothesis, i.e., the hypothesis that only
+known Standard Model processes are occurring. The alternative hypothesis, on the other hand, includes both the
+background and a potential new signal.
+
+This is where we connect hypothesis testing to Poisson statistics. We model the number of observed events as a random
+variable that follows a Poisson distribution, with an expectation value equal to the sum of the expected number of
+background events (B) and signal events (S). If the actual observed number of events is significantly larger than the
+expected number of background events, then we have evidence against the null hypothesis.
+
+The "significance" in particle physics refers to how many standard deviations an observed result is away from the
+expectation under the null hypothesis. If our data gives a result that is very unlikely under the null hypothesis (say,
+less than a 0.01 chance), we have strong evidence against the null hypothesis. The significance Z is, in essence, the
+number of standard deviations that the observed data is away from the expectation under the null hypothesis, with Z = 1
+corresponding to a p-value of about 0.16 (or 16\%), and Z = 2 corresponding to a p-value of about 0.023 (or 2.3\%).
+
+To make the connection between the significance and the Poisson distribution more explicit, we can state that if we
+observe n events when we were expecting B background events and S signal events, then the p-value can be calculated as
+the probability of observing n or more events under the null hypothesis. This is given by the sum of the probabilities
+of the Poisson distribution for all values from n to infinity, using $\lambda = B$. If $B$ is large, we can approximate this with
+a Gaussian distribution, as I've explained before, which gives us the commonly-used formula for significance: Z = S /
+sqrt(B). This approximation is used for its simplicity and because it provides a reasonably accurate estimate for large
+B.
+
+This provides a powerful tool for identifying new phenomena in particle physics. If the significance of a signal exceeds
+a certain threshold (often $ 5 \sigma $ in particle physics, corresponding to a p-value of about $3\times10^-7$), the signal is
+considered a discovery.

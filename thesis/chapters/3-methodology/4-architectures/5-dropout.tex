@@ -1,0 +1,24 @@
+\subsection{Dropout as a Regularization Technique and Ensembling}
+
+Regularization is a crucial component in training neural networks to prevent overfitting and improve generalization. One
+such regularization method used in our work is \emph{dropout}, which operates by randomly dropping out, or "turning
+off", a proportion of the neurons during training. Introduced by \cite{dropout}, this
+technique is simple and computationally efficient, and it has been widely adopted in the deep learning community.
+
+The dropout rate, the proportion of neurons to drop, is a hyperparameter that requires tuning. A moderate dropout rate
+(e.g., 0.5) introduces noise into the training process, which helps prevent the model from memorizing the training data
+and potentially improves generalization. However, a high dropout rate may hinder the learning process by adding too much
+noise, while a low dropout rate may not provide sufficient regularization, leading to overfitting.
+
+From the perspective of model ensembling, dropout can be viewed as a way to implicitly create an ensemble of different
+"thinned" networks, which share parameters. The output of the network with dropout can be seen as an averaged prediction
+of these thinned networks. Ensembling typically provides a boost in model performance by aggregating predictions of
+diverse models, thus reducing the risk of overfitting to specific patterns in the training data.
+
+In our experiments, applying dropout to the neural network architectures led to an improvement in generalization,
+reflected by a decrease in the gap between training and validation performance metrics. The exact numbers will be
+presented in the results section (\placeholder{XXX}).
+
+Despite its advantages, dropout does introduce an additional layer of randomness into the training process, making the
+convergence slower and sometimes harder. Also, while dropout can improve generalization, it does not replace the need
+for sufficient training data, careful feature selection, and other components of a successful machine learning project.

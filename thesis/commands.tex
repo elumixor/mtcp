@@ -1,5 +1,21 @@
 \newcommand{\lss}{\ensuremath{2l_{SS}+1\tau_\text{had}}\xspace}
 \newcommand{\ttbar}{\ensuremath{{t\bar{t}}}\xspace}
-\newcommand{\ttH}{\ensuremath{{t\bar{t}H}}\xspace}
-\newcommand{\ttZ}{\ensuremath{{t\bar{t}Z}}\xspace}
-\newcommand{\ttW}{\ensuremath{{t\bar{t}W}}\xspace}
+\newcommand{\tth}{\ensuremath{{t\bar{t}H}}\xspace}
+\newcommand{\ttz}{\ensuremath{{t\bar{t}Z}}\xspace}
+\newcommand{\ttw}{\ensuremath{{t\bar{t}W}}\xspace}
+
+% Placeholder - anything inside of this block will be rendered with a orange background
+\newcommand{\placeholder}[1]{\colorbox{orange}{#1}}
+
+% \autoref{chapter} will output Capitalized Chapter in bold.
+\addto\extrasenglish{%
+    \renewcommand{\chapterautorefname}{\textbf{Chapter}}%
+}
+
+% Make AUC and ROC look better
+\newcommand{\AUC}{\ensuremath{\text{AUC}}\xspace}
+\newcommand{\ROC}{\ensuremath{\text{ROC}}\xspace}
+
+% Cite severin and jan
+\newcommand{\severin}{\cite{severin}\xspace}
+\newcommand{\jan}{\cite{jan}\xspace}

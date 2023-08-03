@@ -1,0 +1,35 @@
+\subsection{Previous work}
+
+In an attempt to further our understanding of the ttH process, this work builds upon the previous efforts made by
+\severin and \jan. Their research involved training simple neural networks
+(primarily feed-forward networks) for the classification task at hand.
+
+\jan work extended beyond simple neural networks, experimenting with TabNet and XGBoost as well. Meanwhile, \severin
+proposed an architecture composed of multiple Multi-Layer Perceptrons (MLPs) tailored to distinguish one background from
+the ttH specifically.
+
+Their approach to evaluating the classifiers was primarily based on standard Machine Learning metrics such as accuracy,
+Area Under the Receiver Operating Characteristic (AUROC) curves, and most importantly, the statistical significance of
+the ttH signal. The optimization techniques used in their studies were mainly grid-searching over various
+hyperparameters such as the number of layers, embedding size, learning rate, and batch size.
+
+Last results from \severin achieve \placeholder{XXX} accuracy, \placeholder{XXX} $\AUC_\tth$ and \placeholder{XXX}
+significance. \jan results are \placeholder{XXX} accuracy, \placeholder{XXX} $\AUC_\tth$ and \placeholder{XXX}.
+It is important to note, howver, that they didn't use the weights while calculating the ROC curves, so the results are
+unfortunately not directly comparable.
+
+Our research seeks to improve upon these previous efforts by introducing more complex architectures and advanced
+optimization techniques, which will be discussed in the following sections.
+
+\subsection[MLP]{\gls{mlp}}
+
+In previous work, \severin utilized \glspl{mlp} as the primary model architecture.
+While he experimented with combining multiple \glspl{mlp}, this approach is essentially equivalent to using a single,
+larger \gls{mlp}. This can be formalized as in \cite{ft-transformer}:
+
+$$
+    \text{MLP(x)} = \text{MLP(x)} + \text{MLP(x)}
+$$
+
+The benefit of using the staged network, however, is that each sub-\gls{mlp} can be trained on a different set of
+features. This can potentially reduce the systematical uncertainties, associated with the final prediction.

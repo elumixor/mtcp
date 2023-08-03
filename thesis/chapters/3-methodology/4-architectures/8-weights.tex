@@ -20,7 +20,7 @@ Where $N$ is the number of events, $M$ is the number of classes, $y_{ij}$ is the
 $j$-th class, and $p_{ij}$ is the predicted probability of the $i$-th event for the $j$-th class.
 
 This definition treats all classes. We can, however, assign a weight to each class. This would mean that some classes
-are essentially prioritized over the others. The cross-entropy loss function with weights is defined as:
+are essentially prioritized over the others. The cross-entropy loss function with w eights is defined as:
 
 $$
     \text{Cross-Entropy Loss}_\text{W} = -\sum_{i=1}^{N} \sum_{j=1}^{M} w_j y_{ij} \log(p_{ij})
@@ -48,7 +48,7 @@ with the higher weight, the classifier would be incentivized to classify it corr
 Which approach should be used? To answer this question empirically, we have trained the same classifier with the same
 random seed, but with different loss functions. The results are shown in \autoref{tab:weights}. The classifier
 that used the sample-wise weighted Cross-Entropy loss function performed the best having achieved the highest accuracy
-of 88\%, $\text{AUC}_\text{mean}$ of 0.94, and $\text{AUC}_\ttH$ of 0.98.
+of 88\%, $\AUC_\text{mean}$ of 0.94, and $\AUC_\tth$ of 0.98.
 
 \begin{table}[htbp]
     \centering

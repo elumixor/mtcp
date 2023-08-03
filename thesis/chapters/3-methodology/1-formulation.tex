@@ -1,0 +1,59 @@
+\section{Problem Formulation}
+
+Our primary objective is to distinguish the ttH events from other processes (or events) produced in the LHC. This
+separation task can be naturally formulated as a classification problem. In the broad field of machine learning,
+classification is the task of predicting the discrete class label of an observation given its features. In our case, the
+observations are the events and the class labels represent different processes, including the ttH process.
+
+Classification problems can further be classified into binary and multi-class, depending on the number of classes.
+Binary classification, as the name suggests, involves two classes. On the other hand, multi-class classification refers
+to problems where an observation can belong to one of more than two classes. Depending on the nature and distribution of
+the data, one may choose either binary or multi-class classification. In our case, we can approach the task either as a
+binary problem (ttH vs not ttH) or as a multi-class problem (differentiating among various processes).
+
+As with many machine learning tasks, we approach this as a supervised learning problem. In supervised learning, we have
+a set of labeled observations (known as the training data) and the goal is to learn a function that maps the features to
+the labels. Once this function is learned, it can be used to predict the labels (in our case, process classes) of new,
+unseen observations.
+
+Given a dataset with $N$ observations, we have each observation $i$ represented as a tuple $(x_i, y_i, w_i)$, where
+$x_i$ is a feature vector (a representation of our event), $y_i$ is a class label, and $w_i$ is a weight associated with
+the observation. The objective is to learn a function $f$ such that given a new observation $x$, we can predict its
+class label $y$.
+
+In the case of binary classification, $y_i$ can take on values 0 (for background) or 1 (for signal), while for
+multi-class classification, $y_i$ can take on values from $\{0, 1, ..., C\}$ where $C$ is the number of classes
+(representing different processes).
+
+The learning of the function $f$ is driven by the minimization of a loss function $L$ that quantifies the discrepancy
+between the predicted and true labels. For classification problems, a common choice is the cross-entropy loss function.
+
+For a binary classification, the cross-entropy loss for a single observation is given by:
+
+$$ L(y_i, f(x_i)) = -y_i \log(f(x_i)) - (1 - y_i) \log(1 - f(x_i)) $$
+
+where $f(x_i)$ is the probability of the observation $i$ being of class 1. When you sum up the losses for all
+observations and normalize by the total number of observations, you get the average loss for the dataset, also known as
+the empirical risk:
+
+$$ R(f) = -\frac{1}{N}\sum_{i=1}^{N} y_i \log(f(x_i)) + (1 - y_i) \log(1 - f(x_i)) $$
+
+In the case of a weighted dataset, the empirical risk becomes:
+
+$$ R(f) = -\frac{1}{N}\sum_{i=1}^{N} w_i \big[ y_i \log(f(x_i)) + (1 - y_i) \log(1 - f(x_i)) \big] $$
+
+For multi-class classification, the cross-entropy loss can be extended to accommodate more than two classes. This is
+usually done by using one-hot encoding for the class labels and applying a softmax function to the output of the
+function $f$. The loss for a single observation then becomes:
+
+$$ L(y_i, f(x_i)) = - \sum_{c=1}^{C} y_{i,c} \log(f_{i,c}(x_i)) $$
+
+where $y_{i,c}$ is the true label (0 or 1) of observation $i$ for class $c$, and $f_{i,c}(x_i)$ is the predicted
+probability of observation $i$ belonging to class $c$.
+
+As before, the empirical risk is the sum of the losses for all observations, and in the case of a weighted dataset, it
+is defined as:
+
+$$ R(f) = -\frac{1}{N}\sum_{i=1}^{N} w_i \sum_{c=1}^{C} y_{i,c} \log(f_{i,c}(x_i)) $$
+
+In this context, the function $f$ that minimizes this empirical risk is the solution to our classification problem.
