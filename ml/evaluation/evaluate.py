@@ -251,7 +251,7 @@ class evaluate:
         ax1.set_ylabel("Loss")
         ax1.legend()
 
-        ax2.plot([stat.metrics["val/acc_bin"] for stat in stats], label="Accuracy")
+        ax2.plot([stat.metrics["val/acc/bin"] for stat in stats], label="Accuracy")
         ax2.set_xlabel("Epoch")
         ax2.set_ylabel("Accuracy")
         ax2.legend()

@@ -172,7 +172,7 @@ for trial in range(repeat):
         half=config.dtype,
     )
 
-    train(
+    stats_last, *_ = train(
         model,
         optim,
         trn,
@@ -191,7 +191,7 @@ for trial in range(repeat):
 
     # Load the best model
     best_path = os.path.join(config.checkpoints_dir, f"{model.name}-best")
-    load_checkpoint(best_path, model)
+    stats_best = load_checkpoint(best_path, model)
 
     # Run evaluations
     if "evaluations" in config:
@@ -230,6 +230,8 @@ for trial in range(repeat):
         "y_names": trn.y_names,
         "mean": trn.metadata["mean"],
         "std": trn.metadata["std"],
+        "stats_best": stats_best,
+        "stats_last": stats_last,
     }
 
     with tempfile.NamedTemporaryFile(delete=False) as tmp_file:

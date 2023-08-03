@@ -35,10 +35,15 @@ class Model(nn.Module, ABC):
     @classmethod
     def from_saved(cls, path: str, device="cpu"):
         saved_data = torch.load(path, map_location=device)
+
+        # For old models
+        if "n_features_continuous" not in saved_data:
+            saved_data["n_features_continuous"] = len(saved_data["x_names_continuous"])
+
         model = cls(**saved_data)
         # Rename the weights keys: remove the "_orig_mod" prefix. This is for loading the compiled models
-        state_dict = saved_data["weights"]
         weights = {k.replace("_orig_mod.", ""): v for k, v in saved_data["weights"].items()}
         model.load_state_dict(weights)
         model.eval()
+
         return model

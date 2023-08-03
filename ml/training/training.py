@@ -56,9 +56,10 @@ def train(
     except FileNotFoundError:
         # If there's no checkpoint, create the initial checkpoint for the best and for the last evaluations
         evaluation = evaluate_fn(0)
-        stats_best = stats = [evaluation]
+        stats_best = [evaluation]
+        stats = [evaluation]
 
-        save_checkpoint(best_path, model, optim, scheduler, stats)
+        save_checkpoint(best_path, model, optim, scheduler, stats_best)
         save_checkpoint(last_path, model, optim, scheduler, stats)
 
         # Print the initial/best evaluation
@@ -131,6 +132,7 @@ def train(
 
             if evaluation > evaluation_best:
                 evaluation_best = evaluation
+                stats_best = stats[:]
 
                 # Record the best data
                 model_best = model.state_dict()
