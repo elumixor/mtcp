@@ -39,13 +39,22 @@ source_base_dir = args.source_base_dir if args.source_base_dir else config.sourc
 target_base_dir = args.target_base_dir if args.target_base_dir else os.path.join(config.target_base_dir, "small")
 files = [args.file] if args.file else config.files if "files" in config else get_all_files(source_base_dir)
 
-global_lock_path = os.path.join(target_base_dir, ".lock")
+global_lock_path = os.path.join(target_base_dir, ".all-lock")
 
-def process_file(i_file, file_name, source_path, target_path, processed_path, lock_path):
+
+def process_file(i_file, file_name, source_path, target_path):
+    processed_path = f"{target_path}.processed"
+    lock_path = f"{target_path}.lock"
+
+    if os.path.exists(processed_path):
+        print(f"File [{i_file + 1}/{len(files)}] {file_name} has already been processed, skipping...")
+        return
+
     with FileLock(global_lock_path):
-        if os.path.exists(processed_path):
-            print(f"File [{i_file + 1}/{len(files)}] {file_name} has already been processed, skipping...")
-            return
+        # Create the target directory if it doesn't exist
+        target_dir = os.path.dirname(target_path)
+        if not os.path.exists(target_dir):
+            os.makedirs(target_dir)
 
         # Check if the lock file exists
         if os.path.exists(lock_path):
@@ -55,16 +64,6 @@ def process_file(i_file, file_name, source_path, target_path, processed_path, lo
         # Create the lock file
         with open(lock_path, "w") as f:
             pass
-
-        # Check for the lock again (in case another process has already finished)
-        if os.path.exists(lock_path):
-            print(f"File [{i_file + 1}/{len(files)}] {file_name} is being processed by another process, skipping...")
-            return
-
-        # Create the target directory if it doesn't exist
-        target_dir = os.path.dirname(target_path)
-        if not os.path.exists(target_dir):
-            os.makedirs(target_dir)
 
     file_str = f"File [{i_file + 1}/{len(files)}]"
     print(f"{file_str} {source_path} -> {target_path}")
@@ -105,7 +104,6 @@ def process_file(i_file, file_name, source_path, target_path, processed_path, lo
 
                 result[tree_name] = features
 
-
     with uproot.recreate(target_path) as target_file:
         for tree_name, arrays in result.items():
             target_file[tree_name] = arrays
@@ -118,12 +116,13 @@ def process_file(i_file, file_name, source_path, target_path, processed_path, lo
         # Remove the lock file
         os.remove(lock_path)
 
+    print(f"{file_str} {file_name}: Done")
 
 
 with ThreadPoolExecutor(max_workers=multiprocessing.cpu_count() * 2) as executor:
     futures = []
-    for i_file, file_name, source_path, target_path, processed_path, lock_path in iterate_files(source_base_dir, target_base_dir, files, restart=args.restart):
-        future = executor.submit(process_file, i_file, file_name, source_path, target_path, processed_path, lock_path)
+    for i_file, file_name, source_path, target_path in iterate_files(source_base_dir, target_base_dir, files, restart=args.restart):
+        future = executor.submit(process_file, i_file, file_name, source_path, target_path)
         futures.append(future)
 
     for future in as_completed(futures):
