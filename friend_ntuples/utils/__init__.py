@@ -1,6 +1,8 @@
 import os
 import shutil
 
+from .file_lock import FileLock
+
 
 def str2bool(v):
     return v.lower() in ("yes", "true", "t", "1")
@@ -23,7 +25,7 @@ def get_all_files(base_dir: str):
     return files
 
 
-def iterate_files(source_base_dir, target_base_dir, files, processed_files_dir=".processed", restart=False):
+def iterate_files(source_base_dir, target_base_dir, files, processed_files_dir=".processed", lock_files_dir=".lock", restart=False):
     # Remove the source_base_dir prefix
     files = [file[len(source_base_dir):] if os.path.isabs(file) else file for file in files]
 
@@ -42,29 +44,31 @@ def iterate_files(source_base_dir, target_base_dir, files, processed_files_dir="
         print(f"Creating target directory {target_base_dir}")
         os.makedirs(target_base_dir)
 
-    # Read the list of already processed files
+    # Create the processed files directory if it doesn't exist
     processed_files_dir = os.path.join(target_base_dir, processed_files_dir)
     if not os.path.exists(processed_files_dir):
         os.makedirs(processed_files_dir)
 
+    # Create the lock directory if it doesn't exist
+    lock_files_dir = os.path.join(target_base_dir, lock_files_dir)
+    if not os.path.exists(lock_files_dir):
+        os.makedirs(lock_files_dir)
+
+    # Read the list of already processed files
+    n_processed = len(files)
     files = [file for file in files if not os.path.exists(os.path.join(processed_files_dir, file.replace("/", "_")))]
+    n_processed -= len(files)
 
     # Loop over all the files
     for i_file, file in enumerate(files):
         source_path = os.path.join(source_base_dir, file)
         target_path = os.path.join(target_base_dir, file)
+
         processed_name = file.replace("/", "_")
+
         processed_path = os.path.join(processed_files_dir, processed_name)
+        lock_path = os.path.join(lock_files_dir, processed_name)
 
-        if os.path.exists(processed_path):
-            print(f"File [{i_file + 1}/{len(files)}] {source_path} has already been processed, skipping...")
-            continue
+        i_file += n_processed
 
-        print(f"File [{i_file + 1}/{len(files)}] {source_path} -> {target_path}")
-
-        # Create the target directory if it doesn't exist
-        target_dir = os.path.dirname(target_path)
-        if not os.path.exists(target_dir):
-            os.makedirs(target_dir)
-
-        yield i_file, source_path, target_path, processed_path
+        yield i_file, file, source_path, target_path, processed_path, lock_path

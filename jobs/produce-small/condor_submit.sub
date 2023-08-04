@@ -1,0 +1,39 @@
+executable            = /afs/cern.ch/user/v/vyazykov/.condor/$ENV(MTCP_JOB)/commands/job.sh
+initialdir            = /afs/cern.ch/user/v/vyazykov/.condor/$ENV(MTCP_JOB)
+output                = logs/out/$(Process).out
+error                 = logs/err/$(Process).err
+log                   = logs/log/$(Process).log
+
+executable            = job.sh
+arguments             = $(filename)
+# getenv                = True
+
+# espresso microcentury longlunch workday tomorrow testmatch
++JobFlavour           = "espresso"
+# +JobFlavour           = "microcentury"
+# +JobFlavour           = "workday"
+# +JobFlavour           = "tomorrow"
+# +JobFlavour           = "testmatch"
+#+BigMemJob = True
+#+AccountingGroup = "group_u_ATLAS.u_bigmem"
+
+
+
+# Retry options
+on_exit_remove = (ExitBySignal == False) && (ExitCode == 0)
+max_retries = 50
+
+# Request some GPU
+# request_GPUs = 1
+# requirements = TARGET.CUDACapability =?= 7.0
+# require_gpus = Capability >= 7.0
+
+# Notification
+# notify_user             = vyazykov@cern.ch
+# notification            = always
+
+
+# Queue a job for each file from files.txt
+# queue filename from head files.txt -n 1 |
+queue filename from cat files.txt |
+# queue filename from cat test.txt |

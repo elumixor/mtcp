@@ -1,0 +1,7 @@
+description: Produce pre-fit plots
+clusters: [cern]
+condor:
+    max_runtime: 500 # minutes
+command: "$MTCP_JOB_DIR/run.sh"
+artifacts:
+    - $MTCP_TREX_DIR/outputs/$MTCP_JOB/Plots/probs_ttH.png
