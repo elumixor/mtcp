@@ -6,6 +6,7 @@ from typing import Callable
 import torch
 import wandb
 from tqdm import tqdm
+from copy import deepcopy
 
 from ml.evaluation import evaluate
 from ml.data import Data
@@ -134,11 +135,12 @@ def train(
                 evaluation_best = evaluation
                 stats_best = stats[:]
 
-                # Record the best data
-                model_best = model.state_dict()
-                optim_best = optim.state_dict()
+                # Record the best data (we need to make a deep copy, otherwise the best data will be overwritten)
+                model_best = deepcopy(model.state_dict())
+                optim_best = deepcopy(optim.state_dict())
                 scheduler_best = (
-                    scheduler.state_dict() if scheduler is not None else None
+                    deepcopy(scheduler.state_dict())
+                    if scheduler is not None else None
                 )
 
             # Add the SIGINT handler again because the evaluation uses the same handler

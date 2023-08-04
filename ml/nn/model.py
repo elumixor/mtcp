@@ -36,11 +36,6 @@ class Model(nn.Module, ABC):
     def from_saved(cls, path: str, device="cpu"):
         saved_data = torch.load(path, map_location=device)
 
-        print([m.metrics["val/loss"] for m in saved_data["stats_best"]])
-        print([m.metrics["val/loss"] for m in saved_data["stats_last"]])
-        print(saved_data["stats_best"][-1])
-        print(saved_data["stats_last"][-1])
-
         # For old models
         if "n_features_continuous" not in saved_data:
             saved_data["n_features_continuous"] = len(saved_data["x_names_continuous"])
