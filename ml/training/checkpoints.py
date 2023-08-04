@@ -64,8 +64,7 @@ def load_checkpoint(name: str,
     scheduler_name = os.path.join(name, "scheduler.pt")
 
     # Load the model
-    model_dict = torch.load(model_name)
-    model.load_state_dict(model_dict)
+    model.load_state_dict(torch.load(model_name))
 
     # Load the optim
     if optim is not None:
