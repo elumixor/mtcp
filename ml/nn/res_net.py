@@ -11,7 +11,7 @@ class ResNet(Model):
     def __init__(
         self,
         n_features_continuous: int,
-        categorical_sizes: list[int],
+        categorical_sizes: "list[int]",
         n_classes: int,
         n_embed=32,
         n_embed_categorical=8,

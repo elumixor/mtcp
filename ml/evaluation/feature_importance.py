@@ -8,7 +8,7 @@ from ml.nn import Model
 def feature_importance(model: Model,
                        data: Data,
                        class_idx: int,
-                       feature_names: list[str],
+                       feature_names: "list[str]",
                        num_steps=100,
                        num_examples=None,
                        plot=False,
@@ -37,7 +37,8 @@ def feature_importance(model: Model,
         grads_categorical = []
         for alpha in torch.linspace(0, 1, num_steps):
             x_step_continuous = baseline.x_continuous + alpha * x_diff_continuous
-            x_step_categorical = torch.where(alpha < 0.5, baseline.x_categorical, batch.x_categorical) # I can't think of anything better atm
+            x_step_categorical = torch.where(alpha < 0.5, baseline.x_categorical,
+                                             batch.x_categorical)  # I can't think of anything better atm
 
             x_step_continuous.requires_grad = True
             # x_step_categorical.requires_grad = True

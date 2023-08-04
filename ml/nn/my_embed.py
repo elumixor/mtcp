@@ -3,7 +3,7 @@ import torch.nn as nn
 
 
 class MyEmbed(nn.Module):
-    def __init__(self, n_features_continuous: int, categorical_sizes: list[int], n_embed: int, embed_continuous=True, use_nan_w=True):
+    def __init__(self, n_features_continuous: int, categorical_sizes: "list[int]", n_embed: int, embed_continuous=True, use_nan_w=True):
         super().__init__()
 
         self.embed_continuous = embed_continuous
@@ -41,4 +41,3 @@ class MyEmbed(nn.Module):
         # Otherwise jsut stack the categoricals with the continuous along the feature dimension
         x_categorical = x_categorical.view(B, -1)
         return torch.cat([x_continuous, x_categorical], dim=1)
-

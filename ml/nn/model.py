@@ -46,5 +46,6 @@ class Model(nn.Module, ABC):
 
         model.load_state_dict(weights)
         model.eval()
+        model.to(device)
 
         return model

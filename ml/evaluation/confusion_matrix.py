@@ -5,8 +5,8 @@ def confusion_matrix(
         preds: torch.LongTensor,
         target: torch.LongTensor,
         weights: torch.FloatTensor,
-        n_classes: int | None = None,
-        signal: int | None = None,
+        n_classes: "int | None" = None,
+        signal: "int | None" = None,
 ) -> torch.FloatTensor:
     assert (signal is None) + (n_classes is None) == 1, f"Either specify signal for binary classification or n_classes for multiclass classification"
     assert preds.shape == target.shape == weights.shape, f"{preds.shape} != {target.shape} != {weights.shape}"
@@ -27,6 +27,7 @@ def confusion_matrix(
             result[i_true, i_pred] = weights[mask].sum()
 
     return result
+
 
 def make_binary_cm(cm: torch.FloatTensor, signal_idx: int):
     cm_binary = torch.zeros((2, 2))

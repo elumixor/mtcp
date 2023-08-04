@@ -10,13 +10,13 @@ Data = NamedTuple("Data", [
     ("y", "list[str] | None"),
     ("w", np.ndarray),
     ("selected", np.ndarray),
-    ("x_names", list[str]),
+    ("x_names", "list[str]"),
     ("y_names", "list[str] | None"),
     ("event_numbers", np.ndarray),
 ])
 
 
-def convert_object_features(data, object_features: list[str], non_object_features: list[str], n_array_elements: int):
+def convert_object_features(data, object_features: "list[str]", non_object_features: "list[str]", n_array_elements: int):
     object_features_data = {}
 
     for feature in object_features:

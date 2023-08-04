@@ -1,6 +1,10 @@
 source_base_dir: /eos/atlas/atlascerngroupdisk/phys-higgs/HSG8/multilepton_ttWttH/v08/v0801/systematics-full/
-target_base_dir: ./friend_ntuples/output/
-model_path: ./friend_ntuples/models/transformer-2-10-data/model.py
+target_base_dir: friend_ntuples/output/
+model_path: friend_ntuples/model.py
+trex_config: configs/training.config
+region: lep-pt-0
 branch_name: probs_ttH
+batch_size: 5000
+model: resnets/resnet-8
 files:
     - nominal/mc16a/p4418/600793.root

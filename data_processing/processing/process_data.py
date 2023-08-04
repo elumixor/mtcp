@@ -16,15 +16,15 @@ ProcessedData = NamedTuple("ProcessedData", [
     ("mean", np.ndarray),
     ("std", np.ndarray),
     ("selected", np.ndarray),
-    ("x_names_categorical", list[str]),
-    ("x_names_continuous", list[str]),
+    ("x_names_categorical", "list[str]"),
+    ("x_names_continuous", "list[str]"),
     ("y_names", "list[str] | None"),
     ("map_categorical", "dict[str, dict[int, str]] | None"),
     ("event_numbers", np.ndarray),
 ])
 
 
-def process_data(data: Data, categorical: list[str], invalid: dict[int, list[str]]):
+def process_data(data: Data, categorical: "list[str]", invalid: "dict[int, list[str]]"):
     # Split x into categorical and continuous
     i_categorical = [data.x_names.index(feature) for feature in categorical]
     i_continuous = [i for i in range(len(data.x_names)) if i not in i_categorical]
