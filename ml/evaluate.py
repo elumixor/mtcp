@@ -16,6 +16,7 @@ def evaluate(
     F=None,
     wandb_run=None,
     device="cpu",
+    files_dir=None,
 ):
     model.eval()
     model.to(device)
@@ -27,9 +28,10 @@ def evaluate(
             batch_size=batch_size,
             device=device,
             wandb_run=wandb_run,
+            files_dir=files_dir,
         )
 
-    thresholds = [0.0]
+    thresholds = [None]
 
     if significance:
         print("Evaluating significance")
@@ -40,8 +42,9 @@ def evaluate(
             batch_size=batch_size,
             device=device,
             wandb_run=wandb_run,
+            files_dir=files_dir,
         )
-        thresholds = [0.0, threshold, threshold_simple]
+        thresholds = [None, threshold, threshold_simple]
 
     if confusion_matrix:
         for threshold in tqdm(thresholds, desc="Evaluating confusion matrices"):
@@ -52,10 +55,11 @@ def evaluate(
                 batch_size=batch_size,
                 device=device,
                 wandb_run=wandb_run,
+                files_dir=files_dir,
             )
 
     if feature_importance:
-        evaluate_feature_importance(model, val, device=device, wandb_run=wandb_run)
+        evaluate_feature_importance(model, val, device=device, wandb_run=wandb_run, files_dir=files_dir, num_examples=25)
 
     return thresholds
 
@@ -98,4 +102,5 @@ if __name__ == "__main__":
         significance="significance" in config.evaluations,
         confusion_matrix="confusion_matrix" in config.evaluations,
         feature_importance="feature_importance" in config.evaluations,
+        files_dir=f"ml/outputs/plots/{config.run_name}"
     )

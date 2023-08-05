@@ -68,6 +68,10 @@ def load_from_config(config):
     classes = config.classes if "classes" in config else data.y_names
     features = config.features if "features" in config else data.x_names
 
+    # Set the seeed from config
+    if "seed" in config:
+        torch.manual_seed(config.seed)
+
     # Take the trn_split of the selected samples
     # 20% of that is the validation set
     trn_cut, val, tst = data_cut.split(config.trn_split)

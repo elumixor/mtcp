@@ -1,4 +1,5 @@
-extend: transformers/transformer-2-10-data
+extend: transformers/transformer-2
 
-fraction: 1.0
+cuts: discard
+fraction: 1
 batch_size: 5000

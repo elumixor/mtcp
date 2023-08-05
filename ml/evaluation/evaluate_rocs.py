@@ -1,3 +1,4 @@
+import os
 import torch
 from sklearn.metrics import roc_curve
 import numpy as np
@@ -9,7 +10,7 @@ from ml.data import Data
 from ml.nn import Model
 
 
-def evaluate_rocs(model: Model, val: Data, batch_size: int, device="cpu", wandb_run=None):
+def evaluate_rocs(model: Model, val: Data, batch_size: int, device="cpu", wandb_run=None, files_dir=None):
     plt.rcParams.update({'font.size': 22})
 
     # Get probs on the validation set
@@ -35,3 +36,12 @@ def evaluate_rocs(model: Model, val: Data, batch_size: int, device="cpu", wandb_
 
         if wandb_run is not None:
             wandb.log({f"roc/{val.y_names[i]}": wandb.Image(fig)})
+
+        if files_dir is not None:
+            roc_dir = f"{files_dir}/roc"
+            if not os.path.exists(roc_dir):
+                os.makedirs(roc_dir)
+
+            fig.savefig(f"{roc_dir}/{val.y_names[i]}.pdf")
+
+        plt.close(fig)
