@@ -57,13 +57,13 @@ def process_file(i_file, file_name, source_path, target_path):
 
         # with FileLock(global_lock_path):
         # Check if the lock file exists
-        if os.path.exists(lock_path):
-            print(f"File [{i_file + 1}/{len(files)}] {file_name} is being processed by another process, skipping...")
-            return
+        # if os.path.exists(lock_path):
+        #     print(f"File [{i_file + 1}/{len(files)}] {file_name} is being processed by another process, skipping...")
+        #     return
 
         # Create the lock file
-        with open(lock_path, "w") as f:
-            pass
+        # with open(lock_path, "w") as f:
+            # pass
 
         print(f"{file_str} {source_path} -> {target_path}")
 
@@ -126,19 +126,22 @@ if len(files) == 1:
     for i_file, file_name, source_path, target_path in iterate_files(source_base_dir, target_base_dir, files, restart=args.restart):
         process_file(i_file, file_name, source_path, target_path)
 else:
-    with ThreadPoolExecutor(max_workers=multiprocessing.cpu_count() * 2) as executor:
-        try:
-            futures = []
-            for i_file, file_name, source_path, target_path in iterate_files(source_base_dir, target_base_dir, files, restart=args.restart):
-                future = executor.submit(process_file, i_file, file_name, source_path, target_path)
-                futures.append(future)
+    for i_file, file_name, source_path, target_path in iterate_files(source_base_dir, target_base_dir, files, restart=args.restart):
+        process_file(i_file, file_name, source_path, target_path)
 
-            for future in as_completed(futures):
-                try:
-                    future.result()
-                except Exception as e:
-                    print(f"Error processing file: {e}")
-        except KeyboardInterrupt:
-            print("Interrupted")
-            executor.shutdown(wait=False, cancel_futures=True)
-            raise
+    # with ThreadPoolExecutor(max_workers=multiprocessing.cpu_count() * 2) as executor:
+    #     try:
+    #         futures = []
+    #         for i_file, file_name, source_path, target_path in iterate_files(source_base_dir, target_base_dir, files, restart=args.restart):
+    #             future = executor.submit(process_file, i_file, file_name, source_path, target_path)
+    #             futures.append(future)
+
+    #         for future in as_completed(futures):
+    #             try:
+    #                 future.result()
+    #             except Exception as e:
+    #                 print(f"Error processing file: {e}")
+    #     except KeyboardInterrupt:
+    #         print("Interrupted")
+    #         executor.shutdown(wait=False, cancel_futures=True)
+    #         raise

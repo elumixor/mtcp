@@ -11,8 +11,8 @@ cd $my_path
 find /eos/atlas/atlascerngroupdisk/phys-higgs/HSG8/multilepton_ttWttH/v08/v0801/systematics-full -name "*.root" | grep -v "NoNeed" > files.txt
 
 small_dir="/eos/user/v/vyazykov/mtcp/friend_ntuples/output/small"
-rm -rf $small_dir
-mkdir -p $small_dir
+# rm -rf $small_dir
+# mkdir -p $small_dir
 
 export MTCP_JOB="produce-small"
 afs_job_dir="/afs/cern.ch/user/v/vyazykov/.condor/$MTCP_JOB"

@@ -6,8 +6,8 @@ region: lep-pt-0
 branch_name: probs_ttH
 batch_size: 5000
 model: resnets/resnet-8
-files:
-    - nominal/mc16a/p4418/600793.root
+# files:
+#     - nominal/mc16a/p4418/600793.root
 #     - nominal/mc16e/p5035/504338.root
 #     - nominal/mc16e/p4590/700205.root
 #     - nominal/mc16e/p4590/700336.root

@@ -27,11 +27,15 @@ def get_all_files(base_dir: str):
 
 def iterate_files(source_base_dir, target_base_dir, files, restart=False):
     # Remove the source_base_dir prefix
+    # Also filter out NoNeed dirs
     files = [file[len(source_base_dir):] if os.path.isabs(file) else file for file in files]
 
     # Create directories if they don't exist
     directories = set([os.path.dirname(file) for file in files])
     for directory in directories:
+        if "NoNeed" in directory:
+            continue
+
         target_directory = os.path.join(target_base_dir, directory)
         if not os.path.exists(target_directory):
             os.makedirs(target_directory)
@@ -53,6 +57,10 @@ def iterate_files(source_base_dir, target_base_dir, files, restart=False):
 
     # Loop over all the files
     for i_file, file in enumerate(files):
+        if "NoNeed" in file:
+            print(f"NoNeed: {file}")
+            continue
+
         source_path = os.path.join(source_base_dir, file)
         target_path = os.path.join(target_base_dir, file)
 
