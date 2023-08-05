@@ -1,0 +1,5 @@
+!outputs
+outputs/**/*.*
+!outputs/**/*.png
+!outputs/**/*.svg
+!outputs/**/*.pdf

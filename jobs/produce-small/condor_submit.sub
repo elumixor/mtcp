@@ -9,11 +9,15 @@ arguments             = $(filename)
 # getenv                = True
 
 # espresso microcentury longlunch workday tomorrow testmatch
-+JobFlavour           = "espresso"
+# +JobFlavour           = "espresso"
 # +JobFlavour           = "microcentury"
 # +JobFlavour           = "workday"
 # +JobFlavour           = "tomorrow"
 # +JobFlavour           = "testmatch"
+
+# 1 hour
++MaxRuntime           = 3600
+
 #+BigMemJob = True
 #+AccountingGroup = "group_u_ATLAS.u_bigmem"
 
@@ -21,7 +25,7 @@ arguments             = $(filename)
 
 # Retry options
 on_exit_remove = (ExitBySignal == False) && (ExitCode == 0)
-max_retries = 50
+max_retries = 3
 
 # Request some GPU
 # request_GPUs = 1

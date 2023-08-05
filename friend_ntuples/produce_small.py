@@ -4,6 +4,7 @@ import os
 import uproot
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import multiprocessing
+from threading import Lock
 import numpy as np
 
 from argparse import ArgumentParser
@@ -42,20 +43,19 @@ files = [args.file] if args.file else config.files if "files" in config else get
 global_lock_path = os.path.join(target_base_dir, ".all-lock")
 
 
+
 def process_file(i_file, file_name, source_path, target_path):
-    processed_path = f"{target_path}.processed"
-    lock_path = f"{target_path}.lock"
+    try:
+        file_str = f"File [{i_file + 1}/{len(files)}]"
 
-    if os.path.exists(processed_path):
-        print(f"File [{i_file + 1}/{len(files)}] {file_name} has already been processed, skipping...")
-        return
+        processed_path = f"{target_path}.processed"
+        lock_path = f"{target_path}.lock"
 
-    with FileLock(global_lock_path):
-        # Create the target directory if it doesn't exist
-        target_dir = os.path.dirname(target_path)
-        if not os.path.exists(target_dir):
-            os.makedirs(target_dir)
+        if os.path.exists(processed_path):
+            print(f"File [{i_file + 1}/{len(files)}] {file_name} has already been processed, skipping...")
+            return
 
+        # with FileLock(global_lock_path):
         # Check if the lock file exists
         if os.path.exists(lock_path):
             print(f"File [{i_file + 1}/{len(files)}] {file_name} is being processed by another process, skipping...")
@@ -65,50 +65,49 @@ def process_file(i_file, file_name, source_path, target_path):
         with open(lock_path, "w") as f:
             pass
 
-    file_str = f"File [{i_file + 1}/{len(files)}]"
-    print(f"{file_str} {source_path} -> {target_path}")
+        print(f"{file_str} {source_path} -> {target_path}")
 
-    # Open the file
-    with uproot.open(source_path) as source_file:
-        # Read the list of trees
-        trees = source_file.keys()
+        # Open the file
+        with uproot.open(source_path) as source_file:
+            # Read the list of trees
+            trees = source_file.keys()
 
-        # We need to join the individual cycles
-        trees = list(set([tree.split(";")[0] for tree in trees]))
-        result = {}
+            # We need to join the individual cycles
+            trees = list(set([tree.split(";")[0] for tree in trees]))
+            result = {}
 
-        # Loop over all the trees
-        for i_tree, tree_name in enumerate(trees):
-            tree = source_file[tree_name]
-            n_events = tree.num_entries
+            # Loop over all the trees
+            for i_tree, tree_name in enumerate(trees):
+                tree = source_file[tree_name]
+                n_events = tree.num_entries
 
-            print(f"{file_str} {file_name}: [{i_tree + 1}/{len(trees)}] {tree_name} ({n_events} events)")
+                print(f"{file_str} {file_name}: [{i_tree + 1}/{len(trees)}] {tree_name} ({n_events} events)")
 
-            tree_keys = tree.keys()
+                tree_keys = tree.keys()
 
-            # Now we should apply the cut and save the resulting tree
-            if tree.num_entries == 0:
-                print(f"{file_str} {file_name}: [{i_tree + 1}/{len(trees)}] {tree_name} has no events")
-                result[tree_name] = {key: np.array([]) for key in features} if len(tree_keys) > 0 else {"dummy": np.array([])}
-            else:
-                # Apply the cut and save a new file
-                arrays = tree.arrays(tree_keys, cut=cut_expression)
+                # Now we should apply the cut and save the resulting tree
+                if tree.num_entries == 0:
+                    print(f"{file_str} {file_name}: [{i_tree + 1}/{len(trees)}] {tree_name} has no events")
+                    result[tree_name] = {key: np.array([]) for key in features} if len(tree_keys) > 0 else {"dummy": np.array([])}
+                else:
+                    # Apply the cut and save a new file
+                    arrays = tree.arrays(tree_keys, cut=cut_expression)
 
-                features = {}
-                for feature in tree_keys:
-                    array = arrays[feature]
-                    if len(array) == 0:
-                        array = array.to_numpy()
+                    features = {}
+                    for feature in tree_keys:
+                        array = arrays[feature]
+                        if len(array) == 0:
+                            array = array.to_numpy()
 
-                    features[feature] = array
+                        features[feature] = array
 
-                result[tree_name] = features
+                    result[tree_name] = features
 
-    with uproot.recreate(target_path) as target_file:
-        for tree_name, arrays in result.items():
-            target_file[tree_name] = arrays
+        with uproot.recreate(target_path) as target_file:
+            for tree_name, arrays in result.items():
+                target_file[tree_name] = arrays
 
-    with FileLock(global_lock_path):
+        # with FileLock(global_lock_path):
         # Add the file to the list of processed files (create an empty file)
         with open(processed_path, "w") as f:
             pass
@@ -116,17 +115,30 @@ def process_file(i_file, file_name, source_path, target_path):
         # Remove the lock file
         os.remove(lock_path)
 
-    print(f"{file_str} {file_name}: Done")
+        print(f"{file_str} {file_name}: Done")
+    except Exception as e:
+        print(f"{file_str}: ERROR: {e}")
+        if os.path.exists(lock_path):
+            os.remove(lock_path)
 
 
-with ThreadPoolExecutor(max_workers=multiprocessing.cpu_count() * 2) as executor:
-    futures = []
+if len(files) == 1:
     for i_file, file_name, source_path, target_path in iterate_files(source_base_dir, target_base_dir, files, restart=args.restart):
-        future = executor.submit(process_file, i_file, file_name, source_path, target_path)
-        futures.append(future)
-
-    for future in as_completed(futures):
+        process_file(i_file, file_name, source_path, target_path)
+else:
+    with ThreadPoolExecutor(max_workers=multiprocessing.cpu_count() * 2) as executor:
         try:
-            future.result()
-        except Exception as e:
-            print(f"Error processing file: {e}")
+            futures = []
+            for i_file, file_name, source_path, target_path in iterate_files(source_base_dir, target_base_dir, files, restart=args.restart):
+                future = executor.submit(process_file, i_file, file_name, source_path, target_path)
+                futures.append(future)
+
+            for future in as_completed(futures):
+                try:
+                    future.result()
+                except Exception as e:
+                    print(f"Error processing file: {e}")
+        except KeyboardInterrupt:
+            print("Interrupted")
+            executor.shutdown(wait=False, cancel_futures=True)
+            raise

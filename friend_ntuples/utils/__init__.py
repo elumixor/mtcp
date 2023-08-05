@@ -29,6 +29,13 @@ def iterate_files(source_base_dir, target_base_dir, files, restart=False):
     # Remove the source_base_dir prefix
     files = [file[len(source_base_dir):] if os.path.isabs(file) else file for file in files]
 
+    # Create directories if they don't exist
+    directories = set([os.path.dirname(file) for file in files])
+    for directory in directories:
+        target_directory = os.path.join(target_base_dir, directory)
+        if not os.path.exists(target_directory):
+            os.makedirs(target_directory)
+
     # Check if the source directory exists
     if not os.path.exists(source_base_dir):
         raise ValueError(f"Source directory {source_base_dir} does not exist")
