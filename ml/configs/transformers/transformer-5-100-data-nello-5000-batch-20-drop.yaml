@@ -1,0 +1,21 @@
+extend: transformers/transformer-5-100-data-safe-5000-batch
+
+features:
+  - DeltaR_max_lep_bjet77
+  - HT_fwdJets
+  - Ptll01
+  - dilep_type
+  - minDeltaR_LJ_0
+  - minDeltaR_LJ_1
+  - taus_pt_0
+  - DRll01
+  - MtLep1Met
+  - HT_taus
+  - total_charge
+  - max_eta
+  - DRjj_lead
+  - Mb1
+  - sumPsbtag
+  - HT_inclFwdJets
+  - MLepMet
+  - nJets_OR

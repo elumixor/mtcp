@@ -1,8 +1,6 @@
 import os
 import shutil
 
-from .file_lock import FileLock
-
 
 def str2bool(v):
     return v.lower() in ("yes", "true", "t", "1")
@@ -11,7 +9,7 @@ def str2bool(v):
 def get_all_files(base_dir: str):
     """Gets the list of all the .root files in the base_dir and its subdirectories recursively"""
     files = []
-    remaining = [base_dir]
+    remaining = [os.path.expanduser(base_dir)]
     while remaining:
         current_dir = remaining.pop()
 
@@ -26,19 +24,13 @@ def get_all_files(base_dir: str):
 
 
 def iterate_files(source_base_dir, target_base_dir, files, restart=False):
+    source_base_dir = os.path.expanduser(source_base_dir)
+    target_base_dir = os.path.expanduser(target_base_dir)
+
     # Remove the source_base_dir prefix
     # Also filter out NoNeed dirs
-    files = [file[len(source_base_dir):] if os.path.isabs(file) else file for file in files]
+    files = [file[len(source_base_dir) + 1:] if os.path.isabs(file) else file for file in files]
 
-    # Create directories if they don't exist
-    directories = set([os.path.dirname(file) for file in files])
-    for directory in directories:
-        if "NoNeed" in directory:
-            continue
-
-        target_directory = os.path.join(target_base_dir, directory)
-        if not os.path.exists(target_directory):
-            os.makedirs(target_directory)
 
     # Check if the source directory exists
     if not os.path.exists(source_base_dir):
@@ -54,6 +46,16 @@ def iterate_files(source_base_dir, target_base_dir, files, restart=False):
     if not os.path.exists(target_base_dir):
         print(f"Creating target directory {target_base_dir}")
         os.makedirs(target_base_dir)
+
+    # Create directories if they don't exist
+    directories = set([os.path.dirname(file) for file in files])
+    for directory in directories:
+        if "NoNeed" in directory:
+            continue
+
+        target_directory = os.path.join(target_base_dir, directory)
+        if not os.path.exists(target_directory):
+            os.makedirs(target_directory)
 
     # Loop over all the files
     for i_file, file in enumerate(files):

@@ -80,10 +80,13 @@ class Model:
         batch = self.preprocess(x)
 
         # Run the network to obtain the logits
-        predictions = self.nn.predict(batch, threshold=self.threshold, signal_idx=self.signal_idx)
+        logits = self.nn(batch)
+        probs = logits.softmax(dim=1)
+
+        probs_signal = probs[:, self.signal_idx]
 
         # Return the predictions as numpy arrays
-        return predictions.cpu().numpy()
+        return probs_signal.cpu().numpy()
 
     def preprocess(self, x: ak.Array):
         """Preprocess the root arrays"""

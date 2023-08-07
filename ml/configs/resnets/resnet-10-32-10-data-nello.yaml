@@ -1,0 +1,6 @@
+extend: resnets/resnet-10-nello
+
+n_embed: 32
+cuts: discard
+fraction: 0.1
+compile: False

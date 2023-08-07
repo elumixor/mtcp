@@ -15,7 +15,7 @@ class Model(nn.Module, ABC):
         return sum(p.numel() for p in self.parameters() if p.requires_grad)
 
     @torch.no_grad()
-    def predict(self, batch, threshold=None, signal_idx=None):
+    def predict(self, batch, threshold=None, signal_idx=None, return_probs=False):
         assert (threshold is None) == (
             signal_idx is None
         ), "Either both or none of threshold and signal_idx must be given"
@@ -30,7 +30,13 @@ class Model(nn.Module, ABC):
         probs_ = probs.clone()
         probs_[:, signal_idx] = -1
         best_bg = probs_.argmax(dim=1)
-        return torch.where(passed, signal_idx, best_bg)
+
+        labels = torch.where(passed, signal_idx, best_bg)
+
+        if return_probs:
+            return labels, probs
+
+        return labels
 
     @classmethod
     def from_saved(cls, path: str, device="cpu"):
