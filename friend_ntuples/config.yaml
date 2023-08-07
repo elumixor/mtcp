@@ -6,7 +6,27 @@ region: lep-pt-0
 branch_name: probs_ttH
 batch_size: 5000
 model: resnets/resnet-8
-# files:
+files:
+  # - nominal/data/data16.root
+  # - nominal/data/data17.root
+  # - nominal/data/data18.root
+
+  # - Sys1/mc16e/p4308/364204.root
+
+  # - Sys2/mc16a/p4308/364184.root
+
+  # - Sys4/mc16a/p4308/364116.root
+  # - Sys4/mc16d/p4416/346311.root
+
+  # - Sys6/mc16a/p4308/364170.root
+
+  # - Sys7/mc16a/p4308/364287.root
+  # - Sys7/mc16a/p4308/410658.root
+  # - Sys7/mc16d/p4308/363357.root
+
+  # - Sys8/mc16e/p4308/364248.root
+  # - Sys8/mc16d/p4416/501720.root
+
 #     - nominal/mc16a/p4418/600793.root
 #     - nominal/mc16e/p5035/504338.root
 #     - nominal/mc16e/p4590/700205.root

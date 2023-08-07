@@ -51,9 +51,9 @@ def process_file(i_file, file_name, source_path, target_path):
         processed_path = f"{target_path}.processed"
         lock_path = f"{target_path}.lock"
 
-        if os.path.exists(processed_path):
-            print(f"File [{i_file + 1}/{len(files)}] {file_name} has already been processed, skipping...")
-            return
+        # if os.path.exists(processed_path):
+        #     print(f"File [{i_file + 1}/{len(files)}] {file_name} has already been processed, skipping...")
+        #     return
 
         # with FileLock(global_lock_path):
         # Check if the lock file exists
@@ -113,13 +113,16 @@ def process_file(i_file, file_name, source_path, target_path):
             pass
 
         # Remove the lock file
-        os.remove(lock_path)
+        if os.path.exists(lock_path):
+            os.remove(lock_path)
 
         print(f"{file_str} {file_name}: Done")
     except Exception as e:
-        print(f"{file_str}: ERROR: {e}")
         if os.path.exists(lock_path):
             os.remove(lock_path)
+
+        print(f"{file_str}: ERROR: {e}")
+        raise
 
 
 if len(files) == 1:
