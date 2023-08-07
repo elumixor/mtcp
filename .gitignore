@@ -20,7 +20,6 @@ outputs/
 jobs/**/logs/
 jobs/**/logs
 jobs/**/status.json
-jobs/**/condor_submit.sub
 
 # Node modules
 node_modules/
