@@ -1,0 +1,19 @@
+
+executable            = /afs/cern.ch/user/v/vyazykov/.condor/pre-fit/commands/run.sh
+arguments             = 200 /eos/user/v/vyazykov/mtcp/jobs/pre-fit/run.sh
+output                = /afs/cern.ch/user/v/vyazykov/.condor/pre-fit/logs/out
+error                 = /afs/cern.ch/user/v/vyazykov/.condor/pre-fit/logs/err
+log                   = /afs/cern.ch/user/v/vyazykov/.condor/pre-fit/logs/log
+initialdir            = /afs/cern.ch/user/v/vyazykov/.condor/pre-fit
+getenv                = MTCP*
+
++MaxRuntime           = 12000
+
++PostCmd              = "/usr/bin/python3"
++PostArguments        = "/eos/user/v/vyazykov/mtcp/pipeliner/condor/on_done.py /eos/user/v/vyazykov/mtcp/jobs/pre-fit"
+
+on_exit_remove        = (ExitBySignal == False) && (ExitCode == 0)
+max_retries           = 1
+
+
+queue
