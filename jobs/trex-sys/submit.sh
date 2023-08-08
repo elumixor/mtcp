@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# set -e
-# set -x
-
 my_path=$(dirname $(realpath $0))
 cd $my_path
 

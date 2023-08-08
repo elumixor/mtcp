@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source /eos/user/v/vyazykov/eos/TRExFitter/setup.sh
+source /eos/user/v/vyazykov/TRExFitter/setup.sh
 
 export MTCP_ROOT="/eos/user/v/vyazykov/mtcp"
 cd $MTCP_ROOT/trex-fitter

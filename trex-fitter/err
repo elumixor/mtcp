@@ -1,0 +1,225 @@
+Info in <Minuit2>: MnSeedGenerator Initial state: FCN =       47.82582265 Edm =   3.758919538e-12 NCalls =    157
+Info in <Minuit2>: VariableMetricBuilder Start iterating until Edm is < 1e-05 with call limit = 19500
+Info in <Minuit2>: VariableMetricBuilder    0 - FCN =       47.82582265 Edm =   3.758919538e-12 NCalls =    157
+Warning in <Minuit2>: VariableMetricBuilder No improvement in line search
+Info in <Minuit2>: VariableMetricBuilder    1 - FCN =       47.82582265 Edm =   3.758919538e-12 NCalls =    159
+Info in <Minuit2>: VariableMetricBuilder After Hessian
+Info in <Minuit2>: VariableMetricBuilder    2 - FCN =       47.82582265 Edm =    8.83444501e-18 NCalls =   1077
+Info in <Minuit2>: Minuit2Minimizer::Hesse Using max-calls 19500
+Info in <Minuit2>: Minuit2Minimizer::Hesse Hesse is valid - matrix is accurate
+Info in <Minuit2>: MnMinos Determination of lower Minos error for parameter 38
+Info in <Minuit2>: MnFunctionCross Run Migrad with fixed parameters:
+  Pos 38: mu_ttH = 0.520247
+Info in <Minuit2>: MnSeedGenerator Initial state: FCN =       48.38411378 Edm =   0.0006020236507 NCalls =    153
+Info in <Minuit2>: VariableMetricBuilder Start iterating until Edm is < 5e-06 with call limit = 19500
+Info in <Minuit2>: VariableMetricBuilder    0 - FCN =       48.38411378 Edm =   0.0006020236507 NCalls =    153
+Info in <Minuit2>: VariableMetricBuilder    1 - FCN =       48.38357972 Edm =   2.518211135e-07 NCalls =    231
+Info in <Minuit2>: MnFunctionCross Result after Migrad FCN =       48.38357972 Edm =   2.518211135e-07 NCalls =    231 
+  Pos |    Name    |  type   |      Value       |    Error +/-
+    0 | alpha_ATLAS_EG_RES | limited |  -0.001515173411 | 0.9933526878
+    1 | alpha_ATLAS_EG_SCALE | limited |   0.005874071392 |  0.993326217
+    2 | alpha_ATLAS_EL_ID | limited |    0.01437048781 | 0.9932156711
+    3 | alpha_ATLAS_EL_Isol | limited |   0.001711980218 | 0.9933448227
+    4 | alpha_ATLAS_EL_Reco | limited |   0.009680324113 | 0.9932902581
+    5 | alpha_ATLAS_MET_Para | limited |    -0.1947186089 | 0.9474598085
+    6 | alpha_ATLAS_MET_Perp | limited |    -0.1950975981 | 0.9474175641
+    7 | alpha_ATLAS_MET_Scale | limited | -0.0007802830427 | 0.9933448188
+    8 | alpha_ATLAS_MU_ID | limited |  2.662623321e-09 | 0.9933468046
+    9 | alpha_ATLAS_MU_ID_STAT | limited |   0.002466891314 | 0.9933432022
+   10 | alpha_ATLAS_MU_ID_STAT_LOWPT | limited |  2.663276037e-09 | 0.9933468046
+   11 | alpha_ATLAS_MU_ID_SYST | limited |   0.008830564366 | 0.9932976828
+   12 | alpha_ATLAS_MU_ID_SYST_LOWPT | limited |  2.663276037e-09 | 0.9933468046
+   13 | alpha_ATLAS_MU_Isol_STAT | limited |   0.001522411795 | 0.9933452205
+   14 | alpha_ATLAS_MU_Isol_SYST | limited |    0.00674614796 | 0.9933199203
+   15 | alpha_ATLAS_MU_RESBIAS | limited |  -0.002412645708 | 0.9933619153
+   16 | alpha_ATLAS_MU_RHO | limited |  2.662623323e-09 | 0.9933468046
+   17 | alpha_ATLAS_MU_SCALE | limited | -0.0004949590667 | 0.9933466936
+   18 | alpha_ATLAS_MU_TTVA_STAT | limited |   0.001415401931 | 0.9933454904
+   19 | alpha_ATLAS_MU_TTVA_SYST | limited |   0.001628895009 | 0.9933450932
+   20 | alpha_ATLAS_TRIG_EL | limited |   0.002819471834 | 0.9933416754
+   21 | alpha_ATLAS_TRIG_MU_STAT | limited |   0.006105460814 |  0.993325913
+   22 | alpha_ATLAS_TRIG_MU_SYST | limited |   -0.07025365143 | 0.9903695453
+   23 | alpha_FakesElLead_PLIV_PtFrac | limited |  -0.009735594073 | 0.9933745502
+   24 | alpha_FakesElSubLead_PLIV_PtFrac | limited |    0.02792110536 | 0.9935569461
+   25 | alpha_FakesMuLead_PLIV_RelCaloCluster | limited |     0.0206957535 | 0.9933919542
+   26 | alpha_FakesMuSubLead_PLIV_RelCaloCluster | limited |  -0.002672113976 | 0.9933461493
+   27 | alpha_PLIV_El_ID_Tight | limited |  0.0006334062454 |  0.993346553
+   28 | alpha_PLIV_El_Iso_Tight | limited |   0.001053523864 | 0.9933460274
+   29 | alpha_PLIV_El_JetModeling_Tight | limited |    0.02378258266 | 0.9930660339
+   30 | alpha_PLIV_El_MllWindow_Tight | limited |  0.0002173048573 | 0.9933468056
+   31 | alpha_PLIV_El_Pileup_Tight | limited |    0.01119386567 | 0.9932771907
+   32 | alpha_PLIV_El_Stat_Tight | limited |   0.004603390409 |   0.99333352
+   33 | alpha_PLIV_El_TemplateCut_Tight | limited |  0.0001583458167 | 0.9933468083
+   34 | gamma_stat_probs-ttH_bin_0 | limited |      1.001180225 | 0.03137149506
+   35 | gamma_stat_probs-ttH_bin_1 | limited |      1.001930937 | 0.03664337462
+   36 | gamma_stat_probs-ttH_bin_2 | limited |       1.00338535 | 0.04526940205
+   37 | gamma_stat_probs-ttH_bin_3 | limited |      1.004857076 | 0.04453306068
+   38 |     mu_ttH |  fixed  |     0.5202465281 | 0.4797534719
+Info in <Minuit2>: MnFunctionCross Run Migrad again (2nd) with fixed parameters:
+  Pos 38: mu_ttH = 0.545765
+Info in <Minuit2>: MnSeedGenerator Initial state: FCN =       48.32251428 Edm =   0.0001935266753 NCalls =    153
+Info in <Minuit2>: VariableMetricBuilder Start iterating until Edm is < 5e-06 with call limit = 19500
+Info in <Minuit2>: VariableMetricBuilder    0 - FCN =       48.32251428 Edm =   0.0001935266753 NCalls =    153
+Info in <Minuit2>: VariableMetricBuilder    1 - FCN =       48.32231873 Edm =    2.70244308e-08 NCalls =    230
+Info in <Minuit2>: MnFunctionCross Result after 2nd Migrad FCN =       48.32231873 Edm =    2.70244308e-08 NCalls =    230 
+  Pos |    Name    |  type   |      Value       |    Error +/-
+    0 | alpha_ATLAS_EG_RES | limited |  -0.001451604567 | 0.9933527277
+    1 | alpha_ATLAS_EG_SCALE | limited |   0.005584343476 | 0.9933264433
+    2 | alpha_ATLAS_EL_ID | limited |    0.01359729651 | 0.9932162932
+    3 | alpha_ATLAS_EL_Isol | limited |     0.0016216777 | 0.9933448328
+    4 | alpha_ATLAS_EL_Reco | limited |   0.009151897594 | 0.9932905632
+    5 | alpha_ATLAS_MET_Para | limited |    -0.1837525777 |  0.948662256
+    6 | alpha_ATLAS_MET_Perp | limited |    -0.1841030069 | 0.9482987682
+    7 | alpha_ATLAS_MET_Scale | limited | -0.0007411588241 | 0.9933448371
+    8 | alpha_ATLAS_MU_ID | limited | -4.587010008e-10 | 0.9933468046
+    9 | alpha_ATLAS_MU_ID_STAT | limited |   0.002334087384 | 0.9933432327
+   10 | alpha_ATLAS_MU_ID_STAT_LOWPT | limited | -4.579878907e-10 | 0.9933468046
+   11 | alpha_ATLAS_MU_ID_SYST | limited |   0.008364916479 | 0.9932979849
+   12 | alpha_ATLAS_MU_ID_SYST_LOWPT | limited | -4.579878907e-10 | 0.9933468046
+   13 | alpha_ATLAS_MU_Isol_STAT | limited |   0.001443667505 | 0.9933452294
+   14 | alpha_ATLAS_MU_Isol_SYST | limited |   0.006385524955 | 0.9933201182
+   15 | alpha_ATLAS_MU_RESBIAS | limited |  -0.002250943558 | 0.9933619859
+   16 | alpha_ATLAS_MU_RHO | limited | -4.587009991e-10 | 0.9933468046
+   17 | alpha_ATLAS_MU_SCALE | limited | -0.0004656619668 | 0.9933466969
+   18 | alpha_ATLAS_MU_TTVA_STAT | limited |   0.001339965097 | 0.9933454998
+   19 | alpha_ATLAS_MU_TTVA_SYST | limited |   0.001543193255 | 0.9933451032
+   20 | alpha_ATLAS_TRIG_EL | limited |   0.002668059094 | 0.9933417048
+   21 | alpha_ATLAS_TRIG_MU_STAT | limited |   0.005773277063 | 0.9933260829
+   22 | alpha_ATLAS_TRIG_MU_SYST | limited |   -0.06642900874 | 0.9902657823
+   23 | alpha_FakesElLead_PLIV_PtFrac | limited |  -0.009273032776 | 0.9933763137
+   24 | alpha_FakesElSubLead_PLIV_PtFrac | limited |    0.02658086765 | 0.9935602753
+   25 | alpha_FakesMuLead_PLIV_RelCaloCluster | limited |    0.01969460109 | 0.9933923406
+   26 | alpha_FakesMuSubLead_PLIV_RelCaloCluster | limited |  -0.002542755713 | 0.9933461135
+   27 | alpha_PLIV_El_ID_Tight | limited |  0.0005986130515 | 0.9933465547
+   28 | alpha_PLIV_El_Iso_Tight | limited |  0.0009955460601 | 0.9933460287
+   29 | alpha_PLIV_El_JetModeling_Tight | limited |    0.02245474313 | 0.9930632901
+   30 | alpha_PLIV_El_MllWindow_Tight | limited |  0.0002044464439 | 0.9933468062
+   31 | alpha_PLIV_El_Pileup_Tight | limited |    0.01057594127 | 0.9932769256
+   32 | alpha_PLIV_El_Stat_Tight | limited |   0.004352107069 | 0.9933334718
+   33 | alpha_PLIV_El_TemplateCut_Tight | limited |  0.0001488739634 | 0.9933468091
+   34 | gamma_stat_probs-ttH_bin_0 | limited |      1.001117922 | 0.03137856471
+   35 | gamma_stat_probs-ttH_bin_1 | limited |      1.001830616 | 0.0366586382
+   36 | gamma_stat_probs-ttH_bin_2 | limited |      1.003211628 | 0.04531074778
+   37 | gamma_stat_probs-ttH_bin_3 | limited |      1.004609316 | 0.04463394696
+   38 |     mu_ttH |  fixed  |     0.5457650079 | 0.4797534719
+Info in <Minuit2>: MnMinos end of Minos scan for low interval for parameter mu_ttH
+Info in <Minuit2>: MnMinos Determination of upper Minos error for parameter 38
+Info in <Minuit2>: MnFunctionCross Run Migrad with fixed parameters:
+  Pos 38: mu_ttH = 1.47975
+Info in <Minuit2>: MnSeedGenerator Initial state: FCN =        48.2776941 Edm =    0.001971572684 NCalls =    153
+Info in <Minuit2>: VariableMetricBuilder Start iterating until Edm is < 5e-06 with call limit = 19500
+Info in <Minuit2>: VariableMetricBuilder    0 - FCN =        48.2776941 Edm =    0.001971572684 NCalls =    153
+Info in <Minuit2>: VariableMetricBuilder    1 - FCN =       48.27598398 Edm =   4.371893577e-07 NCalls =    231
+Info in <Minuit2>: MnFunctionCross Result after Migrad FCN =       48.27598398 Edm =   4.371893577e-07 NCalls =    231 
+  Pos |    Name    |  type   |      Value       |    Error +/-
+    0 | alpha_ATLAS_EG_RES | limited |  0.0008573481983 | 0.9933479116
+    1 | alpha_ATLAS_EG_SCALE | limited |  -0.004991320685 | 0.9933180718
+    2 | alpha_ATLAS_EL_ID | limited |   -0.01556687063 | 0.9932116776
+    3 | alpha_ATLAS_EL_Isol | limited |  -0.001817138497 | 0.9933448874
+    4 | alpha_ATLAS_EL_Reco | limited |    -0.0107385029 | 0.9932843473
+    5 | alpha_ATLAS_MET_Para | limited |     0.1372634764 |  0.944384384
+    6 | alpha_ATLAS_MET_Perp | limited |      0.137644685 | 0.9442399653
+    7 | alpha_ATLAS_MET_Scale | limited |  0.0006753557649 | 0.9933447984
+    8 | alpha_ATLAS_MU_ID | limited | -5.820231385e-09 | 0.9933468046
+    9 | alpha_ATLAS_MU_ID_STAT | limited |  -0.002664724064 | 0.9933430481
+   10 | alpha_ATLAS_MU_ID_STAT_LOWPT | limited | -5.820231385e-09 | 0.9933468046
+   11 | alpha_ATLAS_MU_ID_SYST | limited |  -0.009288546713 | 0.9932986737
+   12 | alpha_ATLAS_MU_ID_SYST_LOWPT | limited | -5.820231385e-09 | 0.9933468046
+   13 | alpha_ATLAS_MU_Isol_STAT | limited |  -0.001557991416 | 0.9933452573
+   14 | alpha_ATLAS_MU_Isol_SYST | limited |  -0.007238496405 | 0.9933195032
+   15 | alpha_ATLAS_MU_RESBIAS | limited |   0.003602400594 | 0.9933450593
+   16 | alpha_ATLAS_MU_RHO | limited | -5.820231387e-09 | 0.9933468046
+   17 | alpha_ATLAS_MU_SCALE | limited |  0.0006005254941 | 0.9933465363
+   18 | alpha_ATLAS_MU_TTVA_STAT | limited |  -0.001510080672 | 0.9933454868
+   19 | alpha_ATLAS_MU_TTVA_SYST | limited |  -0.001720796898 | 0.9933451507
+   20 | alpha_ATLAS_TRIG_EL | limited |  -0.003058313158 | 0.9933415837
+   21 | alpha_ATLAS_TRIG_MU_STAT | limited |  -0.006720284193 |  0.993323806
+   22 | alpha_ATLAS_TRIG_MU_SYST | limited |    0.07760642903 | 0.9901695335
+   23 | alpha_FakesElLead_PLIV_PtFrac | limited |   0.007279922132 | 0.9933174226
+   24 | alpha_FakesElSubLead_PLIV_PtFrac | limited |   -0.02187307504 | 0.9932116143
+   25 | alpha_FakesMuLead_PLIV_RelCaloCluster | limited |   -0.01658835017 |  0.993239246
+   26 | alpha_FakesMuSubLead_PLIV_RelCaloCluster | limited |   0.002144529437 | 0.9933436954
+   27 | alpha_PLIV_El_ID_Tight | limited |  -0.000706752645 | 0.9933465155
+   28 | alpha_PLIV_El_Iso_Tight | limited |  -0.001183262432 | 0.9933459193
+   29 | alpha_PLIV_El_JetModeling_Tight | limited |   -0.02720153645 | 0.9929675574
+   30 | alpha_PLIV_El_MllWindow_Tight | limited | -0.0002734434754 | 0.9933467692
+   31 | alpha_PLIV_El_Pileup_Tight | limited |   -0.01255009195 | 0.9932628823
+   32 | alpha_PLIV_El_Stat_Tight | limited |  -0.005105680193 | 0.9933321091
+   33 | alpha_PLIV_El_TemplateCut_Tight | limited | -0.0001957083876 | 0.9933467874
+   34 | gamma_stat_probs-ttH_bin_0 | limited |     0.9988188949 | 0.03156846066
+   35 | gamma_stat_probs-ttH_bin_1 | limited |     0.9980156709 | 0.03695745616
+   36 | gamma_stat_probs-ttH_bin_2 | limited |     0.9965031507 | 0.04578639127
+   37 | gamma_stat_probs-ttH_bin_3 | limited |     0.9951036032 | 0.04527694991
+   38 |     mu_ttH |  fixed  |      1.479753472 | 0.4797534719
+Info in <Minuit2>: MnFunctionCross Run Migrad again (2nd) with fixed parameters:
+  Pos 38: mu_ttH = 1.50561
+Info in <Minuit2>: MnSeedGenerator Initial state: FCN =       48.32349243 Edm =   8.373864349e-05 NCalls =    153
+Info in <Minuit2>: VariableMetricBuilder Start iterating until Edm is < 5e-06 with call limit = 19500
+Info in <Minuit2>: VariableMetricBuilder    0 - FCN =       48.32349243 Edm =   8.373864349e-05 NCalls =    153
+Info in <Minuit2>: VariableMetricBuilder    1 - FCN =       48.32340941 Edm =   2.031496056e-08 NCalls =    230
+Info in <Minuit2>: MnFunctionCross Result after 2nd Migrad FCN =       48.32340941 Edm =   2.031496056e-08 NCalls =    230 
+  Pos |    Name    |  type   |      Value       |    Error +/-
+    0 | alpha_ATLAS_EG_RES | limited |  0.0008354103047 | 0.9933478924
+    1 | alpha_ATLAS_EG_SCALE | limited |  -0.005152992072 | 0.9933182128
+    2 | alpha_ATLAS_EL_ID | limited |   -0.01649030491 | 0.9931999346
+    3 | alpha_ATLAS_EL_Isol | limited |  -0.001923286867 | 0.9933447204
+    4 | alpha_ATLAS_EL_Reco | limited |   -0.01139656872 |  0.993278164
+    5 | alpha_ATLAS_MET_Para | limited |     0.1426139211 | 0.9453624797
+    6 | alpha_ATLAS_MET_Perp | limited |     0.1430153004 | 0.9454476275
+    7 | alpha_ATLAS_MET_Scale | limited |  0.0006955063357 | 0.9933447802
+    8 | alpha_ATLAS_MU_ID | limited | -4.049623475e-10 | 0.9933468046
+    9 | alpha_ATLAS_MU_ID_STAT | limited |  -0.002821284356 | 0.9933426681
+   10 | alpha_ATLAS_MU_ID_STAT_LOWPT | limited | -4.049623475e-10 | 0.9933468046
+   11 | alpha_ATLAS_MU_ID_SYST | limited |  -0.009817667913 | 0.9932945909
+   12 | alpha_ATLAS_MU_ID_SYST_LOWPT | limited | -4.049623475e-10 | 0.9933468046
+   13 | alpha_ATLAS_MU_Isol_STAT | limited |  -0.001643481151 | 0.9933451521
+   14 | alpha_ATLAS_MU_Isol_SYST | limited |  -0.007660876001 | 0.9933167873
+   15 | alpha_ATLAS_MU_RESBIAS | limited |   0.003899834439 | 0.9933435438
+   16 | alpha_ATLAS_MU_RHO | limited | -4.048575013e-10 | 0.9933468046
+   17 | alpha_ATLAS_MU_SCALE | limited |  0.0006400835361 | 0.9933465092
+   18 | alpha_ATLAS_MU_TTVA_STAT | limited |  -0.001597597483 | 0.9933453728
+   19 | alpha_ATLAS_MU_TTVA_SYST | limited |  -0.001820282038 | 0.9933450006
+   20 | alpha_ATLAS_TRIG_EL | limited |  -0.003240999902 | 0.9933410944
+   21 | alpha_ATLAS_TRIG_MU_STAT | limited |  -0.007126063586 |  0.993321319
+   22 | alpha_ATLAS_TRIG_MU_SYST | limited |    0.08234715279 | 0.9902665736
+   23 | alpha_FakesElLead_PLIV_PtFrac | limited |   0.007386297405 | 0.9933178138
+   24 | alpha_FakesElSubLead_PLIV_PtFrac | limited |   -0.02232941158 | 0.9932186136
+   25 | alpha_FakesMuLead_PLIV_RelCaloCluster | limited |   -0.01697988078 | 0.9932442462
+   26 | alpha_FakesMuSubLead_PLIV_RelCaloCluster | limited |   0.002191627167 | 0.9933437778
+   27 | alpha_PLIV_El_ID_Tight | limited | -0.0007501586773 |  0.993346492
+   28 | alpha_PLIV_El_Iso_Tight | limited |  -0.001256896429 | 0.9933458523
+   29 | alpha_PLIV_El_JetModeling_Tight | limited |   -0.02892126142 | 0.9929388232
+   30 | alpha_PLIV_El_MllWindow_Tight | limited | -0.0002926387726 | 0.9933467634
+   31 | alpha_PLIV_El_Pileup_Tight | limited |   -0.01332274147 | 0.9932563483
+   32 | alpha_PLIV_El_Stat_Tight | limited |  -0.005417720873 | 0.9933309923
+   33 | alpha_PLIV_El_TemplateCut_Tight | limited |  -0.000208835453 | 0.9933467847
+   34 | gamma_stat_probs-ttH_bin_0 | limited |     0.9987564626 | 0.0315690356
+   35 | gamma_stat_probs-ttH_bin_1 | limited |     0.9979117989 | 0.03694557856
+   36 | gamma_stat_probs-ttH_bin_2 | limited |     0.9963208531 | 0.04572059929
+   37 | gamma_stat_probs-ttH_bin_3 | limited |       0.99484554 | 0.04507804941
+   38 |     mu_ttH |  fixed  |      1.505613937 | 0.4797534719
+Info in <Minuit2>: MnMinos end of Minos scan for up interval for parameter mu_ttH
+Info in <TCanvas::Print>: pdf file ./outputs/probs-partial-sys/Pulls/All/NuisPar_Fakes.pdf has been created
+Info in <TCanvas::Print>: pdf file ./outputs/probs-partial-sys/Pulls/PullSig/NuisParSig_Fakes.pdf has been created
+Info in <TCanvas::Print>: pdf file ./outputs/probs-partial-sys/Pulls/RankedPullSig/NuisParSigRank_Fakes.pdf has been created
+Info in <TCanvas::Print>: pdf file ./outputs/probs-partial-sys/Pulls/All/NuisPar_Instrumental.pdf has been created
+Info in <TCanvas::Print>: pdf file ./outputs/probs-partial-sys/Pulls/PullSig/NuisParSig_Instrumental.pdf has been created
+Info in <TCanvas::Print>: pdf file ./outputs/probs-partial-sys/Pulls/RankedPullSig/NuisParSigRank_Instrumental.pdf has been created
+Info in <TCanvas::Print>: pdf file ./outputs/probs-partial-sys/Pulls/All/NuisPar.pdf has been created
+Info in <TCanvas::Print>: pdf file ./outputs/probs-partial-sys/Pulls/PullSig/NuisParSig.pdf has been created
+Info in <TCanvas::Print>: pdf file ./outputs/probs-partial-sys/Pulls/RankedPullSig/NuisParSigRank.pdf has been created
+Info in <TCanvas::Print>: pdf file ./outputs/probs-partial-sys/Gammas.pdf has been created
+Info in <TCanvas::Print>: pdf file ./outputs/probs-partial-sys/NormFactors.pdf has been created
+Info in <TCanvas::Print>: png file ./outputs/probs-partial-sys/Pulls/All/NuisPar_Fakes.png has been created
+Info in <TCanvas::Print>: png file ./outputs/probs-partial-sys/Pulls/PullSig/NuisParSig_Fakes.png has been created
+Info in <TCanvas::Print>: png file ./outputs/probs-partial-sys/Pulls/RankedPullSig/NuisParSigRank_Fakes.png has been created
+Info in <TCanvas::Print>: png file ./outputs/probs-partial-sys/Pulls/All/NuisPar_Instrumental.png has been created
+Info in <TCanvas::Print>: png file ./outputs/probs-partial-sys/Pulls/PullSig/NuisParSig_Instrumental.png has been created
+Info in <TCanvas::Print>: png file ./outputs/probs-partial-sys/Pulls/RankedPullSig/NuisParSigRank_Instrumental.png has been created
+Info in <TCanvas::Print>: png file ./outputs/probs-partial-sys/Pulls/All/NuisPar.png has been created
+Info in <TCanvas::Print>: png file ./outputs/probs-partial-sys/Pulls/PullSig/NuisParSig.png has been created
+Info in <TCanvas::Print>: png file ./outputs/probs-partial-sys/Pulls/RankedPullSig/NuisParSigRank.png has been created
+Info in <TCanvas::Print>: png file ./outputs/probs-partial-sys/Gammas.png has been created
+Info in <TCanvas::Print>: png file ./outputs/probs-partial-sys/NormFactors.png has been created
+Info in <TCanvas::Print>: pdf file ./outputs/probs-partial-sys/CorrMatrix.pdf has been created
+Info in <TCanvas::Print>: png file ./outputs/probs-partial-sys/CorrMatrix.png has been created
