@@ -6,22 +6,22 @@ To train a classifier, we need a set of labeled observations. In the context of 
 event and the label corresponds to the process that led to this event. However, obtaining these labeled observations is
 not as straightforward as simply recording the events.
 
-We need a model that describes the underlying physics. In our case, this is the Standard Model, including the branching
+We need a model that describes the underlying physics. In our case, this is the \gls{sm}, including the branching
 factors introduced before. The model is based on our understanding of particle physics and describes the probabilities
 of different processes and outcomes.
 
-To generate our labeled dataset, we use a tool called Monte Carlo (MC) simulations. MC simulations are a way to generate
+To generate our labeled dataset, we use a tool called \gls{mc} simulations. \gls{mc} simulations are a way to generate
 data that follows a given model. In essence, the simulation creates a large number of events, each following the
 probabilistic rules of the model. We can then record these events and their corresponding labels (which process they
 were created by).
 
-The benefit of MC simulations is that they allow us to create a large amount of data where we know the 'true' labels.
-This data can be used to train and evaluate our classifier. However, it's important to note that while MC simulations
+The benefit of \gls{mc} simulations is that they allow us to create a large amount of data where we know the 'true' labels.
+This data can be used to train and evaluate our classifier. However, it's important to note that while \gls{mc} simulations
 are based on our best understanding of physics, they are not perfect. There are always uncertainties and potential
 inaccuracies in the model, which can affect the generated data and the performance of our classifier.
 
 To alleviate the difficulties of training on small dataset, more signal events are explicitly generated. This leads to
-producing a different distribution than the one observed in the real data. To align the MC simulated data with the real
+producing a different distribution than the one observed in the real data. To align the \gls{mc} simulated data with the real
 data, it is necessary to apply event weights. Event weighting is a technique used to correct the simulated distributions
 for known differences between the simulation and the real data.
 
@@ -29,11 +29,11 @@ for known differences between the simulation and the real data.
 
 % Luminosity: The total number of simulated events often does not correspond to the luminosity of the real data. Events
 % are therefore weighted to correspond to the correct integrated luminosity. If $L_{data}$ is the integrated luminosity of
-% the data and $L_{MC}$ is the integrated luminosity of the MC sample, then the luminosity weight for an event is $w_{L} =
-%     L_{data}/L_{MC}$.
+% the data and $L_{\gls{mc}}$ is the integrated luminosity of the \gls{mc} sample, then the luminosity weight for an event is $w_{L} =
+%     L_{data}/L_{\gls{mc}}$.
 
 % Cross-Section: Different processes have different probabilities (cross-sections) of occurring. The ratio of the
-% cross-sections in data and simulation $\sigma_{data}/\sigma_{MC}$ is used as a weight.
+% cross-sections in data and simulation $\sigma_{data}/\sigma_{\gls{mc}}$ is used as a weight.
 
 % Detector Effects: The detector response is not always perfectly simulated. Therefore, weights are applied to correct for
 % known discrepancies in detector efficiencies and energy resolutions between the data and the simulation.
@@ -63,28 +63,30 @@ for known differences between the simulation and the real data.
 
 In particle physics, especially in high energy experiments such as those conducted at the LHC, the parameter space is
 vast. Identifying signals from noise or background events becomes a challenging task. To tackle this challenge, we
-divide the parameter space into different regions, each serving a specific purpose. These regions include the Signal
-Region (SR), Control Region (CR), and Validation Region (VR).
+divide the parameter space into different regions, each serving a specific purpose. These regions include the \gls{sr},
+\gls{cr}, and \gls{vr}.
 
 \begin{itemize}
-    \item \textbf{Signal Region (SR)}: The Signal Region is where we expect the events of interest, the
+    \item \textbf{\gls{sr}} is where we expect the events of interest, the
           signal, to be most prevalent. It is defined by certain selection criteria that maximize the signal's prominence against
           the background. In our case, the signal refers to the \tth events.
 
-    \item \textbf{Control Region (CR)}: The Control Region is where we estimate the amount of background contamination
-          present in the Signal Region. The CR is characterized by negligible signal but a significant amount of background
-          events, similar to what we expect in the SR. By studying the CR, we can understand and model the background in the SR.
+    \item \textbf{\gls{cr}} is where we estimate the amount of background contamination
+          present in the \gls{sr}. The \gls{cr} is characterized by negligible signal but a significant amount of background
+          events, similar to what we expect in the \gls{sr}. By studying the \gls{cr}, we can understand and model the background in the \gls{sr}.
 
-    \item \textbf{Validation Region (VR)}: The Validation Region is used to test the reliability of our model predictions
-          and the Monte Carlo simulations. The VR is typically chosen where neither the signal nor the background is expected to
+    \item \textbf{\gls{vr}} is used to test the reliability of our model predictions
+          and the \gls{mc} simulations. The VR is typically chosen where neither the signal nor the background is expected to
           be particularly high or low. Any significant deviation of the observed data from our model predictions in the VR may
-          indicate the presence of a new physics process or systematic errors in our model or simulation.  \end{itemize}
+          indicate the presence of a new physics process or systematic errors in our model or simulation.
+\end{itemize}
 
 These regions are not arbitrarily defined but are carefully chosen based on detailed knowledge of the physics processes
 involved and the detector's characteristics. They provide a robust framework for analyzing the data from high-energy
 physics experiments and are crucial in our search for the \tth process events.
 
 \subsection{\lss channel}
+\label{sec:lss}
 
 \input{figures/feynman/2lss1tau}
 
@@ -119,99 +121,58 @@ expected number of \tth events in the \lss final state is reduced to:
                           & = 500 \text{ fb} \cdot 140 \text{ fb}^{-1} \cdot 6.25\% \cdot 100\% \cdot 100\% \cdot 10\% \cdot 70\% \approx 3.15
 \end{align*}
 
-It should be noted, however, that this is a simplified calculation and does not consider various factors such as
-detector efficiencies and background events. Nevertheless, it provides a good estimate of the scale of the challenge we
-face in detecting the \tth process in the \lss channel.
+\todo{Fix the above calculations, it's not correct}
 
-\subsection{Distribution of the variables inside \gls{sr}}
+% It should be noted, however, that this is a simplified calculation and does not consider various factors such as
+% detector efficiencies and background events. Nevertheless, it provides a good estimate of the scale of the challenge we
+% face in detecting the \tth process in the \lss channel.
 
-The following figures (\autoref{fig:distributions1} and \autoref{fig:distributions2}) show the distributions of some variables
-of interest inside \gls{sr}.
+As we apply the selection criteria to the data, we drop from about 8.9M to just 32K raw events. For the \tth, this
+corresponds to 0.8M $\rightarrow$ 15K raw events. In terms of weighted events the transition is from 46K $\rightarrow$
+32.72 weighted events across all the processes, and 523.42 $\rightarrow$ 12.22 weighted events for the \tth. The details
+for all processes are shown on the \autoref{tab:class_distributions}.
+
+\todo{highlight the numbers above}
+
+\begin{figure}[htb]
+    \centering
+    \input{generated/num_events.tex}
+    \captionof{table}{Comparison of the number of events before and after applying the selection criteria. For each
+        process, we show the number of raw events and the number of weighted events.}
+    \label{tab:class_distributions}
+\end{figure}
+
+
+The figures \autoref{fig:lep_pt_0} and \autoref{fig:lep_pt_1} show the distributions of the leading and
+subleading leptons' transverse momenta inside inside the \gls{sr}. These types of plots are one of the most common
+plots generated by the \trex\footnote{\trex is a framework for binned template profile likelihood fits heavily used at
+    CERN. The documentation can be found at \url{https://trexfitter-docs.web.cern.ch/trexfitter-docs/}. The code can be
+    found at \url{https://gitlab.cern.ch/TRExStats/TRExFitter}} software. These plots are often used to check the well
+modelling of the variables. It is essential to make sure that the variables are well
+modelled - events generated by the \gls{mc} agrees with the real data. Otherwise we can be training on the wrong data
+and our classifier will not generalize well when it comes to the real data. More plots are presented in the
+\appref{appendix:yields}.
+
 
 \captionsetup[subfigure]{justification=centering}
-\begin{figure}[htb!]
+\begin{figure}[htb]
     \centering
     \begin{subfigure}{0.45\textwidth}
-        \includegraphics[width=\linewidth]{figures/plots/histograms/lep_pt_0.png}
+        \includegraphics[width=\linewidth]{figures/yields/lep-pt-0.pdf}
         \caption{Distribution of the transverse momentum of the leading lepton.}
         \label{fig:lep_pt_0}
     \end{subfigure}\hfill%
     \begin{subfigure}{0.45\textwidth}
-        \includegraphics[width=\linewidth]{figures/plots/histograms/lep_pt_1.png}
+        \includegraphics[width=\linewidth]{figures/yields/lep-pt-1.pdf}
         \caption{Distribution of the transverse momentum of the subleading lepton.}
         \label{fig:lep_pt_1}
     \end{subfigure}
-
-    \vspace{0.5cm}
-
-    \begin{subfigure}{0.45\textwidth}
-        \includegraphics[width=\linewidth]{figures/plots/histograms/lep_Eta_0.png}
-        \caption{Distribution of the pseudorapidity of the leading lepton.}
-        \label{fig:lep_Eta_0}
-    \end{subfigure}\hfill%
-    \begin{subfigure}{0.45\textwidth}
-        \includegraphics[width=\linewidth]{figures/plots/histograms/lep_Eta_1.png}
-        \caption{Distribution of the pseudorapidity of the subleading lepton.}
-        \label{fig:lep_Eta_1}
-    \end{subfigure}
-    \caption{Distributions of the variables inside \gls{sr} (part 1)}
-    \label{fig:distributions1}
+    \caption{Distributions of the transverse momentum of the leading and subleading leptons. The areas are crossed out
+        because the events in these regions are blinded.}
 \end{figure}
 
-\newpage
-
-\begin{figure}[htb!]
-    \centering
-    \begin{subfigure}{0.45\textwidth}
-        \includegraphics[width=\linewidth]{figures/plots/histograms/lep_Phi_0.png}
-        \caption{Distribution of the azimuthal angle of the leading lepton.}
-        \label{fig:lep_Phi_0}
-    \end{subfigure}\hfill%
-    \begin{subfigure}{0.45\textwidth}
-        \includegraphics[width=\linewidth]{figures/plots/histograms/lep_Phi_1.png}
-        \caption{Distribution of the azimuthal angle of the subleading lepton.}
-        \label{fig:lep_Phi_1}
-    \end{subfigure}
-
-    \vspace{0.5cm}
-
-    \begin{subfigure}{0.45\textwidth}
-        \includegraphics[width=\linewidth]{figures/plots/histograms/njets.png}
-        \caption{Distribution of the number of jets.}
-        \label{fig:njets}
-    \end{subfigure}\hfill%
-    \begin{subfigure}{0.45\textwidth}
-        \includegraphics[width=\linewidth]{figures/plots/histograms/nbjets.png}
-        \caption{Distribution of the number of $b$-jets.}
-        \label{fig:nbjets}
-    \end{subfigure}
-    \caption{Distributions of the variables inside \gls{sr} (part 2)}
-    \label{fig:distributions2}
-\end{figure}
-
-\begin{minipage}{0.45\textwidth}
-    \centering
-    \begin{tabular}{c|c|c|c|c}
-        $t\bar{t}H$ & \textbf{v6} & \textbf{v8} &      &       \\
-        \hline
-        Weighted    & 1000        & 500         & -500 & -50\% \\
-        Raw         & 1000        & 500         & -500 & -50\% \\
-        \hline
-    \end{tabular}
-    \captionof{table}{Number of ttH events in the SR for v6 and v8.}
-    \label{tab:ttH_event_numbers1}
-\end{minipage}\hfill%
-\begin{minipage}{0.45\textwidth}
-    \centering
-    \begin{tabular}{c|c|c|c|c}
-        \gls{sr} & \textbf{v6} & \textbf{v8} &      &       \\
-        \hline
-        Weighted & 1000        & 500         & -500 & -50\% \\
-        Raw      & 1000        & 500         & -500 & -50\% \\
-        \hline
-    \end{tabular}
-    \captionof{table}{Number of all the events in the SR for v6 and v8.}
-    \label{tab:ttH_event_numbers2}
-\end{minipage}
-
+One might wonder why the plots are crossed out in some regions. This is because the events in these regions are blinded.
+Blinding refers to hiding the data points in the bin if the relation of teh signal to background is larger than some
+threshold. A threshold of $0.15$ is a common threshold to apply and that is what we have used throughout the thesis.
+The reasoning behind the blinding is \todo{???}.
 

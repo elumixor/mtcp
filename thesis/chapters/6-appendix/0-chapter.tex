@@ -2,26 +2,30 @@
 \label{ch:Appendix}
 
 
-\section{Automated well-modelling estimation}
+% Suggestion for the  future progress perhaps
+% \section{Automated well-modelling estimation}
 
-This "well enough" usually just means that a person looks at the plots and decides if the agreement is good enough.
-But we propose an automated way of doing this. As the algorithm is basically checking if the number of weighted events
-in each bin is the same for the simulated and recorded data. However, only the bins where the signal to background ratio
-is high enough are considered.
+% This "well enough" usually just means that a person looks at the plots and decides if the agreement is good enough.
+% But we propose an automated way of doing this. As the algorithm is basically checking if the number of weighted events
+% in each bin is the same for the simulated and recorded data. However, only the bins where the signal to background ratio
+% is high enough are considered.
 
-Each bin thus contributes to the well-modelling score. If the bin is blinded, the contribution is zero. Otherwise, the
-contribution for the bin is:
+% Each bin thus contributes to the well-modelling score. If the bin is blinded, the contribution is zero. Otherwise, the
+% contribution for the bin is:
 
-$$
-    \text{Bin Contribution} = 1 - \frac{N_\text{Recorded} - N_\text{Simulation}}{\max(N_\text{Recorded}, N_\text{Simulation})}
-$$
+% $$
+%     \text{Bin Contribution} = 1 - \frac{N_\text{Recorded} - N_\text{Simulation}}{\max(N_\text{Recorded}, N_\text{Simulation})}
+% $$
 
-Where $N_\text{Recorded}$ and $N_\text{Simulation}$ are the number of weighted events in the bin for the recorded and
-simulated data respectively.
+% Where $N_\text{Recorded}$ and $N_\text{Simulation}$ are the number of weighted events in the bin for the recorded and
+% simulated data respectively.
 
-The total well-modelling score is then the mean of the contributions for all the bins.
+% The total well-modelling score is then the mean of the contributions for all the bins.
 
 
+\input{chapters/6-appendix/1-sr-details}
+\input{chapters/6-appendix/4-features}
+\input{chapters/6-appendix/8-training-optimizations}
 
 \section{Training times}
 

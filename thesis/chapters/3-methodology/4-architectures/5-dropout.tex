@@ -1,4 +1,5 @@
 \subsection{Dropout as a Regularization Technique and Ensembling}
+\label{sec:dropout}
 
 Regularization is a crucial component in training neural networks to prevent overfitting and improve generalization. One
 such regularization method used in our work is \emph{dropout}, which operates by randomly dropping out, or "turning
@@ -17,7 +18,7 @@ diverse models, thus reducing the risk of overfitting to specific patterns in th
 
 In our experiments, applying dropout to the neural network architectures led to an improvement in generalization,
 reflected by a decrease in the gap between training and validation performance metrics. The exact numbers will be
-presented in the results section (\placeholder{XXX}).
+presented in the results section (\todo{XXX}).
 
 Despite its advantages, dropout does introduce an additional layer of randomness into the training process, making the
 convergence slower and sometimes harder. Also, while dropout can improve generalization, it does not replace the need

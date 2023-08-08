@@ -8,25 +8,68 @@ generalizes to unseen data. Therefore, it is important to understand these measu
 \subsection{Loss Function: The Objective of Training}
 
 The loss function quantifies the discrepancy between the model's predictions and the actual targets in the training set.
-It provides an objective measure that we strive to minimize during the training process. Cross-entropy loss, also known
-as log loss, is a commonly used loss function for classification tasks, including ours:
+It provides an objective measure that we strive to minimize during the training process.  In many classification tasks,
+it is common to utilize the cross-entropy loss function to quantify the discrepancy between the model's predictions and
+the actual targets. The standard formulation for the cross-entropy loss is given by:
 
 \begin{equation}
     L(\mathbf{y}, \mathbf{\hat{y}}) = -\frac{1}{N}\sum_{i=1}^{N}\sum_{j=1}^{M} y_{ij} \log(\hat{y}_{ij})
 \end{equation}
 
-where $N$ is the number of samples, $M$ is the number of classes, $\mathbf{y}$ is the true label, and $\mathbf{\hat{y}}$
-is the predicted label.
+where \( N \) is the number of samples, \( M \) is the number of classes, \( \mathbf{y} \) is the true label, and \(
+\mathbf{\hat{y}} \) is the predicted label.
 
-\subsection{Validation and Test Sets: Generalization Checkpoints}
+In certain scenarios, such as imbalanced datasets, it may be beneficial to apply different weights to different classes.
+By introducing a weight vector \(\mathbf{w}\), where \( w_j \) corresponds to the weight for class \( j \), the loss
+function becomes:
 
-\begin{figure}[htbp]
+\begin{equation}
+    L(\mathbf{y}, \mathbf{\hat{y}}) = -\frac{1}{N}\sum_{i=1}^{N} w_i \sum_{j=1}^{M} y_{ij} \log(\hat{y}_{ij})
+\end{equation}
+
+This modification allows for greater control over the importance of each class in the loss calculation.
+
+Similarly, there may be instances where weighting individual samples is more appropriate. By introducing a weight vector
+\(\mathbf{w}\), where \( w_i \) corresponds to the weight for sample \( i \), the formulation alters to:
+
+\begin{equation}
+    L(\mathbf{y}, \mathbf{\hat{y}}) = -\frac{1}{N}\sum_{i=1}^{N}\sum_{j=1}^{M} w_j y_{ij} \log(\hat{y}_{ij})
+\end{equation}
+
+This adjustment provides flexibility in emphasizing or de-emphasizing particular samples in the computation of the loss
+function.
+
+In summary, the introduction of class and sample weights in the cross-entropy loss function enables the modeling process
+to address specific challenges and requirements, such as class imbalances or individual sample importance. This
+customization can be critical in obtaining an optimal model that aligns well with the underlying distribution of the
+data and the objectives of the analysis.
+
+\subsection{Validation and Test Sets}
+
+\begin{figure}[htb]
     \centering
-    \includegraphics[width=0.8\textwidth]{figures/plots/ml/losses.png}
-    \caption{Training and validation losses during the training process. \gls{ftt} with 2 blocks and embedding size
-        of 256 was used on the plot (see \autoref{sec:ftt}). Around the 30th epoch, the training loss starts to
-        decrease while the validation loss starts to increase, indicating that the model is overfitting to
-        the training data. It is at this point that the checkpoint is saved and used for evaluation.}
+    \begin{minipage}[t][\height][t]{0.47\textwidth}
+        \includegraphics[width=\textwidth]{figures/ml/training/standard-ts-losses.png}
+        \caption{\gls{ftt} with 2 blocks and 256 embedding size training on the standard training set.}
+        \label{fig:standard-losses}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[t][\height][t]{0.47\textwidth}
+        \includegraphics[width=\textwidth]{figures/ml/training/extended-ts-losses.png}
+        \caption{\gls{ftt} with 5 blocks, 256 embedding size, and 20\% dropout training on the \emph{extended} training
+            set.} \label{fig:extended-losses}
+    \end{minipage}
+    \caption{Training and validation losses during the training process with extended train-test split.
+        \autoref{fig:standard-losses} shows the training of the \gls{ftt} with 2 blocks (see \autoref{sec:ftt}) on the
+        standard training set. Because of the lack of training samples, and high capacity of the model, we observe
+        overfitting. The training loss continues to decrease while the validation loss starts to increase. The
+        checkpoint with the validation loss is the lowest is then used as the final model. This is referred to as early
+        stopping. The best way to prevent overfitting is to get more training data (see
+        \autoref{sec:extended-set}). If that is not possible, one might also consider augmentation techniques, or
+        regularization - dropout (see \autoref{sec:dropout}), weight decay etc. \autoref{fig:extended-losses} shows the
+        training of the \gls{ftt} with 5 blocks (see \autoref{sec:ftt}) on the extended training set. Also, the 20\%
+        dropout is introduced. We observe now only a slight overfitting, which means that the model has generalized
+        a lot better.}
     \label{fig:losses}
 \end{figure}
 
@@ -49,6 +92,7 @@ instance, the loss function does not capture the trade-off between correctly ide
 metrics are commonly used to evaluate classifiers.
 
 \subsubsection{Confusion Matrix: A Comprehensive Performance Snapshot}
+\label{sec:weihted-cm}
 
 The confusion matrix provides a comprehensive view of the classifier's performance. For a binary classification task, it
 is a 2x2 matrix where the rows correspond to the true classes and the columns correspond to the predicted classes:
@@ -63,11 +107,31 @@ is a 2x2 matrix where the rows correspond to the true classes and the columns co
 where TP (true positive) is the number of positive instances correctly identified as positive, TN (true negative) is the
 number of negative instances correctly identified as negative, FP (false positive) is the number of negative instances
 incorrectly identified as positive (Type I error), and FN (false negative) is the number of positive instances
-incorrectly identified as negative (Type II error).
+incorrectly identified as negative (Type II error). \autoref{fig:cm} shows how such confusion matrix looks in our case
+when we only care about differentiating between \tth and non-\tth events.
 
-In our context, the confusion matrix can be extended to a multi-class scenario, leading to an MxM matrix for an M-class
-classification task. Moreover, to reflect the underlying data distribution, the confusion matrix should be weighted,
-with each instance contributing to the confusion matrix proportional to its weight.
+\begin{figure}[htb]
+    \centering
+    \includegraphics[width=\textwidth]{figures/ml/cm/signal_argmax.pdf}
+    \caption{Confusion matrix for a binary classification task. This confusion matrix is produced using 5-blocks
+        \gls{ftt} (see \autoref{sec:ftt}) trained on the extended training set (see \autoref{sec:extended-set}). The
+        $\arg\max$ classification strategy was used.  We note that here the classifier is trained on
+        differentiating between all the classes, but during evaluation, all the non-\tth events are grouped together.
+        Note that we present the weighted \gls{cm} here (see \autoref{sec:weights}).}
+    \label{fig:cm}
+\end{figure}
+
+In our context, the confusion matrix can be extended to a multi-class scenario (\autoref{fig:cm-multi}), leading to an
+MxM matrix for an M-class classification task. \todo{Add formulas/definitions for weighted confusion matrix}
+
+\begin{figure}[htb]
+    \centering
+    \includegraphics[width=\textwidth]{figures/ml/cm/all_argmax.pdf}
+    \caption{Confusion matrix for a multi-class classification task. This confusion matrix is produced using 5-blocks
+        \gls{ftt} (see \autoref{sec:ftt}) trained on the extended training set (see \autoref{sec:extended-set}). The
+        $\arg\max$ classification strategy was used.}
+    \label{fig:cm-muli}
+\end{figure}
 
 The confusion matrix serves as the basis for several other performance metrics, including accuracy, F1 score, and area
 under the ROC curve (AUC-ROC).
@@ -94,7 +158,16 @@ weighted confusion matrix for a binary classification task is given by:
     \end{pmatrix}
 \end{equation}
 
-where each term (TP, FP, FN, TN) is the sum of the weights of the corresponding instances.
+where each term (TP, FP, FN, TN) is the sum of the weights of the corresponding instances:
+
+\begin{align}
+    \text{TP}_{w} & = \sum_{i=1}^{N} w_i \llbracket y_i = 1 \land \hat{y}_i = 1 \rrbracket \\
+    \text{FP}_{w} & = \sum_{i=1}^{N} w_i \llbracket y_i = 0 \land \hat{y}_i = 1 \rrbracket \\
+    \text{FN}_{w} & = \sum_{i=1}^{N} w_i \llbracket y_i = 1 \land \hat{y}_i = 0 \rrbracket \\
+    \text{TN}_{w} & = \sum_{i=1}^{N} w_i \llbracket y_i = 0 \land \hat{y}_i = 0 \rrbracket
+\end{align}
+
+\todo{add for multi class scenario}
 
 The performance metrics derived from this weighted confusion matrix (accuracy, F1 score, AUC-ROC, etc.) then reflect the
 performance of the classifier on the actual data distribution we are interested in. Hence, using a weighted confusion
@@ -112,6 +185,8 @@ calculated directly from the confusion matrix:
 
 \subsubsection{F1 Score: The Balance Between Precision and Recall}
 
+\todo{Explain more why the accuracy is not very good metric for imbalanced datasets and how F1 is better}
+
 The F1 score is the harmonic mean of precision and recall, providing a balance between the two. Precision (also known as
 positive predictive value) is the proportion of positive identifications that were actually correct, while recall (also
 known as sensitivity) is the proportion of actual positives that were identified correctly. The F1 score can be
@@ -126,8 +201,35 @@ calculated as:
 The receiver operating characteristic (ROC) curve is a plot of the true positive rate (recall or sensitivity) against
 the false positive rate (1 - specificity) for different classification thresholds. The area under the ROC curve
 (AUC-ROC) measures the classifier's ability to distinguish between classes. A perfect classifier has an AUC-ROC of 1,
-while a random classifier has an AUC-ROC of 0.5.
+while a random classifier has an AUC-ROC of 0.5. The ROC curves for the \tth and two most dominant background processes
+\ttw and \ttz are shown in \autoref{fig:rocs}.
+
+\begin{figure}[htb]
+    \centering
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\linewidth]{figures/ml/roc/ttH.pdf}
+        \caption{\tth}
+        \label{fig:roc-tth}
+    \end{subfigure}
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\linewidth]{figures/ml/roc/ttW.pdf}
+        \caption{\ttw}
+        \label{fig:roc-ttw}
+    \end{subfigure}
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\linewidth]{figures/ml/roc/ttZ.pdf}
+        \caption{\ttz}
+        \label{fig:roc-ttz}
+    \end{subfigure}
+    \caption{ROC curves for the binary classification tasks of \tth, \ttw, and \ttz. These ROC curves are
+        produced using 5-blocks \gls{ftt} (see \autoref{sec:ftt}) trained on the extended training set (see
+        \autoref{sec:extended-set}). We provide both the ROCs computed with the weighted and unweighted confusion
+        matrices. The second we provide for completeness and comparison with the previous analysis, while we emphasize
+        that the weighted ROCs are the ones that should be used always.} \label{fig:rocs}
+\end{figure}
+
 
 These metrics, combined with the loss function, provide a comprehensive view of the classifier's performance and guide
 the optimization process during training. They also provide a robust measure for comparing different classifiers or the
-same classifier with different hyperparameters.
+same classifier with different hyperparameters. Generally, one should examine all of these metrics to get a complete
+picture of the classifier's performance.

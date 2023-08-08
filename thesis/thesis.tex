@@ -7,6 +7,7 @@
 \usepackage{enumitem}
 \usepackage{parskip}
 \usepackage{booktabs}
+\usepackage{bbm}
 \usepackage{graphicx}
 \usepackage{caption}
 \usepackage{subcaption}
@@ -14,10 +15,11 @@
 \usepackage{svg}
 \usepackage{biblatex}
 \usepackage{xspace}
+\usepackage{soul}
+\usepackage{stmaryrd}
 \usepackage[english]{babel}
 \usepackage[compat=1.1.0]{tikz-feynhand}
 
-\makeglossaries
 
 \input{glossaries}
 \input{commands}
@@ -52,12 +54,13 @@
 
 \includeonly{
 	chapters/abstract,
-	chapters/acknowledgements,
+	% chapters/acknowledgements,
 	chapters/1-structure,
 	chapters/2-introduction/0-chapter,
-	chapters/3-methodology/0-chapter,
-	chapters/4-uncertainties/0-chapter,
-	chapters/5-conclusions/0-chapter,
+	% chapters/3-methodology/0-chapter,
+	% chapters/4-uncertainties/0-chapter,
+	% chapters/5-conclusions/0-chapter,
+	% chapters/6-appendix/0-chapter,
 }
 
 \begin{document}
@@ -70,10 +73,13 @@
 \include{chapters/acknowledgements}
 
 % Auto-generated glossary
-\listoftables
-\listoffigures
-\printglossary[title=List of Acronyms,toctitle=List of Acronyms]
-\tableofcontents
+{\let\gls\glsfirst
+	\let\Gls\Glsfirst
+	\listoftables
+	\listoffigures
+	\printnoidxglossaries
+	\tableofcontents
+}
 
 
 % Main chapters

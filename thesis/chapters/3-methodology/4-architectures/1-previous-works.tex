@@ -13,8 +13,8 @@ Area Under the Receiver Operating Characteristic (AUROC) curves, and most import
 the ttH signal. The optimization techniques used in their studies were mainly grid-searching over various
 hyperparameters such as the number of layers, embedding size, learning rate, and batch size.
 
-Last results from \severin achieve \placeholder{XXX} accuracy, \placeholder{XXX} $\AUC_\tth$ and \placeholder{XXX}
-significance. \jan results are \placeholder{XXX} accuracy, \placeholder{XXX} $\AUC_\tth$ and \placeholder{XXX}.
+Last results from \severin achieve \todo{XXX} accuracy, \todo{XXX} $\AUC_\tth$ and \todo{XXX}
+significance. \jan results are \todo{XXX} accuracy, \todo{XXX} $\AUC_\tth$ and \todo{XXX}.
 It is important to note, howver, that they didn't use the weights while calculating the ROC curves, so the results are
 unfortunately not directly comparable.
 
@@ -27,9 +27,15 @@ In previous work, \severin utilized \glspl{mlp} as the primary model architectur
 While he experimented with combining multiple \glspl{mlp}, this approach is essentially equivalent to using a single,
 larger \gls{mlp}. This can be formalized as in \cite{ft-transformer}:
 
-$$
-    \text{MLP(x)} = \text{MLP(x)} + \text{MLP(x)}
-$$
+\begin{align}
+    \text{MLP(x)}      & = \text{Linear}(\text{MLPBlock}(\dots(\text{MLPBlock}(x)))) \\
+    \text{MLPBlock(x)} & = \text{Dropout}(\sigma(\text{Linear}(x)))
+\end{align}
 
-The benefit of using the staged network, however, is that each sub-\gls{mlp} can be trained on a different set of
-features. This can potentially reduce the systematical uncertainties, associated with the final prediction.
+Where $\sigma$ is the activation function.
+
+% Do we need to include this? Is it even true? I didn't understand how we can select features during sys uncertainty
+% estimation...
+
+% The benefit of using the staged network, however, is that each sub-\gls{mlp} can be trained on a different set of
+% features. This can potentially reduce the systematical uncertainties, associated with the final prediction.

@@ -1,7 +1,7 @@
-\subsection[SR details]{\gls{sr} details}
+\section{\gls{sr} cut expression}
 
-{\scriptsize
-    \begin{verbatim}
+ {\scriptsize
+  \begin{verbatim}
     custTrigMatch_LooseID_FCLooseIso_DLT
     && (dilep_type && (lep_ID_0*lep_ID_1)>0)
     && ((lep_Pt_0 >= 10e3 && lep_Pt_1 >= 10e3) && (fabs(lep_Eta_0) <= 2.5 && fabs(lep_Eta_1) <= 2.5)
@@ -22,7 +22,42 @@
     && nJets_OR>=4
     && ((dilep_type==2) || abs(Mll01-91.2e3)>10e3)
 \end{verbatim}
-}
+ }
 
-We have kept the cuts essentially the same, except for the cut on the \verb|nJets_OR| to \verb|>=4| to keep consistent
-\gls{sr} definition across the group.
+We have kept the cuts the same as \cite{severin}, except for the cut on the \verb|nJets_OR| to \verb|>=4| to keep
+consistent definition \gls{sr} definition across the group \todo{refer to the BDT group - how?}.
+
+\section{Yields Plots}
+\label{appendix:yields}
+
+\begin{figure}[htb!]
+    \centering
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width=\linewidth]{figures/yields/lep-pt-0.pdf}
+        \caption{Distribution of the transverse momentum of the leading lepton.}
+    \end{subfigure}\hfill%
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width=\linewidth]{figures/yields/lep-pt-1.pdf}
+        \caption{Distribution of the transverse momentum of the subleading lepton.}
+    \end{subfigure}
+\end{figure}
+
+\begin{figure}[htb!]
+    \centering
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width=\linewidth]{figures/yields/n-jets.pdf}
+        \caption{Distribution of the number of jets.}
+    \end{subfigure}\hfill%
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width=\linewidth]{figures/yields/n-bjets.pdf}
+        \caption{Distribution of the number of $b$-jets.}
+    \end{subfigure}
+\end{figure}
+
+\begin{figure}[htb!]
+    \centering
+    \begin{subfigure}{0.45\textwidth}
+        \includegraphics[width=\linewidth]{figures/yields/tau-width.pdf}
+        \caption{Distribution of the $\tau$-jet width.}
+    \end{subfigure}\hfill%
+\end{figure}

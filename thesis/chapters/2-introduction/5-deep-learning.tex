@@ -1,38 +1,39 @@
 \section*{Motivation for Deep Learning in Particle Physics}
 
-In recent years, the application of deep learning techniques in various scientific domains has gained significant
+In recent years, the application of \gls{dl} techniques in various scientific domains has gained significant
 attention due to their ability to extract complex patterns and relationships directly from data. In the field of
-particle physics, deep learning has shown promising potential for improving the analysis of high-dimensional datasets
+particle physics, \gls{dl} has shown promising potential for improving the analysis of high-dimensional datasets
 and enhancing the discrimination power between signal and background events.
 
 In the context of the ttH process in the \lss channel, previous work by \cite{severin} and \cite{jan} has already
 explored the involvement of \glspl{nn} to tackle the signal and background separation problem. Their work has
-provided valuable insights into the feasibility and initial performance of deep learning approaches for this specific
-process. Building upon their research, we aim to further advance the application of deep learning techniques and address
+provided valuable insights into the feasibility and initial performance of \gls{dl} approaches for this specific
+process. Building upon their research, we aim to further advance the application of \gls{dl} techniques and address
 some of the challenges encountered in their work.
 
-While it is true that deep learning methods have occasionally been outperformed by "standard" machine learning
-techniques like XGBoost \cite{xgboost}, \glspl{bdt}, random forests \cite{random-forrest}, and others, in certain
-applications, they have shown significant potential for surpassing these traditional methods. The remarkable capacity of
-deep neural networks to learn complex representations and capture intricate dependencies within the data makes them
-well-suited for tasks involving high-dimensional and non-linear patterns.
+While it is true that \gls{dl} methods are usually outperformed \cite{tabular} by "standard" machine learning techniques
+like XGBoost \cite{xgboost}, \glspl{bdt}, random forests \cite{random-forrest} for tabular data, in many other
+applications (i.e. computer vision, \gls{nlp}) they are commonly a \gls{sota} method
+\cite{gpt4-technical,gpt4-sparks,diffusion}. % You know, I can add infinitely many references here :)
+In the context of particle physics, \gls{dl} methods have also shown potential for surpassing these traditional methods
+\cite{jet-rnn}.  The remarkable capacity of deep neural networks to learn complex representations and capture intricate
+dependencies within the data makes them well-suited for tasks involving high-dimensional and non-linear patterns.
 
-One factor that can affect the performance of deep learning algorithms is the availability of sufficient training data.
+An important factor that affects the performance of \gls{dl} algorithms is the availability of sufficient training data.
 In our work, we address this limitation by experimenting with an extended dataset obtained by dropping all of the
-selection cuts. This expanded dataset provides a larger sample size and allows the neural networks to capture more
-diverse patterns and improve their generalization capabilities. By leveraging this extended dataset, we aim to
-demonstrate that deep learning models can achieve comparable or superior performance to other machine learning
-techniques, such as XGBoost, \gls{bdt}, or random forests, in the context of the ttH signal and background separation.
+selection cuts (see \autoref{sec:extended-set}). This extended dataset provides a larger sample size and allows the
+neural networks to capture more diverse patterns and improve their generalization capabilities. By leveraging this
+extended dataset, we aim to demonstrate that \gls{dl} models can achieve comparable or superior performance to other
+machine learning techniques, such as XGBoost, \gls{bdt}, or random forests, in the context of the ttH signal and
+background separation.
 
-Moreover, we explore the application of the famous transformer architecture, originally developed for natural language
-processing tasks, in the context of particle physics analysis. Transformers have demonstrated exceptional performance in
-capturing long-range dependencies and handling sequential data, which makes them a compelling choice for analyzing the
-complex patterns and correlations present in the \lss channel. Through our experiments with the transformer
-architecture, we aim to assess its effectiveness in improving the discrimination power and uncovering relevant features
-in the ttH signal and background separation.
+Moreover, we explore the application of the famous transformer \cite{transformer} architecture, originally developed for
+\gls{nlp} tasks, in the context of particle physics analysis. Transformers have since became extremely popular and were
+applied to almost every domain of machine learning. We research the performance of the transformer architecture in
+the context of particle physics and compare it to the previous results, as well as other tree-based methods.
 
-By leveraging the capabilities of deep learning and exploring novel architectures like transformers, we seek to address
+By leveraging the capabilities of \gls{dl} and exploring novel architectures like transformers, we seek to address
 the challenges encountered in previous work and enhance the performance of signal and background separation in the
-\lss channel. Through our research, we aim to contribute to the growing body of knowledge on deep learning in
+\lss channel. Through our research, we aim to contribute to the growing body of knowledge on \gls{dl} in
 particle physics and demonstrate its potential for advancing the field.
 
