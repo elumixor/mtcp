@@ -18,6 +18,26 @@ selected = np.load("data_processing/output/selected.npy")
 # ---------------------------------------------------------------
 # ttH     | ...      | ...           | ...       | ...
 
+latex_names = dict(
+    ttH="\\tth",
+    ttW="\\ttw",
+    ttW_EW="\\ttwew",
+    ttZ="\\ttz",
+    ttbar="\\ttbar",
+    VV="$VV$",
+    tZ="$tZ$",
+    WtZ="$WtZ$",
+    tW="$tW$",
+    threeTop="$t\\bar{t}t$",
+    fourTop="$t\\bar{t}t\\bar{t}$",
+    ggVV="$ggVV$",
+    VVV="$VVV$",
+    VH="$VH$",
+    WttW="$WttW$",
+    tHjb="$tHjb$",
+    tWH="$tWH$",
+)
+
 # Generate the latex table for the number of events
 with open("thesis/generated/num_events.tex", "w") as f:
     f.write("\\begin{tabular}{l|rr|rr}\n")
@@ -33,6 +53,7 @@ with open("thesis/generated/num_events.tex", "w") as f:
         sr_raw = selected_sr.sum()
         sr_weighted = (w[selected_sr]).sum()
 
+        name = latex_names[name]
         f.write(f"{name} & {sr_raw} & {sr_weighted:.2f} & {all_raw} & {all_weighted:.2f} \\\\\n")
 
     total_raw = y.shape[0]
