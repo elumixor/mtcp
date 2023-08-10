@@ -1,133 +1,100 @@
 \section{Evaluating the Classifier Performance}
 
-The performance of a classifier is not solely determined by its ability to make correct predictions. There are several
-measures of performance, each emphasizing a different aspect of the classifier's behavior. Choosing the right measure of
-performance is vital as it directly impacts the optimization procedure during training and influences how well the model
-generalizes to unseen data. Therefore, it is important to understand these measures in detail.
+During evaluation, it is essential to go beyond the loss function and consider different metrics that shed
+light on various aspects of the model's performance. These metrics offer a more comprehensive understanding of how well
+the classifier is doing. For example, in a binary classification problem such as diagnosing a specific medical
+condition, merely looking at the loss might not reveal how well the model is identifying positive cases among the
+minority class.
 
-\subsection{Loss Function: The Objective of Training}
+Classification metrics include measures like Accuracy, which gives an overall picture of correct classifications, and
+Precision and Recall, which focus on the model's performance with respect to a specific class. Other metrics like the
+F1-Score provide a balance between Precision and Recall, and AUC-ROC measures the ability of the model to discriminate
+between positive and negative classes. Choosing the right combination of these metrics is vital, as it guides the
+optimization during training and influences the model's generalization to unseen data.
 
-The loss function quantifies the discrepancy between the model's predictions and the actual targets in the training set.
-It provides an objective measure that we strive to minimize during the training process.  In many classification tasks,
-it is common to utilize the cross-entropy loss function to quantify the discrepancy between the model's predictions and
-the actual targets. The standard formulation for the cross-entropy loss is given by:
+Understanding and selecting the appropriate classification metrics ensures alignment with the problem's unique
+requirements and goals, enhancing the model's utility and effectiveness in real-world applications.
 
-\begin{equation}
-    L(\mathbf{y}, \mathbf{\hat{y}}) = -\frac{1}{N}\sum_{i=1}^{N}\sum_{j=1}^{M} y_{ij} \log(\hat{y}_{ij})
-\end{equation}
 
-where \( N \) is the number of samples, \( M \) is the number of classes, \( \mathbf{y} \) is the true label, and \(
-\mathbf{\hat{y}} \) is the predicted label.
-
-In certain scenarios, such as imbalanced datasets, it may be beneficial to apply different weights to different classes.
-By introducing a weight vector \(\mathbf{w}\), where \( w_j \) corresponds to the weight for class \( j \), the loss
-function becomes:
-
-\begin{equation}
-    L(\mathbf{y}, \mathbf{\hat{y}}) = -\frac{1}{N}\sum_{i=1}^{N} w_i \sum_{j=1}^{M} y_{ij} \log(\hat{y}_{ij})
-\end{equation}
-
-This modification allows for greater control over the importance of each class in the loss calculation.
-
-Similarly, there may be instances where weighting individual samples is more appropriate. By introducing a weight vector
-\(\mathbf{w}\), where \( w_i \) corresponds to the weight for sample \( i \), the formulation alters to:
-
-\begin{equation}
-    L(\mathbf{y}, \mathbf{\hat{y}}) = -\frac{1}{N}\sum_{i=1}^{N}\sum_{j=1}^{M} w_j y_{ij} \log(\hat{y}_{ij})
-\end{equation}
-
-This adjustment provides flexibility in emphasizing or de-emphasizing particular samples in the computation of the loss
-function.
-
-In summary, the introduction of class and sample weights in the cross-entropy loss function enables the modeling process
-to address specific challenges and requirements, such as class imbalances or individual sample importance. This
-customization can be critical in obtaining an optimal model that aligns well with the underlying distribution of the
-data and the objectives of the analysis.
-
-\subsection{Validation and Test Sets}
-
-\begin{figure}[htb]
-    \centering
-    \begin{minipage}[t][\height][t]{0.47\textwidth}
-        \includegraphics[width=\textwidth]{figures/ml/training/standard-ts-losses.png}
-        \caption{\gls{ftt} with 2 blocks and 256 embedding size training on the standard training set.}
-        \label{fig:standard-losses}
-    \end{minipage}
-    \hfill
-    \begin{minipage}[t][\height][t]{0.47\textwidth}
-        \includegraphics[width=\textwidth]{figures/ml/training/extended-ts-losses.png}
-        \caption{\gls{ftt} with 5 blocks, 256 embedding size, and 20\% dropout training on the \emph{extended} training
-            set.} \label{fig:extended-losses}
-    \end{minipage}
-    \caption{Training and validation losses during the training process with extended train-test split.
-        \autoref{fig:standard-losses} shows the training of the \gls{ftt} with 2 blocks (see \autoref{sec:ftt}) on the
-        standard training set. Because of the lack of training samples, and high capacity of the model, we observe
-        overfitting. The training loss continues to decrease while the validation loss starts to increase. The
-        checkpoint with the validation loss is the lowest is then used as the final model. This is referred to as early
-        stopping. The best way to prevent overfitting is to get more training data (see
-        \autoref{sec:extended-set}). If that is not possible, one might also consider augmentation techniques, or
-        regularization - dropout (see \autoref{sec:dropout}), weight decay etc. \autoref{fig:extended-losses} shows the
-        training of the \gls{ftt} with 5 blocks (see \autoref{sec:ftt}) on the extended training set. Also, the 20\%
-        dropout is introduced. We observe now only a slight overfitting, which means that the model has generalized
-        a lot better.}
-    \label{fig:losses}
-\end{figure}
-
-To assess the generalization ability of the classifier, the dataset is typically divided into three subsets: training,
-validation, and test sets. The training set is used to adjust the model's parameters, the validation set is used to tune
-the hyperparameters and provide an unbiased evaluation of the model during training, and the test set is used to assess
-the performance of the fully-trained model.
-
-During training, not only is the training loss monitored, but also the validation loss. The validation loss provides an
-unbiased estimate of the model's performance on unseen data and is crucial for preventing overfitting. If the training
-loss continues to decrease while the validation loss starts to increase, the model is likely overfitting to the training
-data and failing to generalize to unseen data (see \autoref{fig:losses}). The point at which the validation loss is
-minimized is typically chosen as the stopping point for training (early stopping).
-
-\subsubsection{Performance Metrics: More than Accuracy}
-
-While the loss function provides a measure of the classifier's performance, it does not tell the whole story. For
-instance, the loss function does not capture the trade-off between correctly identifying positive instances
-(sensitivity) and correctly identifying negative instances (specificity). To address this, several other performance
-metrics are commonly used to evaluate classifiers.
-
-\subsubsection{Confusion Matrix: A Comprehensive Performance Snapshot}
+\subsubsection{Confusion Matrix}
 \label{sec:weihted-cm}
 
 The confusion matrix provides a comprehensive view of the classifier's performance. For a binary classification task, it
-is a 2x2 matrix where the rows correspond to the true classes and the columns correspond to the predicted classes:
+is a $2\times2$ matrix where the rows correspond to the true classes and the columns correspond to the predicted classes:
 
 \begin{equation}
-    \begin{pmatrix}
+    \mathbf{C}_\bin = \begin{pmatrix}
         \text{TP} & \text{FP} \\
         \text{FN} & \text{TN} \\
     \end{pmatrix}
 \end{equation}
 
+\begin{align}
+    \text{TP} & = \sum_{i=1}^{N} \llbracket y_i = 1 \land \hat{y}_i = 1 \rrbracket    \\
+    \text{FP} & = \sum_{i=1}^{N} \llbracket y_i = 0 \land \hat{y}_i = 1 \rrbracket    \\
+    \text{FN} & = \sum_{i=1}^{N} \llbracket y_i = 1 \land \hat{y}_i = 0 \rrbracket    \\
+    \text{TN} & = \sum_{i=1}^{N} \llbracket y_i = 0 \land \hat{y}_i = 0 \rrbracket\,,
+\end{align}
+
 where TP (true positive) is the number of positive instances correctly identified as positive, TN (true negative) is the
 number of negative instances correctly identified as negative, FP (false positive) is the number of negative instances
 incorrectly identified as positive (Type I error), and FN (false negative) is the number of positive instances
-incorrectly identified as negative (Type II error). \autoref{fig:cm} shows how such confusion matrix looks in our case
-when we only care about differentiating between \tth and non-\tth events.
+incorrectly identified as negative (Type II error).
+
+As explained before in the \autoref{sec:mc}, the event weights should always be used when evaluating the classifier's
+performance. Otherwise, the results we obtain are not representative of the real-world performance. All of the metrics
+we use thus stem from the \emph{weighted} confusion matrix, defined as:
+
+\begin{equation}
+    \Cbin = \begin{pmatrix}
+        \text{TP}_{w} & \text{FP}_{w} \\
+        \text{FN}_{w} & \text{TN}_{w} \\
+    \end{pmatrix}
+\end{equation}
+
+\begin{align}
+    \text{TP}_{w} & = \sum_{i=1}^{N} w_i \llbracket y_i = 1 \land \hat{y}_i = 1 \rrbracket    \\
+    \text{FP}_{w} & = \sum_{i=1}^{N} w_i \llbracket y_i = 0 \land \hat{y}_i = 1 \rrbracket    \\
+    \text{FN}_{w} & = \sum_{i=1}^{N} w_i \llbracket y_i = 1 \land \hat{y}_i = 0 \rrbracket    \\
+    \text{TN}_{w} & = \sum_{i=1}^{N} w_i \llbracket y_i = 0 \land \hat{y}_i = 0 \rrbracket\,,
+\end{align}
+
+where \Cbin is the confusion matrix, $w_i$ is the \gls{mc} weight of the $i$-th event, calculated as described in the
+\appref{appendix:weights}, and $N$ is the total number of events in the evaluation set. Further on, when referring to
+the confusion matrix, true positives, false positives, false negatives, and true negatives, we will always be referring
+to their weighted counterparts, unless explicitly stated otherwise.
+
+\autoref{fig:cm} shows how such confusion matrix looks in our case for the binary classification task - when we only
+care about differentiating between \tth and non-\tth events.
 
 \begin{figure}[htb]
     \centering
     \includegraphics[width=\textwidth]{figures/ml/cm/signal_argmax.pdf}
-    \caption{Confusion matrix for a binary classification task. This confusion matrix is produced using 5-blocks
+    \caption[Confusion matrix for a binary classification task]
+    {Confusion matrix for a binary classification task. This confusion matrix is produced using 5-blocks
         \gls{ftt} (see \autoref{sec:ftt}) trained on the extended training set (see \autoref{sec:extended-set}). The
-        $\arg\max$ classification strategy was used.  We note that here the classifier is trained on
-        differentiating between all the classes, but during evaluation, all the non-\tth events are grouped together.
-        Note that we present the weighted \gls{cm} here (see \autoref{sec:weights}).}
+        $\arg\max$ classification strategy was used.  Note that the classifier was \emph{trained} to differentiate
+        between all the classes, but during evaluation, all the non-\tth events are grouped together.}
     \label{fig:cm}
 \end{figure}
 
-In our context, the confusion matrix can be extended to a multi-class scenario (\autoref{fig:cm-multi}), leading to an
-MxM matrix for an M-class classification task. \todo{Add formulas/definitions for weighted confusion matrix}
+Binary confusion matrix naturally extends to a multi-class formulation (\autoref{fig:cm-muli}), leading to a
+$|\classY| \times |\classY|$ matrix for an $|\classY|$-class classification task:
+
+\begin{equation}
+    \Cmulti_{ij} = \sum_{k=1}^{|\classY|} w_k \llbracket y_k = i \land \hat{y}_k = j \rrbracket\,,
+\end{equation}
+
+where $i$ and $j$ are the true and predicted classes, respectively. The diagonal elements of the matrix correspond to
+the correctly classified events, while the off-diagonal elements correspond to the misclassified events. The
+multi-class confusion matrix is not symmetric, and the sum of the elements in each row is equal to the number of events
+in the corresponding true class.
 
 \begin{figure}[htb]
     \centering
     \includegraphics[width=\textwidth]{figures/ml/cm/all_argmax.pdf}
-    \caption{Confusion matrix for a multi-class classification task. This confusion matrix is produced using 5-blocks
+    \caption[Confusion matrix for a multi-class classification task]
+    {Confusion matrix for a multi-class classification task. This confusion matrix is produced using 5-blocks
         \gls{ftt} (see \autoref{sec:ftt}) trained on the extended training set (see \autoref{sec:extended-set}). The
         $\arg\max$ classification strategy was used.}
     \label{fig:cm-muli}
@@ -136,69 +103,76 @@ MxM matrix for an M-class classification task. \todo{Add formulas/definitions fo
 The confusion matrix serves as the basis for several other performance metrics, including accuracy, F1 score, and area
 under the ROC curve (AUC-ROC).
 
-\subsubsection{Weighted Confusion Matrix: Accounting for the Data Distribution}
-
-When using machine learning in high-energy physics, the data distribution used to train the model often differs from the
-real-world data distribution we aim to make predictions on. This is due to the Monte Carlo simulations we use to produce
-our training data. While these simulations are designed to model the physical processes as accurately as possible, they
-do not perfectly represent the real data distribution.
-
-This discrepancy is resolved by attaching a weight to each event in the simulation. The weight represents the ratio of
-the number of expected events in the real data to the number of events in the simulated data. Using these weights, we
-can then scale the distribution of the simulated data to match the expected distribution of the real data.
-
-When evaluating the classifier's performance, it is crucial to use a weighted confusion matrix to account for these
-event weights. In the weighted confusion matrix, each instance contributes to the matrix proportional to its weight. The
-weighted confusion matrix for a binary classification task is given by:
-
-\begin{equation}
-    \begin{pmatrix}
-        \text{TP}_{w} & \text{FP}_{w} \\
-        \text{FN}_{w} & \text{TN}_{w} \\
-    \end{pmatrix}
-\end{equation}
-
-where each term (TP, FP, FN, TN) is the sum of the weights of the corresponding instances:
-
-\begin{align}
-    \text{TP}_{w} & = \sum_{i=1}^{N} w_i \llbracket y_i = 1 \land \hat{y}_i = 1 \rrbracket \\
-    \text{FP}_{w} & = \sum_{i=1}^{N} w_i \llbracket y_i = 0 \land \hat{y}_i = 1 \rrbracket \\
-    \text{FN}_{w} & = \sum_{i=1}^{N} w_i \llbracket y_i = 1 \land \hat{y}_i = 0 \rrbracket \\
-    \text{TN}_{w} & = \sum_{i=1}^{N} w_i \llbracket y_i = 0 \land \hat{y}_i = 0 \rrbracket
-\end{align}
-
-\todo{add for multi class scenario}
-
-The performance metrics derived from this weighted confusion matrix (accuracy, F1 score, AUC-ROC, etc.) then reflect the
-performance of the classifier on the actual data distribution we are interested in. Hence, using a weighted confusion
-matrix enables us to evaluate and optimize our classifier in a manner that is directly relevant to our ultimate goal:
-the accurate classification of ttH events in the actual LHC data.
-
 \subsubsection{Accuracy: The Proportion of Correct Predictions}
 
-Accuracy is the most intuitive performance metric. It is the proportion of total predictions that are correct and can be
-calculated directly from the confusion matrix:
+Accuracy is the most intuitive performance metric. It is the proportion of the number of correctly classified examples
+to the total number of examples. Accuracy is calculated trivially from the confusion matrix:
+
+\begin{align}
+    \acc  = \frac{\trace \C_{ii}}{\sum_{i=1}^\classY \sum_{j=1}^\classY \C_{ij}}\,,
+\end{align}
+
+While accuracy is straightforward and commonly used, it may not always be the most representative metric, especially in
+cases where the classes are imbalanced. Consider the example of our particle physics problem where we are searching for
+\tth events and suppose that 90\% of the events are background and only 10\% are signal. A naïve classifier that
+always predicts the background class would achieve an accuracy of 90\%. However, such a classifier would be entirely
+unhelpful for the task at hand since it fails to identify any \tth events.
+
+Certainly, the accuracy is not entirely without value, and there are contexts where it might still be useful. Even in
+imbalanced scenarios, accuracy can provide a general sense of how often the classifier is correct across both the
+majority and minority classes. While it may not provide a nuanced view of performance on the minority class (such as
+\tth events in our case), it still provides information on the overall hit rate of correct predictions.
+
+Additionally, in scenarios where the cost of false positives and false negatives are roughly equivalent, or when the
+class distribution in the model's operational environment matches the training data, accuracy might still be a relevant
+metric. It offers a quick and easily interpretable measure of performance.
+
+However, in the specific context of searching for rare or significant events, such as \tth in particle physics, relying
+solely on accuracy can be misleading. It would typically be considered alongside other metrics that give more insight
+into the performance on the class of interest. Thus, while accuracy may not be the most representative metric in such
+cases, it might still hold some value as part of a broader evaluation framework.
+
+Absolutely, let's proceed with defining precision and recall in a style consistent with what we've been working on.
+
+\subsubsection{Precision and Recall}
+
+Two other important metrics derived from the confusion matrix are precision and recall, which are particularly useful
+when dealing with imbalanced classes.
+
+\paragraph{Precision} is the proportion of TP to all \emph{predicted} positives. Specifically, in our case, it
+is the ratio of the correctly classified \tth events, to all events classified (or misclassified) as \tth. From here on
+out, we assume $y_1 = \tth$, and so the true \tth events correspond to the first row of the confusion matrix, while
+predicted \tth events correspond to the first column. Precision is then given by:
+
+\begin{align}
+    \text{Precision} = \frac{\C_{11}}{\sum_{j=1}^\classY \C_{1j}}\,.
+\end{align}
+
+\paragraph{Recall} (or sensitivity) is the proportion of TP to all \emph{actual} positives. In our case, it is the ratio
+of the correctly classified \tth events to all actual \tth events (which the model might have missed by classifying them
+as background). Recall is given by:
+
+\begin{align}
+    \text{Recall} = \frac{\C_{11}}{\sum_{i=1}^\classY \C_{i1}}\,.
+\end{align}
+
+Precision tells us how reliable our positive predictions are,
+while recall informs us how many of the actual \tth events we were able to detect. Both these metrics provide
+complementary insights, and understanding the trade-off between them is essential in many real-world classification
+tasks. Next, we will introduce the F1 score, a metric that combines both precision and recall to provide a balanced view
+of the model's performance on both fronts.
+
+\subsubsection{F1 score: The Balance Between Precision and Recall}
+
+The F1 score is the harmonic mean of precision and recall, providing a balance between the two. It is calculated as:
 
 \begin{equation}
-    \text{Accuracy} = \frac{TP + TN}{TP + FP + FN + TN}
-\end{equation}
-
-\subsubsection{F1 Score: The Balance Between Precision and Recall}
-
-\todo{Explain more why the accuracy is not very good metric for imbalanced datasets and how F1 is better}
-
-The F1 score is the harmonic mean of precision and recall, providing a balance between the two. Precision (also known as
-positive predictive value) is the proportion of positive identifications that were actually correct, while recall (also
-known as sensitivity) is the proportion of actual positives that were identified correctly. The F1 score can be
-calculated as:
-
-\begin{equation}
-    \text{F1 Score} = 2 \cdot \frac{\text{Precision} \cdot \text{Recall}}{\text{Precision} + \text{Recall}}
+    \text{F1 score} = 2 \cdot \frac{\text{Precision} \cdot \text{Recall}}{\text{Precision} + \text{Recall}}
 \end{equation}
 
 \subsubsection{ROC Curve and AUC: The Trade-off Between Sensitivity and Specificity}
 
-The receiver operating characteristic (ROC) curve is a plot of the true positive rate (recall or sensitivity) against
+The \gls{roc} curve is a plot of the true positive rate (recall or sensitivity) against
 the false positive rate (1 - specificity) for different classification thresholds. The area under the ROC curve
 (AUC-ROC) measures the classifier's ability to distinguish between classes. A perfect classifier has an AUC-ROC of 1,
 while a random classifier has an AUC-ROC of 0.5. The ROC curves for the \tth and two most dominant background processes
@@ -221,11 +195,12 @@ while a random classifier has an AUC-ROC of 0.5. The ROC curves for the \tth and
         \caption{\ttz}
         \label{fig:roc-ttz}
     \end{subfigure}
-    \caption{ROC curves for the binary classification tasks of \tth, \ttw, and \ttz. These ROC curves are
-        produced using 5-blocks \gls{ftt} (see \autoref{sec:ftt}) trained on the extended training set (see
-        \autoref{sec:extended-set}). We provide both the ROCs computed with the weighted and unweighted confusion
-        matrices. The second we provide for completeness and comparison with the previous analysis, while we emphasize
-        that the weighted ROCs are the ones that should be used always.} \label{fig:rocs}
+    \caption[\acrshort{roc} curves for \tth, \ttz, and \ttz]
+    {\gls{roc} curves for the \tth, \ttw, and \ttz computed using one versus all classification. The curves are produced
+        using 5-blocks \gls{ftt} (see \autoref{sec:ftt}) trained on the extended training set (see
+        \autoref{sec:extended-set}). We provide both the \glspl{roc} computed with the weighted and unweighted confusion
+        matrices for completeness and comparison with the previous analysis, bet we emphasize
+        that the weighted \glspl{roc} are the ones that should be used always.} \label{fig:rocs}
 \end{figure}
 
 

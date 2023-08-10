@@ -1,31 +1,50 @@
 \subsection{Pre-processing and embedding}
 
+
 In previous work, all the features were treated as continuous variables. Before feeding them to the network, they were
 normalized to have zero mean and unit variance. This is essential for the training of deep neural networks, as it
 prevents the gradients from exploding or vanishing.
 
-However, this approach is far from optimal when working with the categorical features. We standard way of dealing with
-categorical features is to ues embeddings. An embedding is a mapping from a discrete variable to a continuous vector
-space. The embedding is learned during the training of the network. The embedding layer is essentially a lookup table,
-where each row corresponds to a single category.
+However, this approach is far from optimal when working with the categorical features. The standard way of dealing with
+categorical features is to either use one-hot encoding, or use learnable embeddings. Throughout the work we use the
+latter. An embedding is a mapping from a discrete variable to a continuous vector space. An embedding is learned during
+the training of the network. An embedding layer is essentially a lookup table, where each row corresponds to a single
+category.
 
-Furthermore, the dataset sometimes contains missing or invalid values for some samples. To properly handle those, we
-introduce a separate category for them when the feature is categorical. For continuous features, we replace the missing
-values with a learnable parameter.
-
-The whole structure of the pre-processing layer is shown on the \autoref{fig:preprocessing}.
-
-\begin{figure}[htbp]
+\begin{figure}[htb]
     \centering
     \includegraphics[width=0.5\textwidth]{example-image-a}
     \caption{Pre-processing layer.}
     \label{fig:preprocessing}
 \end{figure}
 
+Furthermore, the dataset sometimes contains missing or invalid values for some samples.
+Some\footnote{lep\_nTrackParticles\_0, lep\_nTrackParticles\_1} features use -1 to indicate a missing value, some
+\footnote{taus\_passJVT\_0} use -99, and some\footnote{lep\_nInnerPix\_0, lep\_nInnerPix\_1,
+    lep\_Mtrktrk\_atConvV\_CO\_0, lep\_Mtrktrk\_atPV\_CO\_1, lep\_Mtrktrk\_atPV\_CO\_0, lep\_Mtrktrk\_atConvV\_CO\_1}
+use -999. To properly handle these, we introduce a separate category for them when the feature is categorical. For
+continuous features, we replace the missing values with a learnable parameter\footnote{We have experimented with also
+    setting such values to zero. We didn't observe any notable difference with \glspl{resnet}, but for \gls{ftt} it
+    seemed to have been an important optimization to make (see \autoref{fig:learnable-nan-w}).}.
 
-\begin{figure}[htbp]
+The whole structure of the pre-processing layer is shown on the \autoref{fig:preprocessing}.
+
+\begin{figure}[htb]
     \centering
-    \includegraphics[width=\textwidth]{figures/resnet_results.pdf}
+    \includegraphics[width=0.5\textwidth]{example-image-c}
+    \caption{Impact of having learnable parameters for missing/invalid values.}
+    \label{fig:learnable-nan-w}
+\end{figure}
+
+Overall, with the 8 blocks \gls{resnet} with an embedding size of 64 we were able to achieve a significance $S = $
+\todo{???}, $\AUC_\tth = $ \todo{???}, $\AUC_\text{mean} = $ \todo{???}. The results are summarized on the
+\autoref{fig:resnet_results}.
+
+
+\begin{figure}[htb]
+    \centering
+    \includegraphics[width=0.5\textwidth]{example-image-b}
     \caption{Resnet results.}
     \label{fig:resnet_results}
 \end{figure}
+

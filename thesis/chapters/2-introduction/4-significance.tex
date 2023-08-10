@@ -24,22 +24,25 @@ $\lambda$, which is
 the rate parameter. The probability of observing $k$ events in an interval is given by the equation:
 
 \begin{equation}
-    P(k \text{ events in interval}) = \frac{\lambda^k e^{-\lambda}}{k!}
+    P(k \text{ events in interval}) = \frac{\lambda^k e^{-\lambda}}{k!}\,,
 \end{equation}
 
-Where $e$ is the base of the natural logarithm, and $k!$ is the factorial of $k$.
+where $e$ is the base of the natural logarithm, and $k!$ is the factorial of $k$.
 
 \autoref{fig:poisson} shows the Poisson distribution for various values of $\lambda$.
 
 \begin{figure}[htb]
     \centering
     \includegraphics[width=0.8\textwidth]{figures/poisson.pdf}
-    \caption{Poisson distribution for various values of $\lambda$. For large $\lambda$, the Poisson distribution
+    \caption[Poisson distribution for various values of $\lambda$]
+    {Poisson distribution for various values of $\lambda$. For large $\lambda$, the Poisson distribution
         approaches a Gaussian distribution.}
     \label{fig:poisson}
 \end{figure}
 
-\subsection{\gls{clt}}
+\subsection[Central Limit Theorem]{\gls{clt}}
+
+\glsreset{clt}
 
 The Poisson distribution and the Gaussian (or Normal) distribution are linked by the \gls{clt}, one of the
 fundamental theorems in probability theory and statistics.
@@ -56,16 +59,17 @@ $\lambda$ can be viewed as the sum of $n$ Poisson processes each with a rate $\f
 
 So, what happens when $n$ is large and $\frac{\lambda}{n}$ is small? Each individual Poisson process will rarely
 contribute an event to the sum, but there are a lot of them ($n$ is large). This is precisely the sort of condition
-under which the \gls{clt} operates. As such, we'd expect, for large $\lambda$, that the Poisson distribution
+under which the \gls{clt} operates. As such, we expect for large $\lambda$ that the Poisson distribution
 will start to look more and more like a Gaussian distribution, as the Poisson distribution is the sum of many
 independent and identically distributed random variables.
 
 Mathematically, a random variable $X$ that is Poisson-distributed with mean $\lambda$ can be approximated by a Gaussian
 distribution with mean $\lambda$ and variance $\lambda$, if $\lambda$ is large. This is usually taken to mean $\lambda >
-    20$ or $30$ (see \autoref{fig:poisson}). Thus, for a Poisson distribution with large $\lambda$, it can be approximated as:
+    20$ or $30$ (see \autoref{fig:poisson}). Thus, for a Poisson distribution with large $\lambda$, it can be
+approximated as
 
 \begin{equation}
-    X \sim N(\lambda, \sqrt{\lambda})
+    X \sim N(\lambda, \sqrt{\lambda})\,.
 \end{equation}
 
 This allows us to use Gaussian statistics for large $\lambda$, which are mathematically more tractable. In the context
@@ -96,7 +100,8 @@ hypothesis. \autoref{fig:p-values} shows the relationship between the $p$-value 
 \begin{figure}[htb]
     \centering
     \includegraphics[width=\textwidth]{figures/p-values.pdf}
-    \caption{The relationship between the $p$-value and the significance level. Note that $p$-value is defined for the
+    \caption[The relationship between the $p$-value and the significance level.]
+    {The relationship between the $p$-value and the significance level. Note that $p$-value is defined for the
         two-tailed test, while in our case we concerned with the case where we have more events than expected. However,
         this is not a problem, as the the significance level computed would underestimate the true significance level,
         meaning that in reality we would expect even better results.}
@@ -104,7 +109,7 @@ hypothesis. \autoref{fig:p-values} shows the relationship between the $p$-value 
 \end{figure}
 
 In particle physics, the null hypothesis often refers to the background-only hypothesis, i.e., the hypothesis that only
-known Standard Model processes are occurring. The alternative hypothesis, on the other hand, includes both the
+known \gls{sm} processes are occurring. The alternative hypothesis, on the other hand, includes both the
 background and a potential new signal.
 
 This is where we connect hypothesis testing to Poisson statistics. We model the number of observed events as a random
@@ -114,9 +119,9 @@ expected number of background events, then we have evidence against the null hyp
 
 The "significance" in particle physics refers to how many standard deviations an observed result is away from the
 expectation under the null hypothesis. If our data gives a result that is very unlikely under the null hypothesis (say,
-less than a 0.01 chance), we have strong evidence against the null hypothesis. The significance Z is, in essence, the
-number of standard deviations that the observed data is away from the expectation under the null hypothesis, with Z = 1
-corresponding to a p-value of about 0.16 (or 16\%), and Z = 2 corresponding to a p-value of about 0.023 (or 2.3\%).
+less than a 0.01 chance), we have strong evidence against the null hypothesis. The significance $Z$ is, in essence, the
+number of standard deviations that the observed data is away from the expectation under the null hypothesis, with $Z = 1$
+corresponding to a $p$-value of about 0.16 (or 16\%), and $Z = 2$ corresponding to a $p$-value of about 0.023 (or 2.3\%).
 
 \begin{align}
     Z(p) & = \cdfinv(1 - p) & p(Z) & = 1 - \cdf(Z) = \int_{Z}^{\infty} \frac{1}{\sqrt{2\pi}} e^{-\frac{x^2}{2}} dx
@@ -128,6 +133,7 @@ corresponding to a p-value of about 0.16 (or 16\%), and Z = 2 corresponding to a
         \hline
         Significance   & 1     & 2    & 3    & 4                 & 5                 \\
         \hline
+        \rule{0pt}{15pt}
         $p$-value (\%) & 15.87 & 2.28 & 0.13 & $3 \cdot 10^{-5}$ & $3 \cdot 10^{-7}$ \\
         \hline
     \end{tabular}
@@ -149,16 +155,22 @@ We should note, however that due to the approximation of the Poisson distributio
 number of background events $b$ must be large enough for the $Z$-score to be meaningful.
 
 In practice, such approximation is often used in the early stages of a search due to its simplicity. For more accurate
-results, a more complex statistical model is used that also accounts for different nuisance parameters, systematic
-uncertainties (see \autoref{ch:Evaluation}, \cite{pract-stat-lhc, statistical} for more details):
+results, a more complex statistical model is used that also accounts for different \glspl{np} - systematic
+uncertainties (\autoref{ch:Evaluation}, \cite{pract-stat-lhc, statistical} for more details):
 
 \begin{align}
-    q_0  & = -2 \frac{L(0, \hat{\hat{\theta}})}{L(\hat{\mu}, \hat{\theta})} \, \text{ where $\hat{\mu} > 0$} \\
-    Z    & = \cdfinv(1 - p) = \sqrt{q_0}                                                                     \\
+    q_0  & = -2 \frac{L(\mu=0, \hat{\hat{\bm{\theta}}}(\mu=0))}{L(\hat{\mu}, \hat{\bm{\theta}})} \, \text{ where $\hat{\mu} > 0$} \\
+    Z    & = \cdfinv(1 - p) = \sqrt{q_0}                                                                                          \\
     p(Z) & = 1 - \cdf(\sqrt{q_0})
 \end{align}
 
+where $L$ is the profile likelihood
+function\footnote{\url{https://statisticalmethods.web.cern.ch/StatisticalMethods/statisticaltests}}, $\mu$ is the
+parameter of interest\footnote{For our case specifically, $\mu$ refers to the signal strength, and so it is set to $0$
+    as the null hypothesis assumes that there is no signal.}, $\bm{\theta}$ are the \glspl{np}, $\hat{\mu}$ and
+$\hat{\bm{\theta}}$ are the \glspl{mle} of $\mu$ and $\bm{\theta}$ respectively, and $\hat{\hat{\bm{\theta}}}$ is the
+\gls{mle} of $\bm{\theta}$ for a fixed value of $\mu$.
 
 This provides a powerful tool for identifying new phenomena in particle physics. If the significance of a signal exceeds
-a certain threshold (often $ 5 \sigma $ in particle physics, corresponding to a p-value of about $3\times10^-7$), the signal is
-considered a discovery.
+a certain threshold (often $5\sigma$ in particle physics, corresponding to a $p$-value of about $3\cdot10^{-7}$), the
+signal is considered a discovery.

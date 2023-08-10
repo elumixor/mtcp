@@ -1,7 +1,7 @@
 \documentclass{phdthesis}
 
 \usepackage{makeidx}
-\usepackage[toc]{glossaries}
+\usepackage[nonumberlist,toc]{glossaries}
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{enumitem}
@@ -12,6 +12,8 @@
 \usepackage{caption}
 \usepackage{subcaption}
 \usepackage{longtable}
+\usepackage{bm}
+\usepackage{physics}
 \usepackage{svg}
 \usepackage{biblatex}
 \usepackage{xspace}
@@ -31,17 +33,8 @@
 \author{Bc. Vladyslav Yazykov}
 \title{Optimization of the \tth Selection Including Systematics Using Machine Learning with ATLAS Data}
 
-\supervisor{prof. Dr. Ing. Jan Kybic}
+\supervisor{doc. Dr. Andr\'{e} Sopczak}
 \supervisorAffiliation{
-	Department of Cybernetics\\
-	Faculty of Electrical Engineering\\
-	Czech Technical University in Prague\\
-	Na Zderaze 269/4\\
-	120 00 Prague 2\\
-	Czech Republic}
-
-\supervisorSpecialist{doc. Dr. Andr\'{e} Sopczak}
-\supervisorSpecialistAffiliation{
 	Institute of Experimental and Applied Physics\\
 	Czech Technical University in Prague\\
 	Husova 240/5\\
@@ -53,11 +46,11 @@
 
 
 \includeonly{
-	chapters/abstract,
+	% chapters/abstract,
 	% chapters/acknowledgements,
-	chapters/1-structure,
-	chapters/2-introduction/0-chapter,
-	% chapters/3-methodology/0-chapter,
+	% chapters/1-structure,
+	% chapters/2-introduction/0-chapter,
+	chapters/3-methodology/0-chapter,
 	% chapters/4-uncertainties/0-chapter,
 	% chapters/5-conclusions/0-chapter,
 	% chapters/6-appendix/0-chapter,
@@ -75,10 +68,10 @@
 % Auto-generated glossary
 {\let\gls\glsfirst
 	\let\Gls\Glsfirst
-	\listoftables
-	\listoffigures
-	\printnoidxglossaries
 	\tableofcontents
+	\listoffigures
+	\listoftables
+	\printnoidxglossaries
 }
 
 

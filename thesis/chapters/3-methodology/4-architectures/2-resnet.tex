@@ -1,25 +1,26 @@
-\subsection[resnet]{\gls{resnet}}
+\subsection{ResNet}
 \label{sec:resnet}
-
-\begin{figure}[htbp]
-    \centering
-    \includegraphics[width=0.5\textwidth]{figures/resnet.pdf}
-    \caption{Resnet architecture.}
-    \label{fig:resnet_architecture}
-\end{figure}
 
 We compare the staged network to a slightly improved version of \gls{mlp} that introduces residual/skip
 connections between the layers (see \autoref{fig:resnet_architecture}) proposed by \cite{resnet}.
-Those connections improve the training of deep neural networks, as the gradients can flow unimpeded back to the first
+
+\begin{figure}[htb]
+    \centering
+    \includegraphics[width=0.5\textwidth]{figures/resnet.pdf}
+    \caption[Resnet architecture]{\gls{resnet} architecture.}
+    \label{fig:resnet_architecture}
+\end{figure}
+
+These connections improve the training of deep neural networks, as the gradients can flow unimpeded back to the first
 layers. This helps combat the vanishing gradients problem. We can formalize this as in
 \cite{ft-transformer}:
 
 
 {\fontsize{11}{10}\selectfont
 \begin{align}
-    \text{ResNet(x)}      & = \text{Prediction}(\text{ResNetBlock}(\dots(\text{ResNetBlock}(\text{Linear}(\text{Embed}(x)))))) \\
-    \text{ResNetBlock(x)} & = x + \text{Dropout}(\text{Linear}(\text{LayerNorm}(\sigma(x))))                                   \\
-    \text{Prediction}(x)  & = \text{Linear}(\text{LayerNorm}(\sigma(x)))
+    \texttt{ResNet(x)}      & = \texttt{Prediction}(\texttt{ResNetBlock}(\dots(\texttt{ResNetBlock}(\Linear(\Embed(x)))))) \\
+    \texttt{ResNetBlock(x)} & = x + \Dropout(\Linear(\LayerNorm(\sigma(x))))                                               \\
+    \texttt{Prediction}(x)  & = \Linear(\LayerNorm(\sigma(x)))
 \end{align}
 }
 
@@ -36,17 +37,7 @@ memorize the training data.
 We introduce a few other changes to the training procedure:
 
 \begin{enumerate}
-    \item We use a \verb|AdamW| optimizer \cite{adamw}
-    \item We use \verb|GELU| activation \cite{gelu}
-    \item Similarly, for the continuous feature, the invalid/missing values are replaced with learnable parameters.
+    \item We use an \verb|AdamW| optimizer \cite{adamw}
+    \item We use a \verb|GELU| activation \cite{gelu}
     \item We introduce \verb|LayerNorm| \cite{layernorm} before each \verb|Linear| layer.
 \end{enumerate}
-
-\begin{figure}[htbp]
-    \centering
-    \includegraphics[width=\textwidth]{figures/resnet_results.pdf}
-    \caption{Resnet results.}
-    \label{fig:resnet_results}
-\end{figure}
-
-

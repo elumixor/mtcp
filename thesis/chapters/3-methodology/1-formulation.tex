@@ -1,59 +1,299 @@
 \section{Problem Formulation}
+\label{sec:formulation}
 
-Our primary objective is to distinguish the ttH events from other processes (or events) produced in the LHC. This
-separation task can be naturally formulated as a classification problem. In the broad field of machine learning,
-classification is the task of predicting the discrete class label of an observation given its features. In our case, the
-observations are the events and the class labels represent different processes, including the ttH process.
+\todo{proofread}
 
-Classification problems can further be classified into binary and multi-class, depending on the number of classes.
-Binary classification, as the name suggests, involves two classes. On the other hand, multi-class classification refers
-to problems where an observation can belong to one of more than two classes. Depending on the nature and distribution of
-the data, one may choose either binary or multi-class classification. In our case, we can approach the task either as a
-binary problem (ttH vs not ttH) or as a multi-class problem (differentiating among various processes).
+\glsreset{erm}
+\subsection[Empirical Risk Minimization]{\gls{erm}}
 
-As with many machine learning tasks, we approach this as a supervised learning problem. In supervised learning, we have
-a set of labeled observations (known as the training data) and the goal is to learn a function that maps the features to
-the labels. Once this function is learned, it can be used to predict the labels (in our case, process classes) of new,
-unseen observations.
+As stated before, our primary objective in this thesis is to distinguish the \tth events from other events of the other
+detected by the \gls{atlas} detector. Given an observation $\bm{x} \in \mathcal{X}$, we want to predict its
+corresponding class label $y \in \mathcal{Y}$. Here $\mathcal{X}$ denotes the space of all possible observations (in
+our case this corresponds to the different measurements of the event), and $\mathcal{Y}$ denotes the space of all
+the class labels we are differentiating between. We can further split the problem into either a binary classification
+(seeking to differentiate between \tth (signal) and not \tth (background)) or a multi-class classification (seeking to
+correctly discriminate between each of the processes - \tth, \ttw, \ttz, \ttbar, etc.).
 
-Given a dataset with $N$ observations, we have each observation $i$ represented as a tuple $(x_i, y_i, w_i)$, where
-$x_i$ is a feature vector (a representation of our event), $y_i$ is a class label, and $w_i$ is a weight associated with
-the observation. The objective is to learn a function $f$ such that given a new observation $x$, we can predict its
-class label $y$.
+As we approach this task as a supervised learning problem (recall \autoref{sec:mc}), we assume that a set of labeled
+observations $\ttrn = {(\bm{x}_i, y_i)}_{i=1}^N$ is provided.  Here $\bm{x}_i \in \mathbf{X}$ is a feature vector
+representing different properties (features) of an event and $y_i \in \mathbf{Y}$ is its corresponding true class label.
+We assume there exists a joint probability distribution $P(\bm{x}, y)$ over the observations $\bm{x}$ and their
+corresponding class labels $y$. Then, we require the examples in the training set $(\bm{x}_i, y_i) \in \ttrn$ to be
+drawn \gls{iid} from the joint distribution $P(\bm{x}, y)$.
 
-In the case of binary classification, $y_i$ can take on values 0 (for background) or 1 (for signal), while for
-multi-class classification, $y_i$ can take on values from $\{0, 1, ..., C\}$ where $C$ is the number of classes
-(representing different processes).
 
-The learning of the function $f$ is driven by the minimization of a loss function $L$ that quantifies the discrepancy
-between the predicted and true labels. For classification problems, a common choice is the cross-entropy loss function.
+We also assume that there is a non-negative real-valued loss function $L(y, \hat{y})$ that quantifies the
+discrepancy between the true label $y$ and the predicted label $\hat{y}$. The common example of such a loss function
+would be a zero-one loss function, which is defined as
 
-For a binary classification, the cross-entropy loss for a single observation is given by:
+\begin{equation}
+    L_{0/1}(y, \hat{y}) = \begin{cases}
+        0 & \text{if } y = \hat{y} \\
+        1 & \text{otherwise}
+    \end{cases}\,.
+\end{equation}
 
-$$ L(y_i, f(x_i)) = -y_i \log(f(x_i)) - (1 - y_i) \log(1 - f(x_i)) $$
+The goal is to find the best hypothesis $h^* \in \mathcal{H}:
+    \mathbf{X} \rightarrow \mathbf{Y}$ that would minimize the expected loss over the joint distribution $P(\bm{x}, y)$:
 
-where $f(x_i)$ is the probability of the observation $i$ being of class 1. When you sum up the losses for all
-observations and normalize by the total number of observations, you get the average loss for the dataset, also known as
-the empirical risk:
+\begin{equation}
+    h^* = \argmin_{h \in \mathcal{H}} \mathbb{E}_{(\bm{x}, y) \sim P(\bm{x}, y)}[L(y, h(\bm{x}))]\,.
+\end{equation}
 
-$$ R(f) = -\frac{1}{N}\sum_{i=1}^{N} y_i \log(f(x_i)) + (1 - y_i) \log(1 - f(x_i)) $$
+In practice, we do not have access to the joint distribution $P(\bm{x}, y)$, but only to the training set $\ttrn$. To
+tackle this problem, we use the \gls{erm} principle \cite{risk-minimization}, which states that the best hypothesis
+$h^*$ is the one that minimizes the empirical risk over the training set $\ttrn$:
 
-In the case of a weighted dataset, the empirical risk becomes:
+\begin{equation}
+    \hat{h} = \argmin_{h \in \mathcal{H}} R_\ttrn(h) = \argmin_{h \in \mathcal{H}} \frac{1}{N} \sum_{i=1}^{N} L(y_i, h(\bm{x}_i))\,.
+\end{equation}
 
-$$ R(f) = -\frac{1}{N}\sum_{i=1}^{N} w_i \big[ y_i \log(f(x_i)) + (1 - y_i) \log(1 - f(x_i)) \big] $$
 
-For multi-class classification, the cross-entropy loss can be extended to accommodate more than two classes. This is
-usually done by using one-hot encoding for the class labels and applying a softmax function to the output of the
-function $f$. The loss for a single observation then becomes:
 
-$$ L(y_i, f(x_i)) = - \sum_{c=1}^{C} y_{i,c} \log(f_{i,c}(x_i)) $$
 
-where $y_{i,c}$ is the true label (0 or 1) of observation $i$ for class $c$, and $f_{i,c}(x_i)$ is the predicted
-probability of observation $i$ belonging to class $c$.
 
-As before, the empirical risk is the sum of the losses for all observations, and in the case of a weighted dataset, it
-is defined as:
 
-$$ R(f) = -\frac{1}{N}\sum_{i=1}^{N} w_i \sum_{c=1}^{C} y_{i,c} \log(f_{i,c}(x_i)) $$
 
-In this context, the function $f$ that minimizes this empirical risk is the solution to our classification problem.
+
+
+
+\subsection{Validation and Test Sets}
+
+Consider, for example the following "cheating" classifier:
+
+\begin{equation}
+    h(\bm{x}) = \begin{cases}
+        y_i & \text{if } \exists i : \bm{x} = \bm{x}_i \\
+        y_0 & \text{otherwise}
+    \end{cases}\,.
+\end{equation}
+
+
+This classifier would have zero empirical risk, but would perform poorly on unseen data (would not generalize well).
+This is referred to as overfitting (see \autoref{fig:standard-losses}). Generally, in case of an unconstrained
+hypothesis space $\mathcal{H}$, we have no guarantee that the empirical risk $R_\ttrn(h)$ is a good approximation of the
+true risk $R(h)$.
+
+
+Specifically, the problem in this case is that the prediction $\hat{y}_i$ depends not only on the observation
+$\bm{x}_i$, but also on the labels $y_1, \dots, y_N$. Consider, for example, a \gls{nn} classifier $h_\nnparams$ with trainable
+parameters $\nnparams$. When training $h_\nnparams$ on the training set by back-propagation, $\nnparams$  becomes implicitly
+conditioned on the true labels $y^1, \dots, y^s$ that the network has encountered before ($s$ denotes the training step).
+This violates the \gls{iid} assumption and thus the empirical risk $R_\ttrn(h_\nnparams)$ is not a good approximation of
+the true risk $R(h_\nnparams)$ anymore.
+
+
+To address this issue and more accurately assess the generalization ability of the classifier $h$, We would need a
+separate set $\tval \sim P(\bm{x}, y)$ that would provide an unbiased estimate of the true risk $R(h)$. This set is
+called the validation set. Validation set is used to compare the performance of different
+classifiers. Consider two classifiers $h_1$ and $h_2$, where the risk on the training set is $R_\ttrn(h_1) <
+    R_\ttrn(h_2)$, but the risk on the validation set is $R_\tval(h_1) > R_\tval(h_2)$. In this case, we would prefer the
+classifier $h_2$ over $h_1$ as it generalizes better to unseen data. The specific case is often seen with the \gls{nn}
+classifiers, where the classifier $h$ is parametrized by $\nnparams$. Then essentially we compare $h_1 = h_{\nnparams_1}$ and
+$h_2 = h_{\nnparams_2}$, where $\nnparams_1$ and $\nnparams_2$ are two different sets of parameters. The process of selecting
+the best classifier $h^*$ from a set of classifiers $\mathcal{H}$ is called model selection.
+
+\begin{figure}[htb]
+    \centering
+    \begin{minipage}[t][\height][t]{0.47\textwidth}
+        \includegraphics[width=\textwidth]{figures/ml/training/standard-ts-losses.png}
+        \caption{\acrshort{ftt} with 2 blocks and 256 embedding size training on the standard training set.}
+        \label{fig:standard-losses}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[t][\height][t]{0.47\textwidth}
+        \includegraphics[width=\textwidth]{figures/ml/training/extended-ts-losses.png}
+        \caption{\acrshort{ftt} with 5 blocks, 256 embedding size, and 20\% dropout training on the \emph{extended} training
+            set.} \label{fig:extended-losses}
+    \end{minipage}
+    \caption[Training and validation losses during the training process with and without extended training set.]
+    {Training and validation losses during the training process with and without extended training set.
+        \autoref{fig:standard-losses} shows the training of the \acrshort{ftt} with 2 blocks (see \autoref{sec:ftt}) on the
+        standard training set. Because of the lack of training samples, and high capacity of the model, we observe
+        overfitting. The training loss continues to decrease while the validation loss starts to increase. The
+        checkpoint with the validation loss is the lowest is then used as the final model. This is referred to as early
+        stopping. The best way to prevent overfitting is to get more training data (see
+        \autoref{sec:extended-set}). If that is not possible, one might also consider augmentation techniques, or
+        regularization - dropout (see \autoref{sec:dropout}), weight decay etc. \autoref{fig:extended-losses} shows the
+        training of the \acrshort{ftt} with 5 blocks (see \autoref{sec:ftt}) on the extended training set. Also, the 20\%
+        dropout is introduced. We observe now only a slight overfitting, which means that the model has generalized
+        a lot better.}
+    \label{fig:losses}
+\end{figure}
+
+The caveat of using the validation for model selection is that in doing so we are implicitly fitting to the validation set,
+as now our best classifier $h^*$ is also conditioned on the evaluations of the other classifiers on the validation set.
+To address the similar issue, a third set is normally introduced, called the test set $\ttst \sim P(\bm{x}, y)$. The test
+set should be used only once to assess the performance of the fully-trained classifier $h^*$.
+
+
+
+
+\todo{But then why we don't use the test set in our thesis???}
+
+
+
+
+
+\subsection{Training}
+
+The process of finding the best hypothesis $h^*$ is called training (or learning). In the context of \gls{erm}, this
+further reduces to minimization of the empirical risk $R_\ttrn(h)$. As described before, the empirical risk is an
+expectation of the loss function $L(y, h(\bm{x}))$ over the training set $\ttrn$. Thus, the choice of the loss function
+will determine the available training algorithms.
+
+This work focuses on training the \gls{nn} classifiers. \gls{nn} can be formally described as a parametric model
+parametrized by a vector of parameters $\nnparams$. \glspl{nn} are generally composed of multiple layers
+$f_{\nnparams_i}^1, \dots f_{\nnparams_L}^D$ ($D$ denotes the total number of layers - depth of the network), where
+each layer $f_{\nnparams_i}^i$ is a parametric function parametrized by $\nnparams_i$.  \glspl{nn} can take different
+architectures, a common one\footnote{In this thesis we use an adaptation of \glspl{resnet} to tabular data and
+    \glspl{ftt}, which are both a special cases of feed-forward \glspl{nn}.} is a feed-forward \gls{nn} where the output
+of the layer $f_{\nnparams_i}^i$ is fed as an input to the next layer $f_{\nnparams_{i+1}}^{i+1}$. The output
+of the last layer $f_{\nnparams_L}^D$ is the output of the network $h_\nnparams$. Alternative to feed-forward
+\glspl{nn} would be the network that contain cycles (e.g.  \glspl{rnn}\footnote{Overview of the different types of
+    \glspl{rnn} \url{https://paperswithcode.com/methods/category/recurrent-neural-networks}.} \cite{rnn,lstm}).
+
+The parameter vector of the whole neural network can be seen as a concatenation of the parameters of the individual
+layers:
+
+\begin{equation}
+    \nnparams = \begin{bmatrix}
+        \nnparams_1 \\
+        \vdots      \\
+        \nnparams_L
+    \end{bmatrix}\,.
+\end{equation}
+
+The goal is then to find the optimal set of parameters $\nnparams^*$ that minimizes the empirical risk $R_\ttrn(h_\nnparams)$.
+
+Training \glspl{nn} efficiently involves the use of gradient-based optimization algorithms where the gradient of the
+empirical risk $R_\ttrn(h_\nnparams)$ with respect to the parameters $\nnparams$ is computed and used to update the parameters
+$\nnparams$ in the direction of the steepest descent. The gradient of the empirical risk $R_\ttrn(h_\nnparams)$ with respect to
+the parameters $\nnparams$ can be computed using the chain rule:
+
+\begin{equation}
+    \nabla_\nnparams R_\ttrn(h_\nnparams) = \nabla_\nnparams \frac{1}{N} \sum_{i=1}^{N} L(y_i, h_\nnparams(\bm{x}_i)) = \frac{1}{N} \sum_{i=1}^{N} \nabla_\nnparams L(y_i, h_\nnparams(\bm{x}_i))\,,
+\end{equation}
+
+and is essentially an average of the gradients of the loss function $L(y_i, h_\nnparams(\bm{x}_i))$ with respect to the
+parameters $\nnparams$ over the training set $\ttrn$. During the update step, the parameters $\nnparams$ are updated in the
+direction of the steepest descent:
+
+\begin{equation}
+    \nnparams \leftarrow \nnparams - \alpha \nabla_\nnparams R_\ttrn(h_\nnparams)\,,
+\end{equation}
+
+where $\alpha$ is the learning rate, a hyperparameter controlling the size of the update step. In practice,
+instead of computing the gradient over the whole training set $\ttrn$, the gradient is computed on the so-called
+mini-batches of the training data. This gradient, computed on the mini-batch acts as an unbiased estimate of the true
+gradient. This approach is called \gls{sgd} and is the most common optimization algorithm used for training
+\glspl{nn}\footnote{Aside from having low computational and
+    memory requirements, being able to learn online, \gls{sgd} has some other advantages, such as being able to escape
+    local minima, generalize better and provide the regularization effect - all consequences of an inherent noise in the
+    gradient estimate.}.
+Throughout our experiments we use an improvement of \gls{sgd} called \gls{adamw} \cite{adam, adamw} which is an adaptive
+learning rate optimization algorithm that uses the first and second moments of the gradient to adapt the learning rate
+dynamically.
+
+Computation of the gradient of the loss function $L(y_i, h_\nnparams(\vec{x}_i))$ with respect to the parameters \nnparams
+is done using the chain rule. The chain rule is a formula for computing the derivative of the composition of two or more
+functions:
+
+\begin{equation}
+    \dv{(\vec{f} \circ \vec{g})}{\vec{x}} = \dv{\vec{f}}{\vec{g}} \dv{\vec{g}}{\vec{x}}\,,
+\end{equation}
+
+where $\vec{f}$ and $\vec{g}$ are functions of $\vec{x}$.
+
+In the context of \glspl{nn}, the chain rule is used to compute the gradient of the loss function with respect to the
+parameters \nnparams by an iterative approach. First, let the outputs of the individual layers are recorded during the
+forward pass (or forward propagation):
+
+\begin{align}
+    \vec{z}^i & = \vec{f}^i(\vec{z}^{i-1}) \quad i = 1, \dots, L \\
+    \vec{z}^0 & = \vec{x}\,,
+\end{align}
+
+where $\vec{z}^i$ is the output of the $i$-th layer and $\vec{z}^0 = \vec{x}$ is the input to the first layer. Then, we
+can compute the gradients with respect to the outputs of the layers:
+
+\begin{align}
+    \vec{\delta}^D     & = \dv{L}{\vec{f}^D}                                                                              \\
+    \vec{\delta}^{D-1} & = \dv{L}{\vec{f}^D} \dv{\vec{f}^D}{\vec{z}^{D-1}} = \vec{\delta}^D \dv{\vec{f}^D}{\vec{f}^{D-1}} \\
+    \vec{\delta}^{D-2} & = \vec{\delta}^{D-1} \dv{\vec{f}^{D-1}}{\vec{f}^{D-2}}                                           \\
+                       & \vdots \nonumber                                                                                 \\
+    \vec{\delta}^1     & = \vec{\delta}^2 \dv{\vec{f}^2}{\vec{f}^1}\,.
+\end{align}
+
+Then, the
+gradient of the loss function with respect to the parameters of each layer $\nnparams_i$ is computed as
+
+\begin{align}
+    \dv{L}{\nnparams_D}     & = \dv{L}{\vec{f}^D} \dv{\vec{f}^D}{\nnparams_{D}} = \vec{\delta}^D \dv{\vec{f}^D}{\nnparams_{D}} \\
+    \dv{L}{\nnparams_{L-1}} & = \dv{L}{\vec{f}^D} \dv{\vec{f}^D}{\vec{f}^{D-1}} \dv{\vec{f}^{D-1}}{\nnparams_{L-1}} =\
+    \vec{\delta}^{D-1} \dv{\vec{f}^{D-1}}{\nnparams_{D-1}}                                                                     \\
+    \dv{L}{\nnparams_{D-2}} & = \vec{\delta}^{D-2} \dv{\vec{f}^{D-2}}{\nnparams_{D-2}}                                         \\
+                            & \vdots \nonumber                                                                                 \\
+    \dv{L}{\nnparams_{1}}   & = \vec{\delta}^1 \dv{\vec{f}^1}{\nnparams_{1}}\,.
+\end{align}
+
+The chain rule is the reason why \glspl{nn} are so successful in practice. It allows for the efficient computation of
+the gradient even for very deep \glspl{nn}.
+
+
+
+
+
+
+\subsection{Cross-entropy loss}
+
+In order for the back-propagation to work, all the functions must be differentiable. The zero-one loss function that we
+have used in the previous section does not conform to this requirement. In practice, when training \glspl{nn} on the
+classification tasks, the cross-entropy loss function is used. Cross-entropy loss operates on the probabilities, rather
+than on the predicted label, thus making it differentiable and suitable to be used in the back-propagation algorithm.
+The cross-entropy loss function is defined as:
+
+\begin{equation}
+    L(y_i, \vec{h}(\vec{x}_i)) = -\sum_{j = 1}^{|\textbf{Y}|} \llbracket y_i = y_j \rrbracket \log(h_j(\vec{x}))\,.
+\end{equation}
+
+In certain scenarios, such as imbalanced datasets, it may be beneficial to apply different weights to different classes.
+Class weights are used to give more importance to under-represented classes, effectively balancing the contribution of
+each class to the overall loss. This helps the learning algorithm focus more on the minority class, which may be of
+particular interest or significance.
+
+For example, consider a medical diagnosis application where 95\% of the samples are negative ($y = 0$) and only 5\% are
+positive ($y = 1$) for a specific condition. Training a model on this dataset without any adjustments may lead to a
+classifier that almost always predicts the negative class, since it's encountering it much more often. Such a skewed
+prediction can be problematic in critical applications, as missing the rare positive cases could have serious
+consequences. To alleviate this issue, class weights can be introduced to the loss function to give equal importance to
+both classes. The modified loss function is:
+
+\begin{equation}
+    L(y_i, \vec{h}(\vec{x}_i)) = -\sum_{j = 1}^{|\textbf{Y}|} \llbracket y_i = y_j \rrbracket w_j \log(h_j(\vec{x}))\,.
+\end{equation}
+
+Here weights $w_1, \dots, w_{|\textbf{Y}|}$ are assigned to each class, where $w_i$ is calculated as:
+
+\begin{equation}
+    w_i = \frac{|\{y \sim \textbf{Y} \mid y = i\}|}{|\textbf{Y}| \sum_{i = 1}^{|\textbf{Y}|} w_i} \quad i = 1, \dots, |\textbf{Y}|\,.
+\end{equation}
+
+Essentially, we count the number of examples of class $i$ and divide it by the total number of examples in the dataset.
+Then we normalize\footnote{This is optional, but helpful - inverse frequencies can have a large range, especially if
+    there is extreme imbalance between the classes. Keeping the weights in the [0, 1] range also help interpretability.}
+the weights so that they sum up to 1.
+
+
+Similarly, the way the cross-entropy is defined, we can also introduce a more refined sample-wise weighting. In this
+case, the loss function would is defined as:
+
+\begin{equation}
+    L(y_i, \vec{h}(\vec{x}_i)) = -\sum_{j = 1}^{|\textbf{Y}|} \llbracket y_i = y_j \rrbracket w_i \log(h_j(\vec{x}))\,.
+\end{equation}
+
+Here we should note that $w_i$ is not the same as the class weight $w_i$ from the previous example. In this case, $w_i$
+is a weight assigned to each sample, rather than to each class, which we note by using the same index $i$ as in the
+$y_i$ and $\vec{x}_i$. This formulation is not commonly used, bt was explored by the previous analysis
+\cite{severin,jan}, thus we include it here for completeness. More details are given in \autoref{sec:weights}.
+

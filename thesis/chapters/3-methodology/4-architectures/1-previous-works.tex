@@ -1,22 +1,47 @@
 \subsection{Previous work}
 
-In an attempt to further our understanding of the ttH process, this work builds upon the previous efforts made by
-\severin and \jan. Their research involved training simple neural networks
-(primarily feed-forward networks) for the classification task at hand.
+In an attempt to further our understanding of the \tth process, this work builds upon the previous efforts made by
+\severin and \jan. Their research also involved training feed-forward neural networks to distinguish between the \tth
+and the background processes.
 
-\jan work extended beyond simple neural networks, experimenting with TabNet and XGBoost as well. Meanwhile, \severin
-proposed an architecture composed of multiple Multi-Layer Perceptrons (MLPs) tailored to distinguish one background from
-the ttH specifically.
+The primary architecture \cite{severin} utilized was a \gls{mlp}. The work examines the effect of various
+hyperparameters such as the number of layers, embedding size, learning rate, and batch size on the significance. The
+work also includes the estimation of statistical uncertainties, associated with the median signal strength. The authors
+experimented with binary and multi-class classification, as well as proposed a staged network approach. The staged
+network is composed of 5 binary classifiers (for \ttz, \ttw, \ttbar, $VV$, and all the other backgrounds grouped
+together in one category "others"). Each of the classifiers is a \gls{mlp} itself, and during the training only receives
+events of \tth and the corresponding background.
 
-Their approach to evaluating the classifiers was primarily based on standard Machine Learning metrics such as accuracy,
-Area Under the Receiver Operating Characteristic (AUROC) curves, and most importantly, the statistical significance of
-the ttH signal. The optimization techniques used in their studies were mainly grid-searching over various
-hyperparameters such as the number of layers, embedding size, learning rate, and batch size.
+\todo{
+    I fail to see how this would work in reality - how would we know which background to give to each binary classifier?
+}
 
-Last results from \severin achieve \todo{XXX} accuracy, \todo{XXX} $\AUC_\tth$ and \todo{XXX}
-significance. \jan results are \todo{XXX} accuracy, \todo{XXX} $\AUC_\tth$ and \todo{XXX}.
-It is important to note, howver, that they didn't use the weights while calculating the ROC curves, so the results are
-unfortunately not directly comparable.
+Although the staged network is its essence is equivalent to a single, larger \gls{mlp}, it allows for the training of
+each sub-network on a \emph{different set of features}. This can potentially reduce the systematic uncertainties,
+associated with the final prediction. \todo{although I don't understand really how...}
+
+The highest mean significance obtained with a multi-class classifier was reported to be $Z = 3.064$ while the highest
+mean significance obtained with a binary classifier was reported to be $Z = 3.114$. The expectation was that having the
+\gls{nn} focus on differentiating between two classes only would improve the performance. However, the results show that
+there was no significant difference. In our work, however, we have observed that when the classifier is trained on
+multiple classes, the performance is increased (see \autoref{sec:binary}). The highest mean significance obtained with a
+staged was reported to be $Z = 2.964$, which is very similar to the other results.
+
+
+
+
+
+In \jan, the experiments were also extended beyond simple \glspl{mlp}, experimenting with TabNet \cite{tabnet} and
+XGBoost \cite{xgboost}. The authors have also experimented with different hyperparameters, as well as different
+fractions of the training set, and different feature sets. The best results were obtained with XGBoost trained on all
+the features and the whole training set, which is unsurprising. The highest mean significance obtained with XGBoost is
+reported as $Z = 2.90$. The authors have also evaluated the uncertainty, associated with the prediction, which is
+reported as $\mu = 1 + 0.42 /- 0.37$.
+
+
+
+
+
 
 Our research seeks to improve upon these previous efforts by introducing more complex architectures and advanced
 optimization techniques, which will be discussed in the following sections.
@@ -28,14 +53,25 @@ While he experimented with combining multiple \glspl{mlp}, this approach is esse
 larger \gls{mlp}. This can be formalized as in \cite{ft-transformer}:
 
 \begin{align}
-    \text{MLP(x)}      & = \text{Linear}(\text{MLPBlock}(\dots(\text{MLPBlock}(x)))) \\
-    \text{MLPBlock(x)} & = \text{Dropout}(\sigma(\text{Linear}(x)))
+    \texttt{MLP(x)}      & = \Linear(\texttt{MLPBlock}(\dots(\texttt{MLPBlock}(x)))) \\
+    \texttt{MLPBlock(x)} & = \Dropout(\sigma(\Linear(x)))
 \end{align}
 
-Where $\sigma$ is the activation function.
+Where $\sigma$ is the activation function\footnote{Common activation functions include ReLU, Leaky ReLU (LReLU)
+    \cite{relu, lrelu}, sigmoid, $\tanh$, and others. Throughout our experiments we mostly use GELU activation
+    \cite{gelu}.},
+$\Linear$ is a linear transformations:
 
-% Do we need to include this? Is it even true? I didn't understand how we can select features during sys uncertainty
-% estimation...
+\begin{equation}
+    \Linear(x) = Wx + b\,,
+\end{equation}
 
-% The benefit of using the staged network, however, is that each sub-\gls{mlp} can be trained on a different set of
-% features. This can potentially reduce the systematical uncertainties, associated with the final prediction.
+and $\Dropout$ is a layer that randomly (with a fixed probability $p$) sets a fraction of the input features to
+zero \cite{dropout}:
+
+\begin{equation}
+    \Dropout_i(\vec{x}) = \begin{cases}
+        0,         & \text{with probability } p \\
+        \vec{x}_i, & \text{otherwise}
+    \end{cases}
+\end{equation}

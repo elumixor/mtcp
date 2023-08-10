@@ -1,0 +1,52 @@
+\section{Event Weighting}
+\label{appendix:weights}
+
+\begin{align*}
+    \text{yearFactor}       & = \begin{cases}
+                                    36646.74 & \text{if } \text{RunYear} = 2015 \text{ or } \text{RunYear} = 2016 \\
+                                    44630.6  & \text{if } \text{RunYear} = 2017                                   \\
+                                    58791.6  & \text{if } \text{RunYear} = 2018
+                                \end{cases}                                                                                                                                            \\
+    \text{normalizedFactor} & = \frac{\text{yearFactor}}{140068.94}                                                                                                                                                                                      \\
+    \text{weights}          & = \text{custTrigSF\_LooseID\_FCLooseIso\_SLTorDLT} \times \text{weight\_pileup} \times \text{jvtSF\_customOR} \times \text{bTagSF\_weight\_DL1r\_85} \times \text{XXX\_VV\_NJET} \times \text{weight\_mc} \times \text{xs} \\
+    \text{lepWeights}       & = \text{lep\_SF\_CombinedTight\_0} \times \text{lep\_SF\_CombinedTight\_1} \times \text{lepSF\_PLIV\_Prompt\_0} \times \text{lepSF\_PLIV\_Prompt\_1}                                                                       \\
+    \text{result}           & = \frac{\text{normalizedFactor} \times \text{weights} \times \text{lepWeights}}{\text{totalEventsWeighted}}
+\end{align*}
+
+\begin{align*}
+    \text{condition1} & = \text{mcChannelNumber} = 364250 \text{ or } 364253 \leq \text{mcChannelNumber} \leq 364255 \text{ or } 364283 \leq \text{mcChannelNumber} \leq 364287 \text{ or } 363355 \leq \text{mcChannelNumber} \leq 363360 \text{ or } \\
+                      & \phantom{=} \text{mcChannelNumber} \in \{363489, 345705, 345706, 345715, 345718, 345723, 364290, 364289, 364288\}                                                                                                              \\
+    \text{value1}     & = \begin{cases}
+                              1.0      & \text{if } nJets\_OR = 0    \\
+                              0.986980 & \text{if } nJets\_OR = 1    \\
+                              0.853062 & \text{if } nJets\_OR = 2    \\
+                              0.785437 & \text{if } nJets\_OR = 3    \\
+                              0.741692 & \text{if } nJets\_OR = 4    \\
+                              0.709992 & \text{if } nJets\_OR = 5    \\
+                              0.685452 & \text{if } nJets\_OR = 6    \\
+                              0.665613 & \text{if } nJets\_OR \geq 7
+                          \end{cases}                                                                                                                                                                                       \\
+    \text{value2}     & = 1.0                                                                                                                                                                                                                          \\
+    XXX\_VV\_NJET     & = \begin{cases}
+                              \text{value1} & \text{if } \text{condition1} \\
+                              \text{value2} & \text{otherwise}
+                          \end{cases}
+\end{align*}
+
+Luminosity: The total number of simulated events often does not correspond to the luminosity of the real data. Events
+are therefore weighted to correspond to the correct integrated luminosity. If $L_{data}$ is the integrated luminosity of
+the data and $L_{\gls{mc}}$ is the integrated luminosity of the \gls{mc} sample, then the luminosity weight for an event is $w_{L} =
+    L_{data}/L_{\gls{mc}}$.
+
+Cross-Section: Different processes have different probabilities (cross-sections) of occurring. The ratio of the
+cross-sections in data and simulation $\sigma_{data}/\sigma_{\gls{mc}}$ is used as a weight.
+
+Detector Effects: The detector response is not always perfectly simulated. Therefore, weights are applied to correct for
+known discrepancies in detector efficiencies and energy resolutions between the data and the simulation.
+
+Pileup: Pileup refers to additional proton-proton collisions that occur simultaneously with the event of interest.
+Pileup can significantly affect the event reconstruction. Pileup weights are used to match the pileup distribution in
+the data.
+
+Higher-order corrections: Theoretical predictions often include higher-order corrections, known as K-factors, to account
+for processes beyond the leading-order approximation used in the simulation.

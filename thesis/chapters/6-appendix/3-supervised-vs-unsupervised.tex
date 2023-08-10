@@ -1,0 +1,76 @@
+\section{Why Supervised Learning?}
+\label{appendix:why-supervised}
+
+In the context of classifying specific particle interactions like \tth events, supervised learning is often favored for
+several reasons:
+
+\begin{enumerate}
+    \item Labeling Ground Truth: With a well-established theoretical model and simulation techniques, you can generate
+          labeled datasets that represent the intermediate and final states of particle collisions. This allows for
+          direct training on what you want the model to learn.
+
+    \item Efficiency and Precision: Supervised learning can leverage this labeled data to create precise and targeted
+          models for the classification problem at hand. This generally results in a more efficient learning process
+          compared to unsupervised methods like clustering, which may not have specific labels to guide the learning.
+
+    \item Model Interpretability: By aligning the model with labeled examples, it's often easier to interpret the
+          model's decision process and understand how it correlates the inputs to the desired classification. This can
+          be important in scientific contexts where understanding the model's behavior can be as crucial as its
+          predictive accuracy. In the case of our task, specifically, a particular use-case would be to determine which
+          parts of detectors deserve more attention during improvement, and which one may not be so relevant.
+
+    \item Directly Aligned with the Objective: If the main goal is to classify specific types of events, then using
+          supervised learning directly aligns with this objective. It utilizes the available knowledge of the phenomena
+          being studied (in this case, particle physics and the standard model) to create a learning paradigm
+          specifically designed to recognize those events.
+
+    \item Potential for Fine-Tuning: Supervised models can often be fine-tuned or adjusted with new data or different
+          structures to continually improve or adapt to new insights. This iterative refinement aligns well with the
+          scientific method of incremental understanding and improvement.
+
+    \item Control Over Error and Bias: In the supervised learning framework, you can often have more control over the
+          types of errors and biases that the model may introduce, as you're explicitly defining what constitutes a
+          correct classification.
+
+    \item Challenges with Unsupervised Learning: On the contrary, unsupervised learning methods like clustering would
+          require determining similarities between events without clear labels, potentially leading to ambiguous or less
+          accurate classifications. It might not leverage the rich theoretical knowledge available in the field of
+          particle physics.
+
+    \item In conclusion, while unsupervised methods might be useful in exploratory phases or when labeled data is not
+          available, the specific nature of ttH event classification, combined with the availability of simulated
+          labeled data and theoretical grounding, makes supervised learning a well-suited and likely more effective
+          approach.
+\end{enumerate}
+
+Clustering, as an unsupervised learning technique, can be applied to the context of out task, but with some significant
+caveats. Here's how it might work and the challenges involved:
+
+\begin{enumerate}
+    \item Application: Clustering could be used to group collision events based on similarities in their observable
+          features, without prior knowledge of labels. By identifying patterns in the data, you might uncover groups
+          that correspond to different types of events, such as ttH and others.
+
+    \item Prediction: Once the clusters have been identified, you could theoretically assign labels to those clusters
+          based on expert knowledge or additional analysis. These labels could then be used to classify new data.
+          However, this is where the challenges and limitations become apparent.
+
+    \item Challenges and Limitations: Lack of Ground Truth: Without labeled data to guide the clustering, there's no
+          straightforward way to ensure that the clusters align with the actual underlying physics. The clusters might
+          correspond to some other aspects of the data that aren't relevant to the classification task.
+
+    \item Ambiguity: The boundaries between clusters may be ambiguous, leading to uncertainty in how to label the
+          clusters. This could result in less accurate classifications.
+
+    \item Model Complexity: Interpreting and validating the clusters might require significant expertise and additional
+          modeling, making it a more complex and potentially less reliable approach than supervised learning.
+
+    \item Predictive Power: Without a clear mapping from features to labels (as in supervised learning), the predictive
+          power of a clustering-based model might be lower, especially if the clusters do not correspond well to the
+          underlying physics.
+
+    \item Not Directly Aligned with the Task: Clustering is generally used for exploratory data analysis and pattern
+          recognition rather than direct classification. Adapting it to a classification task like identifying ttH
+          events may require significant modification and may not be as efficient or effective as using a method
+          specifically designed for classification, such as supervised learning.
+\end{enumerate}

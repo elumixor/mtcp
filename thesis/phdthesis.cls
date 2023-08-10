@@ -55,9 +55,6 @@
 \def \@supervisorAffiliation{Unknown}
 \newcommand{\supervisorAffiliation}[1]{ \def \@supervisorAffiliation{#1} }
 
-\def \@supervisorSpecialistAffiliation{Unknown}
-\newcommand{\supervisorSpecialistAffiliation}[1]{ \def \@supervisorSpecialistAffiliation{#1} }
-
 \def \@placeyear{Prague, June 2015}
 \newcommand{\placeyear}[1]{ \def \@placeyear{#1} }
 
@@ -114,7 +111,6 @@
 		{\large
 		{Study Programme: \PhDProgram} \\
 		{Supervisor: \@supervisor} \\
-		{Supervisor-specialist: \@supervisorSpecialist} \\
 		}
 		\vglue 30mm
 		\@placeyear \\
@@ -130,10 +126,6 @@
 		\item[Thesis Supervisor:] ~\\
 			\@supervisor\\
 			\@supervisorAffiliation
-
-		\item[Thesis Supervisor-specialist:] ~\\
-			\@supervisorSpecialist\\
-			\@supervisorSpecialistAffiliation
 	\end{description}
 	Copyright {\copyright} {\@date} {\@author}
 

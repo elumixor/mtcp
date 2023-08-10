@@ -1,11 +1,9 @@
 \section{Architectures and Optimization Techniques}
 
-This section covers the classifier architectures and optimization techniques we employed in our research. The primary
-models used for this classification task are simple feed-forward neural networks with residual connections (ResNets) and
-the Feature Tokenizer-Transformer (FT-Transformer). The former serves as a baseline, being merely Multi-Layer
-Perceptrons (MLPs) enhanced with skip connections. On the other hand, the FT-Transformer is an adaptation of the
-original Transformer model, designed to handle tabular data. The process of training these models and the optimization
-techniques used to improve their performance will be detailed in the subsequent sections.
+This section covers the classifier architectures and optimization techniques we employed in our research. As a baseline
+model, we used an adaptation of the \glspl{resnet} to the tabular data, inspired by \cite{tabular}. The primary model
+that has shown the best results was the \gls{ftt}, also adopted from \cite{tabular}. The process of training these
+models and the optimization techniques used to improve their performance is described in the subsequent sections.
 
 \input{chapters/3-methodology/4-architectures/1-previous-works}
 \input{chapters/3-methodology/4-architectures/2-resnet}

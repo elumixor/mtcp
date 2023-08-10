@@ -1,7 +1,8 @@
 \section{\gls{sr} cut expression}
+\label{appendix:cut-expression}
 
- {\scriptsize
-  \begin{verbatim}
+{\scriptsize
+    \begin{verbatim}
     custTrigMatch_LooseID_FCLooseIso_DLT
     && (dilep_type && (lep_ID_0*lep_ID_1)>0)
     && ((lep_Pt_0 >= 10e3 && lep_Pt_1 >= 10e3) && (fabs(lep_Eta_0) <= 2.5 && fabs(lep_Eta_1) <= 2.5)
@@ -22,7 +23,7 @@
     && nJets_OR>=4
     && ((dilep_type==2) || abs(Mll01-91.2e3)>10e3)
 \end{verbatim}
- }
+}
 
 We have kept the cuts the same as \cite{severin}, except for the cut on the \verb|nJets_OR| to \verb|>=4| to keep
 consistent definition \gls{sr} definition across the group \todo{refer to the BDT group - how?}.
