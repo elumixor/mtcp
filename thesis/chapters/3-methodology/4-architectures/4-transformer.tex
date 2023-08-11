@@ -1,42 +1,119 @@
-\subsection{\gls{ftt}}
+\subsection{Feature Tokenizer + Transformer}
 \label{sec:ftt}
 
-We adopt the \gls{ftt} proposed in \cite{ft-transformer} architecture, which uses the transformer \cite{transformer}
-architecture at its core.
+\glsreset{ftt}
+We adopt the \gls{ftt} as our primary architecture. The architecture was proposed in \cite{ft-transformer} and is an
+adaptation of the famous transformer architecture \cite{transformer} to the tabular data.
 
 \subsubsection{Transformer architecture}
 
-The transformer architecture was originally proposed for natural language processing tasks, but has since been applied
+The transformer architecture was originally proposed for the \gls{nlp} processing tasks, but has since been applied
 to almost every domain of machine learning. The transformer architecture is a fully-attentional architecture, which
 means that it does not use any convolutional \cite{convolutional} or recurrent \cite{recurrent} layers. Instead, it uses
-the attention mechanism to learn the dependencies between the input features. The transformer architecture is composed
-of multiple blocks, each consisting of a \verb|MultiHeadAttention| layer followed by a simple \verb|FeedForward| layer.
-The \verb|MultiHeadAttention| layer is composed of multiple \verb|Attention| heads, which are then concatenated and
-projected to the desired dimensionality. The \verb|FeedForward| consists of two \verb|Linear| layers with a \verb|GELU|
-activation in-between. To improve and stabilize the training \verb|LayerNorm| \cite{layernorm} layers are used. And
-residual connections are introduced to improve with the training of deep networks.
+the attention\footnote{Here we use self-attention, which means that the keys and values are produced from the same
+    source as queries.}
+\footnote{We use the \emph{scaled} attention, which refers to a division of the scores by $\sqrt{d_k}$ before applying
+    the $\text{softmax}$.}
+mechanism \cite{attention} to learn the dependencies between the input features.
 
-\subsubsection{Post-norm vs pre-norm formulation}
 
-Since the original paper \cite{transformer}, not many things have changed with the transformer design. The notable
-change is that \verb|LayerNorm| layer has been moved from after the \verb|Attention| and \verb|FeedForward| layers
-(post-norm formulation) to before them (pre-norm formulation). The pre-norm formulation has been shown to be more
-stable and easier to train \cite{pre-norm}. We also adopt this change, following \cite{ft-transformer}.
+
+% \todo{1. we need to add the diagram here}
+
+
+
+
+The crux of the transformer's power lies in its scaled dot-product attention mechanism, which allows the model to weigh
+the importance of different input features relative to each other. It can be thought of as a method to compute a
+weighted sum of values based on their relevance to a given query. Attention requires all the features to be mapped into
+the $\vec{X} \in \R^{d_h \times n_\text{features}}$ subspace. Then, for all the features, the so-called
+query, keys, and values are computed:
+
+\begin{align}
+    \vec{Q} & = \vec{W}_Q \vec{X}    \\
+    \vec{K} & = \vec{W}_K \vec{X}    \\
+    \vec{V} & = \vec{W}_V \vec{X}\,,
+\end{align}
+
+where $\vec{W}_Q, \vec{W}_K \in \R^{d_k \times d_h}, \vec{W}_V \in \R^{d_v \times d_h}$ are the trainable projection
+matrices. The dimensionality of the query, key, and value vectors is $d_k, d_k, d_v$, respectively\footnote{We used $d_k
+        = d_v = d_h$, which is a fairly standard practice.}.
+
+The output of the whole layer is computed as:
+
+\begin{equation}
+    \Attention({\vec{Q}, \vec{K}, \vec{V}}) = \text{softmax}(\frac{\vec{Q}\vec{K}^T}{\sqrt{d_h}}) \vec{V} \,.
+\end{equation}
+
+First, the dot-product of the queries and keys is computed and scaled by $\frac{1}{\sqrt{d_k}}$. For large values of
+$d_k$ this helps to avoid the softmax function from saturating. Then the softmax function is applied to obtain the
+attention weights\footnote{Optionally, masking can be applied before softmax. For example in the \gls{nlp}, when
+    predicting the next token, the model is only allowed to look at the previous tokens, so all the tokens after the current
+    position are set to $-\infty$.}. Finally, the dot-product is computed with the values $\vec{V}$ to obtain the output of
+the layer.
+
+This mechanism enables the transformer to focus on different parts of the input data depending on the context provided
+by the query. In practice, applying multiple such heads in parallel was found to be more effective\footnote{We used 4
+    heads throughout all our experiments.}:
+
+\begin{align}
+    \MHA(\vec{Q}, \vec{K}, \vec{V}) & = \texttt{Concat}(\text{head}_1, \dots, \text{head}_h) \vec{W}_O \,,           \\
+    \text{where head}_i             & = \Attention(\vec{Q} \vec{W}_i^Q, \vec{K} \vec{W}_i^K, \vec{V} \vec{W}_i^V)\,.
+\end{align}
+
+Here, queries, keys, and values, are projected by different matrices $\vec{W}_i^Q, \vec{W}_i^K, \vec{W}_i^V$ to each
+head $i$, and then attention is applied in parallel. This allows the model to jointly attend to information from
+different representation subspaces at different positions. Then, the outputs of the heads are concatenated and projected
+to the desired dimensionality by the matrix $\vec{W}_O$.
+
+    {\fontsize{11}{10}\selectfont
+        \begin{align}
+            \label{eq:ftt}
+            \FTT(x)                 & = \Linear(\LayerNorm(\FTTBlock(\dots(\FTTBlock(\Embed(x)))))_1) \\
+            \FTTBlock(x)            & = \texttt{FeedForward}(x + \MHA(\LayerNorm(x)))                 \\
+            \texttt{FeedForward}(x) & = x + \Dropout(\Linear(\GELU(\Linear(\LayerNorm(x)))))
+        \end{align}
+    }
+
+The full transformer architecture is composed of multiple blocks which are applied after continuous and categorical
+features mapped to the embedding space. Each block consists of a \LayerNorm, \MHA, and two \Linear
+layers. The residual connections are applied after the \MHA, and one more time after at the end of each block.
+\LayerNorm layers are applied before each \MHA, and additionally before the first \Linear layer. After the first \Linear
+layer, a \GELU activation is applied. Additionally, \Dropout is applied in the end of the block before the residual
+connection.
+
+The output of the last block is passed to the \LayerNorm, and then the first token as taken and passed to the
+final \Linear layer to obtain the log probabilities (logits) The whole structure is formalized in
+\autoref{eq:ftt} as well as presented on the \autoref{fig:ftt}.
+
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.5\textwidth]{figures/ftt.pdf}
-    \caption{\gls{ftt} architecture.}
+    \includegraphics[width=0.5\textwidth]{figures/ftt.pdf} \caption{\gls{ftt} architecture.}
     \label{fig:ftt}
 \end{figure}
 
-\subsubsection{Flatten last layers ?}
+% \subsubsection{Post-norm vs pre-norm formulation}
 
-\todo{TODO}
+Since the original paper \cite{transformer}, not many things have changed with the transformer design. The notable
+change is that \LayerNorm layer has been moved from after the \MHA and \texttt{FeedForward} layers
+(post-norm formulation) to before them (pre-norm formulation). The pre-norm formulation has been shown to be more stable
+and easier to train \cite{pre-norm}. We also adopt this change, following \cite{ft-transformer}.
 
-Aside from the introduced handling of the missing/invalid values, there is one last difference from the original
-\gls{ftt}: instead of applying the \verb|MultiHeadAttention| layer in the end of the whole stack of blocks to obtain
-the logits, we use a fully-connected \verb|Linear| layer. I have no idea why I did this. The whole structure is shown
-on the \autoref{fig:ftt}.
+To conclude, transformers is a powerful architecture. Attention mechanism essentially represent a form of the
+computation and have shown to be able to approximate a wide range of functions really well. The parallelization
+possibility that comes with using modern \gls{gpu}s makes it possible to train such models very efficiently. The usage
+of residual connections and \LayerNorm layers makes it possible to train very deep models.
 
-\todo{TODO}
+In our experiments, we have observed that transformers have shown better regularization and better results. On the other
+hand, training requires much more more time and memory compared to the simple \glspl{resnet}, and produces a larger
+$\text{CO}_2$ footprint. The details about the training speeds are presented in the \appref{appendix:training-speed}.
+
+% \subsubsection{Flatten last layers ?}
+
+% \todo{TODO}
+
+% Aside from the introduced handling of the missing/invalid values, there is one last difference from the original
+% \gls{ftt}: instead of applying the \verb|MultiHeadAttention| layer in the end of the whole stack of blocks to obtain the
+% logits, we use a fully-connected \verb|Linear| layer. I have no idea why I did this. The whole structure is shown on the
+% \autoref{fig:ftt}.

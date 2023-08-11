@@ -6,10 +6,113 @@ normalized to have zero mean and unit variance. This is essential for the traini
 prevents the gradients from exploding or vanishing.
 
 However, this approach is far from optimal when working with the categorical features. The standard way of dealing with
-categorical features is to either use one-hot encoding, or use learnable embeddings. Throughout the work we use the
-latter. An embedding is a mapping from a discrete variable to a continuous vector space. An embedding is learned during
-the training of the network. An embedding layer is essentially a lookup table, where each row corresponds to a single
-category.
+categorical features is to either use one-hot encoding, or use learnable embeddings.
+
+Suppose we have categorical features $a, b, c, d$. Now let us focus a categorical feature $a$ with $n_a$ unique values.
+One-hot encoding would turn it into a vector of size $n_a$, with all the values being zero, except for the one
+corresponding to the value of the feature. Suppose, $a$ takes it's $j$-th unique value $a^j$. Then one-hot encoding
+would turn it into an $n_a$-dimensional vector with 1 at the $j$-th position and 0 everywhere else:
+
+\begin{equation}
+    a = a^j \xRightarrow[\text{one-hot}]{} \begin{pmatrix}
+        0 \\ \vdots \\ 1_\text{ at  $j$-th position} \\ \vdots \\ 0
+    \end{pmatrix}\,.
+\end{equation}
+
+
+Often, such one-hot encoded vector is then further multiplied with a learnable matrix $\vec{W}^a \in \mathbb{R}^{d_h
+        \times n_a}$, where $d_h$ is the dimensionality of the hidden layer. This operation can be implemented more
+efficiently as a lookup table:
+
+\begin{equation}
+    a = a^j \xRightarrow[\text{lookup}]{} ((\vec{W}^a)^T)_j = \vec{e}^{a^j}\,.
+\end{equation}
+
+Here we denote $\vec{e}^{a^j}$ as the embedded vector, corresponding to the feature $a$ and its $j$-th unique value
+$a^j$.
+
+Essentially, we construct a matrix with the number of rows corresponding to the number of unique values of the feature
+$n_a$, where each row is a vector of learnable weights of size $d_h$. As noted before, this reduces the space and time
+complexity, and so this is what is commonly used in practice.
+
+Often we would also like to learn affine embeddings instead of just linear ones:
+
+\begin{equation}
+    a = a^j \xRightarrow[\text{affine}]{} ((\vec{W}^a)^T)_j + \vec{b}^a = \vec{e}^{a^j}\,.
+\end{equation}
+
+Here $\vec{b}^a$ is a learnable bias vector of size $d_h$ for the feature $a$.
+
+Note that as embedding each categorical feature turns it to a 2-dimensional vector, we would need to combine it
+with the continuous features, which are 1D. We have explored two options: first would be to simply "flatten" the
+embeddings:
+
+\begin{align}
+    (\underbrace{x_1, \dots, x_n}_\text{continuous},
+    \underbrace{a, \dots, d}_\text{categorical})
+     & \xRightarrow[\text{embed}]{}
+    (\underbrace{x_1, \dots, x_n}_\text{continuous},
+    \underbrace{\begin{pmatrix}
+                        e^{a^j}_1 \\ \vdots \\ e^{a^j}_{d_h}
+                    \end{pmatrix}, \dots,
+    \begin{pmatrix}
+            e^{d^j}_1 \\ \vdots \\ e^{d^j}_{d_h}
+        \end{pmatrix}}_\text{categorical}) \\
+     & \xRightarrow[\text{flatten}]{}
+    (\underbrace{x_1, \dots, x_n}_\text{continuous},
+    \underbrace{\,\, e^{a^j}_1,\dots, e^{a^j}_{d_h}, \dots,
+        \,\, e^{d^j}_1, \dots, e^{d^j}_{d_h}}_\text{categorical}),\,
+\end{align}
+
+while the the second option would be to map each continuous feature $x^i$ to a $d_h$-dimensional space as well:
+
+\begin{equation}
+    x_i \xRightarrow[embed]{} x_i \, \vec{w}^i + \vec{b}^i = \vec{e}^{x_i}\,.
+\end{equation}
+
+\begin{equation}
+    \label{eq:full-embed}
+    (\underbrace{x_1, \dots, x_n}_\text{continuous},
+    \underbrace{a, \dots, d}_\text{categorical})
+    \xRightarrow[\text{embed}]{}
+    (\underbrace{\begin{pmatrix}
+            e^{x^1}_1 \\ \vdots \\ e^{x^1}_{d_h}
+        \end{pmatrix}, \dots,
+        \begin{pmatrix}
+            e^{x^n}_1 \\ \vdots \\ e^{x^n}_{d_h}
+        \end{pmatrix}}_\text{continuous},
+    \underbrace{\begin{pmatrix}
+            e^{a^j}_1 \\ \vdots \\ e^{a^j}_{d_h}
+        \end{pmatrix}, \dots,
+        \begin{pmatrix}
+            e^{d^j}_1 \\ \vdots \\ e^{d^j}_{d_h}
+        \end{pmatrix}}_\text{categorical})\,.
+\end{equation}
+
+For the \gls{ftt}, the \autoref{eq:full-embed} is necessary (see \autoref{sec:ftt}), as each attention layer operates
+on an array of 2D tokens, as opposed to an array of 1D features. For the \glspl{resnet}, however, we have found that
+such embeddings were completely unnecessary, suggesting that categorical features were not particularly useful in
+prediction.
+
+Furthermore, the dataset contains missing or invalid values for some samples.  Some\footnote{lep\_nTrackParticles\_0,
+    lep\_nTrackParticles\_1} features use -1 to indicate a missing value, some \footnote{taus\_passJVT\_0} use -99, and
+some\footnote{lep\_nInnerPix\_0, lep\_nInnerPix\_1, lep\_Mtrktrk\_atConvV\_CO\_0, lep\_Mtrktrk\_atPV\_CO\_1,
+    lep\_Mtrktrk\_atPV\_CO\_0, lep\_Mtrktrk\_atConvV\_CO\_1} use -999. To properly handle these, we introduce a separate
+category for them when the feature is categorical (as an invalid value is essentially an extra unique value, so the
+number of unique values for the feature would be automatically increased by 1). For continuous features, we replace the
+missing values with a learnable parameter\footnote{We have experimented with also setting such values to zero. We didn't
+    observe any notable difference with \glspl{resnet}, but for \gls{ftt} it seemed to have been an important
+    optimization to make (see \autoref{fig:learnable-nan-w}).} $w^\text{NaN}_i$ for each feature $x_i$:
+
+\begin{equation}
+    x_i \xRightarrow[\text{handle invalid values}]{} \begin{cases}
+        w^\text{NaN}_i & \text{if } x_i \text{ is missing or invalid} \\
+        x_i            & \text{otherwise}
+    \end{cases}\,.
+\end{equation}
+
+
+The whole structure of the pre-processing layer is shown on the \autoref{fig:preprocessing}.
 
 \begin{figure}[htb]
     \centering
@@ -18,16 +121,6 @@ category.
     \label{fig:preprocessing}
 \end{figure}
 
-Furthermore, the dataset sometimes contains missing or invalid values for some samples.
-Some\footnote{lep\_nTrackParticles\_0, lep\_nTrackParticles\_1} features use -1 to indicate a missing value, some
-\footnote{taus\_passJVT\_0} use -99, and some\footnote{lep\_nInnerPix\_0, lep\_nInnerPix\_1,
-    lep\_Mtrktrk\_atConvV\_CO\_0, lep\_Mtrktrk\_atPV\_CO\_1, lep\_Mtrktrk\_atPV\_CO\_0, lep\_Mtrktrk\_atConvV\_CO\_1}
-use -999. To properly handle these, we introduce a separate category for them when the feature is categorical. For
-continuous features, we replace the missing values with a learnable parameter\footnote{We have experimented with also
-    setting such values to zero. We didn't observe any notable difference with \glspl{resnet}, but for \gls{ftt} it
-    seemed to have been an important optimization to make (see \autoref{fig:learnable-nan-w}).}.
-
-The whole structure of the pre-processing layer is shown on the \autoref{fig:preprocessing}.
 
 \begin{figure}[htb]
     \centering
@@ -38,13 +131,4 @@ The whole structure of the pre-processing layer is shown on the \autoref{fig:pre
 
 Overall, with the 8 blocks \gls{resnet} with an embedding size of 64 we were able to achieve a significance $S = $
 \todo{???}, $\AUC_\tth = $ \todo{???}, $\AUC_\text{mean} = $ \todo{???}. The results are summarized on the
-\autoref{fig:resnet_results}.
-
-
-\begin{figure}[htb]
-    \centering
-    \includegraphics[width=0.5\textwidth]{example-image-b}
-    \caption{Resnet results.}
-    \label{fig:resnet_results}
-\end{figure}
-
+\autoref{tab:results}.

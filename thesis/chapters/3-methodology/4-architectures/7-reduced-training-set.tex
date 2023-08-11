@@ -1,17 +1,11 @@
 \section{Effect of the reduced training set size}
 
 Our extended training set contains roughly 8.7 million events. Combined with the fact that our \gls{nn} is quite large
-as well (about 4.5 million learnable parameters), the training takes a long time. We have thus decided to investigate
-the effect of the reduced training set size on the performance of the classifier.
+as well (about 4 million learnable parameters), the training takes a long time. We have thus decided to investigate
+the effect of the reduced training set size on the performance of the classifier, hoping that we can reduce the
+training time without sacrificing too much performance. The results are summarized on the \autoref{tab:reduced-training-set}.
 
-We have performed 5 experiments with 100\%, 80\%, 60\%, 40\%, and 20\% of the extended training set. The results are
-shown in \autoref{tab:reduced_training_set}. During each experiment, we have kept the same random seed to keep the
-initialization of the \gls{nn} the same. We also kept the same batch size and learning rate. The results show that the
-performance of the classifier do not degrade dramatically between 100\% and 80\% of the training set. Even 60\%-40\%
-provide good compromise between training time and performance. Such training set size of about 4 million events seem
-adequate to obtain some sufficiently good results. Of course, for maximum performance, it is best to use the full
-training set. When dropping to 20\% of the training set, the performance degrades significantly and does not accurately
-represent the full potential of the model.
+\todo{get results, fill the table, and then write the text}
 
 \begin{table}[htbp]
     \centering
@@ -27,5 +21,14 @@ represent the full potential of the model.
         \bottomrule
     \end{tabular}
     \caption{Effect of reduced training set size on classifier performance}
-    \label{tab:reduced_training_set}
+    \label{tab:reduced-training-set}
 \end{table}
+
+We have performed 5 experiments with 100\%, 80\%, 60\%, 40\%, and 20\% of the extended training set. The results are
+shown in \autoref{tab:reduced-training-set}. During each experiment, we have kept the same random seed to keep the
+initialization of the \gls{nn} the same. We also kept the same batch size and learning rate. The results show that the
+performance of the classifier do not degrade dramatically between 100\% and 80\% of the training set. Even 60\%-40\%
+provide good compromise between training time and performance. Such training set size of about 4 million events seem
+adequate to obtain some sufficiently good results. Of course, for maximum performance, it is best to use the full
+training set. When dropping to 20\% of the training set, the performance degrades significantly and does not accurately
+represent the full potential of the model.

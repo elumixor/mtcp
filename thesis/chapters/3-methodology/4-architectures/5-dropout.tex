@@ -1,25 +1,113 @@
-\subsection{Dropout}
+\subsection{Regularization, Ensembling, and Dropout}
 \label{sec:dropout}
 
-Regularization is a crucial component in training neural networks to prevent overfitting and improve generalization. One
-such regularization method used in our work is \emph{dropout}, which operates by randomly dropping out, or "turning
-off", a proportion of the neurons during training. Introduced by \cite{dropout}, this
-technique is simple and computationally efficient, and it has been widely adopted in the deep learning community.
+Regularization is a crucial component in training neural networks to prevent overfitting and improve generalization.
+From the \gls{erm} perspective, regularization can be viewed as constraining the hypothesis space $\mathcal{H}$.
+Given a hypothesis space $\mathcal{H}$ with VC dimension $d$, training set $\ttrn$ of size $N$, and a classifier
+$h^\ttrn$ training on that training set, for any $\delta > 0$ the following bound:
+
+\begin{equation}
+    \label{eq:generalization}
+    \underbrace{R(h^\ttrn) - R_\ttrn(h^\ttrn)}_\text{generalization error}
+    \leq 2\sqrt{\frac{2 d \log \frac{2N}{d} + 2 \log \frac{2}{\delta}}{N}}
+\end{equation}
+
+holds with probability at least $1 - \delta$ \cite{generalization-bound}.
+
+From this inequality, it follows that the generalization error can be reduced by increasing the size of the training
+set\footnote{\vspace{5pt}Because $\lim_{N \rightarrow \inf}\frac{\log N}{N} = 0$.}, or by reducing the VC dimension of the
+hypothesis space\footnote{$\frac{\partial}{\partial d} d \log \frac{2N}{d} = \frac{2N}{d} - 1$, which is larger than 0
+    when $d < \frac{2N}{e}$. In practice it is almost always true, it is uncommon to have VC dimension as
+    disproportionally large, compared to the training set size.}. The latter can be achieved by constraining the
+hypothesis space, which is precisely what regularization does.
+
+An example of a regularization technique is \emph{weight decay}, which operates by adding a penalty term to the loss
+function that penalizes large weights. This penalty term is typically proportional to the $L_2$ norm of the weights
+$\vec{w}$, and the regularization strength is controlled by a hyperparameter $\lambda$. We use a standard value of
+$0.01$ throughout our experiments.
+
+Another extremely popular regularization method is \emph{dropout}, which operates by randomly dropping out, or "turning
+off", a proportion of the neurons during training. Introduced by \cite{dropout}, this technique is simple and
+computationally efficient, and it has been widely adopted in the deep learning community.
 
 The dropout rate, the proportion of neurons to drop, is a hyperparameter that requires tuning. A moderate dropout rate
 (e.g., 0.5) introduces noise into the training process, which helps prevent the model from memorizing the training data
 and potentially improves generalization. However, a high dropout rate may hinder the learning process by adding too much
-noise, while a low dropout rate may not provide sufficient regularization, leading to overfitting.
+noise, while a low dropout rate may not provide sufficient regularization. Generally, for input neurons a dropout rate
+of 0.2 is recommended, while for hidden neurons a dropout rate of 0.5 is recommended \cite{dropout}. With \glspl{ftt},
+we have found that applying a dropout rate of 0.2 for all the layers worked best.
 
 From the perspective of model ensembling, dropout can be viewed as a way to implicitly create an ensemble of different
 "thinned" networks, which share parameters. The output of the network with dropout can be seen as an averaged prediction
 of these thinned networks. Ensembling typically provides a boost in model performance by aggregating predictions of
 diverse models, thus reducing the risk of overfitting to specific patterns in the training data.
 
+% You know, we can of course go here about bias-variance tradeoff, write info about some tree-based algorithms,
+% but why, man, nobody cares about it...
+
 In our experiments, applying dropout to the neural network architectures led to an improvement in generalization,
-reflected by a decrease in the gap between training and validation performance metrics. The exact numbers will be
-presented in the results section (\todo{XXX}).
+reflected by a decrease in the gap between training and validation performance metrics, decreased validation loss and
+increase in the \glspl{auc} of the \glspl{roc} curves. The detailed results are presented in the \autoref{tab:results}.
 
 Despite its advantages, dropout does introduce an additional layer of randomness into the training process, making the
-convergence slower and sometimes harder. Also, while dropout can improve generalization, it does not replace the need
-for sufficient training data, careful feature selection, and other components of a successful machine learning project.
+convergence slower and sometimes harder. It is crucial to first ensure that the model can fit the training data closely,
+even if it overfits, before applying dropout. Also, while dropout can improve generalization, it does not replace the
+need for sufficient training data (see \hyperref[sec:extended-set]{the next section}), careful feature selection, and other
+components of a successful machine learning project.
+
+
+
+
+
+
+
+
+
+
+% Recall, that the risk $R$ of a classifier $h$ is defined as the expected loss over the the joint probability
+% distribution $P(\vec{x}, y)$:
+
+% \begin{equation}
+%     R(h) = \mathbb{E}_{(\vec{x}, y) \sim P} \left[ L(y, h(\vec{x})) \right]\,.
+% \end{equation}
+
+% Now, this risk is in principle unknown, as we don't have access to the true distribution $P$. However, suppose we know
+% the true risk of the best possible classifier $h^* \in \mathbf{Y}^\mathbf{X}$, which we denote as $R^* = R(h^*)$.
+% Next, suppose we only consider classifiers in $\mathcal{H} \subset \mathbf{Y}^\mathbf{X}$. We can denote the best
+% possible classifier in this restricted hypothesis space as $h^\mathcal{H}$ and its true risk $R^\mathcal{H} =
+%     R(h^\mathcal{H})$. However, we also don't know what is the best classifier in $\mathcal{H}$, as we cannot calculate
+% the true risk. So in practice, we have a classifier as the output of some training algorithm $h^\ttrn =
+%     \mathcal{A}(\ttrn)$ that attempts to minimizes the empirical risk on the training set $\ttrn$. We can formulate its
+% true risk as:
+
+% \begin{equation}
+%     R(h^\ttrn) = R^* + \underbrace{(R^\mathcal{H} - R^*)}_{\text{approximation error}}
+%     + \underbrace{(R(h^\ttrn) - R^\mathcal{H})}_{\text{estimation error}}\,.
+% \end{equation}
+
+% Or, equivalently:
+
+% \begin{equation}
+%     \label{eq:risk-decomposition}
+%     \underbrace{R(h^\ttrn) - R^*}_{\text{excess error}} = \underbrace{(R^\mathcal{H} - R^*)}_{\text{approximation error}}
+%     + \underbrace{(R(h^\ttrn) - R^\mathcal{H})}_{\text{estimation error}}\,.
+% \end{equation}
+
+% The excess error is the difference between the true risk of our the classifier $h^\ttrn$ trained on the training
+% set\footnote{Note that it is still unknown.} and the true risk of the best possible classifier $h^*$ for the whole
+% distribution $P$. The excess error can be decomposed into the approximation error and the estimation error.
+
+% The approximation error is the difference between the true risk of the best possible classifier in the restricted
+% hypothesis space\footnote{For example, in our case we have restricted ourselves to different neural networks, and
+%     different classifiers in $\mathcal{H}$ might have different architectures and different weights, etc.}, and the
+% network that we have trained with our selected algorithm\footnote{A good algorithm can make the estimation error
+%     arbitrarily small if the training set has enough samples.}.
+
+% The estimation error, on the other hand, is the difference between the true risk of the best possible classifier in
+% $\mathcal{H}$.
+
+% From \autoref{eq:risk-decomposition} it follows there are two ways to reduce the excess error: either
+% by reducing the approximation error or by reducing the estimation error. The former can be achieved by considering a
+% "smaller" hypothesis space - then it may be easier to pick an algorithm that would produce the
+
+

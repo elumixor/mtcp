@@ -174,3 +174,35 @@ $\hat{\bm{\theta}}$ are the \glspl{mle} of $\mu$ and $\bm{\theta}$ respectively,
 This provides a powerful tool for identifying new phenomena in particle physics. If the significance of a signal exceeds
 a certain threshold (often $5\sigma$ in particle physics, corresponding to a $p$-value of about $3\cdot10^{-7}$), the
 signal is considered a discovery.
+
+For our experiments, we conduct the more precise calculation of significance once the best network is selected. However,
+to get an estimate of what we can expect, we use the approximation described above to calculate the significance during
+the model selection. It is important to note that when optimizing for significance, the \argmax strategy is usually not
+optimal, so the threshold scanning (or working point optimization) is performed (see \autoref{fig:threshold-scan}):
+
+\begin{figure}[htb]
+    \centering
+    \begin{subfigure}[t]{0.47\textwidth}
+        \includegraphics[width=\textwidth]{figures/ml/significance/yield.pdf}
+        \caption[Influence of the threshold on the \tth and background processes' yields.]
+        {Influence of the threshold on the \tth and background processes' yields. As the threshold increases,
+            the number of true positives, as well as false positives, decreases.}
+        \label{fig:signal-yield}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.47\textwidth}
+        \includegraphics[width=\textwidth]{figures/ml/significance/thresholds.pdf}
+        \caption[Influence of the threshold on the significance.]
+        {Influence of the threshold on the significance. Two approximations are used. As the threshold changes, the
+            significance changes accordingly. The threshold that maximizes the significance is chosen.}
+        \label{fig:threshold-scan}
+    \end{subfigure}
+    \hfill
+    \caption{Significance optimization.}
+    \label{fig:significance-optimization}
+\end{figure}
+
+When we start with a threshold of 0, all events are essentially get classified as \tth, producing a high number of true
+positives, but also a high number of false positives. As the threshold increases, the model gets more conservative and
+starts classifying fewer events as \tth, reducing the number of true positives and false positives. For each threshold,
+we compute both values for the significance and choose the threshold that maximizes the significance. As noted, this
+is only an approximation, and the significance is calculated again using the better statistical model of significance.

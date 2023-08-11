@@ -1,35 +1,39 @@
-\section{All classes vs signal and background only vs fine-tuning}
+\section{All classes vs signal and background only vs two-phase training}
 \label{sec:binary}
 
-
-Severin has experimented with formulating both the multiclass and binary classification formulations. The multiclass
-formulation is the most straightforward approach, where the model is trained to differentiate between all classes
-simultaneously. The binary formulation, on the other hand, is a more specialized approach, where the model is trained to
-distinguish between signal and background classes only. All the classes except for the signal are treated as background.
-This approach is motivated by the fact that the signal and background classes are the most important ones for the
-primary task of signal and background discrimination.
-
-Based on our observations, we find that when the model is trained to differentiate between all classes, it exhibits
-improved learning capabilities and can potentially extract more information from the input data. However, this approach
-also allocates resources towards separating individual background classes, which might not be necessary for the primary
-task of signal and background discrimination.
-
-Consequently, we propose an alternative strategy to leverage the model's resources more effectively. We initiate the
-training it on all available classes but once the good performance is reached, we switch to the binary formulation.
-Practically, it means that we are not penalizing the model for misclassifying the background classes (for example if the
-true class is $t\bar{t}W$, and the predicted one is $t\bar{t}Z$, we do not penalize the model for this
-misclassification). Doing so allows the model to focus on the primary task of signal and background discrimination.
-Thus, the model can learn shared underlying physics first, and then focus on the primary task of signal and background
+In \cite{severin}, the authors experimented with both multiclass and binary classification formulations. The multiclass
+formulation is a direct approach where the model is trained to differentiate among all classes simultaneously. In
+contrast, the binary formulation is a specialized approach where the model is trained to distinguish only between signal
+and background classes. All classes, except for the signal, are treated as background. This approach is motivated by the
+hypothesis that the model can concentrate more of its resources on the primary task of signal and background
 discrimination.
 
-The result are summarized on \autoref{fig:fine-tuning} which shows the progress on the AUC, and accuracy for
-differentiating signal from the background.  We can see that the multiclass formulation performs better than the binary
-one. The results are further improved by switching to the binary formulation once the good performance is reached.
+For \cite{severin}, based solely on the reported significance, the results were quite similar\footnote{Based solely on
+    significance, it is challenging to conclude which approach is superior.} for both formulations. However, our
+observations suggest that when the model is trained to differentiate among all classes, it demonstrates enhanced
+learning capabilities\footnote{Based on accuracy, \gls{auc}, and significance.} and can potentially extract more
+information from the input data (see \autoref{fig:two-phase-training}). This approach, however, also allocates resources
+towards distinguishing individual background classes, which might not be essential for the primary task of signal and
+background discrimination.
 
-\begin{figure}[htbp]
+Consequently, we propose an alternative strategy, which we refer to as "two-phase training," to utilize the model's
+resources more effectively. Initially, we train the model on all classes. Once satisfactory performance is achieved, we
+transition to the binary formulation. In practical terms, this means we no longer penalize the model for misclassifying
+among the background classes (e.g., if the true class is \ttw and the predicted one is \ttz, the prediction is still
+deemed correct since both processes are background). This strategy allows the model to focus on the primary task of
+signal and background discrimination after gleaning sufficient information from the distinctions among all classes. The
+model first learns the patterns in the underlying physics comprehensively and then hones its focus on the primary task.
+
+The results are summarized in \autoref{fig:two-phase-training}, showcasing the progress in AUC and accuracy for
+differentiating signal from background. It's evident that the multiclass formulation outperforms the binary one, and
+this performance is further enhanced when transitioning to the binary formulation after achieving good performance in
+the multiclass phase.
+
+
+\begin{figure}[htb]
     \centering
     \includegraphics[width=0.8\textwidth]{example-image-a}
     \caption{Comparison of the multiclass and binary formulations. The dashed line indicates the point where the model
-        switches from the multiclass to the binary formulation. (fine-tuning)}
-    \label{fig:fine-tuning}
+        switches from the multiclass to the binary formulation. (second-phase-training)}
+    \label{fig:two-phase-training}
 \end{figure}

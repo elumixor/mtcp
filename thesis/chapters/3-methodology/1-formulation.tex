@@ -246,6 +246,7 @@ the gradient even for very deep \glspl{nn}.
 
 
 \subsection{Cross-entropy loss}
+\label{sec:cross-entropy}
 
 In order for the back-propagation to work, all the functions must be differentiable. The zero-one loss function that we
 have used in the previous section does not conform to this requirement. In practice, when training \glspl{nn} on the
@@ -254,6 +255,7 @@ than on the predicted label, thus making it differentiable and suitable to be us
 The cross-entropy loss function is defined as:
 
 \begin{equation}
+    \label{eq:no-weight}
     L(y_i, \vec{h}(\vec{x}_i)) = -\sum_{j = 1}^{|\textbf{Y}|} \llbracket y_i = y_j \rrbracket \log(h_j(\vec{x}))\,.
 \end{equation}
 
@@ -270,6 +272,7 @@ consequences. To alleviate this issue, class weights can be introduced to the lo
 both classes. The modified loss function is:
 
 \begin{equation}
+    \label{eq:weight-per-class}
     L(y_i, \vec{h}(\vec{x}_i)) = -\sum_{j = 1}^{|\textbf{Y}|} \llbracket y_i = y_j \rrbracket w_j \log(h_j(\vec{x}))\,.
 \end{equation}
 
@@ -289,6 +292,7 @@ Similarly, the way the cross-entropy is defined, we can also introduce a more re
 case, the loss function would is defined as:
 
 \begin{equation}
+    \label{eq:weight-per-sample}
     L(y_i, \vec{h}(\vec{x}_i)) = -\sum_{j = 1}^{|\textbf{Y}|} \llbracket y_i = y_j \rrbracket w_i \log(h_j(\vec{x}))\,.
 \end{equation}
 

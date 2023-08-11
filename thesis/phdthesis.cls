@@ -276,7 +276,7 @@
 
 % Biblatex rutina pro pohodlne vkladani celych citaci do sekce Autorova citace
 \RequirePackage[style=ieee,backend=bibtex]{biblatex}
-\DeclareBibliographyCategory{fullcited}
+% \DeclareBibliographyCategory{fullcited}
 \newcommand{\bibentry}[1]{\fullcite{#1}\addtocategory{fullcited}{#1}}
 
 %% Par zakladnich veci

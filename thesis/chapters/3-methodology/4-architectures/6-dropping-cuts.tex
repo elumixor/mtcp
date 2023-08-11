@@ -1,21 +1,8 @@
 \section{Increasing statistics by dropping the cuts}
 \label{sec:extended-set}
 
-Our goal is to train a classifier, that would be able to perform well on the events inside our \gls{sr}. However, the
-\gls{sr} is a very small region of the phase space, and the number of events in it is very small. This makes it
-difficult to train a classifier that would be able to generalize well. In this section, we explore the possibility of
-dropping the cuts and training the classifier on the space of all the events from the simulated dataset (except for the
-validation/test sets). The reasoning behind this is that the classifier would be able to learn the structure of the
-structure of events in the \gls{sr} from the events outside of it, as all share the same underlying physics, which would
-be captured in the hidden layers of the network.
-
-A somewhat similar approach was proposed by Nello and Simonetta, where they drop the PLIV cuts to obtain higher number
-of samples for the $t\bar{t}$ events. They train a BDT on that extended dataset which achieves a better performance. In
-order to do so, however, the re-weighting procedure is used to make the distributions the same as in SR.
-
-When dropping all the cuts, such re-weighting should also be considered. However, we should also consider other factors
-such as the class imbalance in terms of the raw (unweighted) events, and how it influences the final performance on the
-SR. See section \ref{sec:weights} for more details.
+As seen from the \autoref{eq:generalization}, one of the best ways to improve the generalization of the classifier is to
+increase the number of samples. This is the most reliable way to improve the performance of the classifier.
 
 \cite{tabular} explores why deep neural networks despite having shown a great performance on a variety of tasks such as
 computer vision, natural language processing, and speech recognition, have not been widely adopted in the tabular data
@@ -24,19 +11,62 @@ difficult to train a deep neural network which would generalize well. Random for
 perform much better in this domain. However, as the number of samples increases, the performance of deep neural networks
 improves and becomes comparable to the other methods.
 
-The whole size of the simulated dataset contains 8.7M raw events. By applying the cuts, we are left with only 24K events
-(0.3\%) inside the SR. After splitting this set further into 80\% training, and 20\% validation sets, we are left with
-only 19K events for training. This is a very small number of samples to train a deep neural network on. Some classes
-such as $t\bar{t}$ are very underrepresented in the training set, having as little as ~10 samples. This makes it
-essentially impossible to train a classifier that would be able to generalize well. Furthermore, the weight associated
-with these events is usually very high, which then results in a high loss, poor accuracy, etc. By extending the training
-set to include all the events except for the validation/test sets, we increase the number of samples by a factor of
-~400. This results in a much better performance, especially for the underrepresented classes such as $t\bar{t}$.
-\autoref{fig:datasets} shows how the dataset is split into training, validation, and test sets.
+As noted before (see \autoref{tab:class_distributions}), the number of samples in the \gls{sr} is very small to allow
+for a reliable training of deep \glspl{nn}. Moreover, some classes such as \ttbar are extremely underrepresented,
+where the \gls{sr} contains only 3 samples of them. Furthermore, the relative event weight
+$\frac{n_\text{raw}}{n_\text{weighted}}$ associated with these events is usually very high, hence misclassifications
+impact the metrics severely in a negative way.
+
+Ultimately, our goal is to train a classifier, that would be able to perform well on the events inside our \gls{sr}.
+However, we can exploit the fact that events outside the \gls{sr} likely share the same underlying physics and are not
+completely unrelated to the \gls{sr}. In other words:
+
+\begin{enumerate}
+    \item We suppose there is a joint distribution, $P_\text{SR}(\vec{x}, y)$, from which we have sampled a
+          training dataset $\ttrn \sim P_\text{SR}(\vec{x}, y)$. All the previous works have used such training set.
+    \item We further suppose that there is a joint distribution $P(\vec{x}, y)$, such that $P_\text{SR} \subset
+              P(\vec{x}, y)$. This is a more general distribution, which represents more general physics, related to
+          all of the events.
+    \item Thus we suppose that by by learning from the more general distribution $P$ would allow us to generalize
+          better, while having more samples (statistics) to train on. We thus propose include these samples, which lie
+          outside the signal region into the training set, and train the classifier on the extended training set
+          $\ttrn_\text{ext}$, while keeping the validation set the same.
+\end{enumerate}
+
+A somewhat similar approach was proposed by the BDT group \todo{how to cite/mention properly}, where they drop some of
+the cuts\footnote{PLIV cuts, specifically - see \autoref{appendix:cut-expression}} to obtain higher number
+of samples for the \ttbar events. Similarly to our work, they have reported an increased classification performance.
+
+An important detail is, however, accounting for the event weights. When we change the cut expression, the distribution
+of events changes as well. We thus need to apply the correct scaling to each class to keep the total number of weighted
+events the same as in the \gls{sr}. This is precisely what is done in the BDT working group \todo{agian, how to mention?}.
+In our experiments, however, we have not observed any particular difference with training with or without weights,
+however, the subject requires more investigation (see \autoref{sec:weights}).
+
+We should be careful to keep the validation set the same as it was (composed solely of events inside
+\gls{sr}), as we would like the evaluations to be unaffected by the change of the cut expression. Otherwise we would be
+potentially reporting results on very different region than \gls{sr} or even \lss. \autoref{fig:datasets} illustrates
+the relationship between the standard, extended training sets, as well as the validation set.
+
+
+% By extending the training
+% set to include all the events except for the validation/test sets, we increase the number of samples by a factor of
+% ~400. This results in a much better performance, especially for the underrepresented classes such as $t\bar{t}$.
+% \autoref{fig:datasets} shows how the dataset is split into training, validation, and test sets.
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.5\textwidth]{figures/datasets.pdf}
-    \caption{Splitting the dataset into training, validation, and test sets.}
+    \includegraphics[width=0.8\textwidth]{figures/datasets.pdf}
+    \caption[Training and validation sets, as well the extended training set.]
+    {Training and validation sets, as well the extended training set. Extended training set is mostly (99.7\%)
+        comprised of events outside the \gls{sr}. Validation set is kept the same as before, to ensure that the
+        evaluation is not affected by the change of the cut expression. The train-validation split is 80-20.}
     \label{fig:datasets}
 \end{figure}
+
+We have observed experimentally that extending the training set has a significant impact on performance. There is an
+increase along all the metrics (see \autoref{tab:results}). The most significant improvement is observed for the
+underrepresented classes, such as \ttbar. Even though we are most interested in the discriminative performance for the
+\tth, we have observed that correctly recognizing each background class has a positive impact on the accuracy of the
+prediction for the \tth as well. Furthermore, a model that has a  good performance on differentiating between all the
+classes has more potential in a subsequent fine-tuning to the binary classification (see \autoref{sec:binary}).
