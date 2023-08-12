@@ -7,22 +7,12 @@ training time without sacrificing too much performance. The results are summariz
 
 \todo{get results, fill the table, and then write the text}
 
-\begin{table}[htbp]
+\begin{figure}[htb]
     \centering
-    \begin{tabular}{rrr}
-        \toprule
-        \textbf{Training Set Size (\%)} & \textbf{Accuracy (\%)} & \textbf{Training Time per 100 Epochs} \\
-        \midrule
-        100                             & 95.2                   & 20 minutes                            \\
-        80                              & 94.8                   & 16.7 minutes                          \\
-        60                              & 93.5                   & 13.3 minutes                          \\
-        40                              & 91.2                   & 10 minutes                            \\
-        20                              & 87.3                   & 6.7 minutes                           \\
-        \bottomrule
-    \end{tabular}
+    \includegraphics[width=0.5\textwidth]{example-image-a}
     \caption{Effect of reduced training set size on classifier performance}
     \label{tab:reduced-training-set}
-\end{table}
+\end{figure}
 
 We have performed 5 experiments with 100\%, 80\%, 60\%, 40\%, and 20\% of the extended training set. The results are
 shown in \autoref{tab:reduced-training-set}. During each experiment, we have kept the same random seed to keep the

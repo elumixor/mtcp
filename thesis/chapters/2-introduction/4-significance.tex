@@ -165,41 +165,40 @@ uncertainties (\autoref{ch:Evaluation}, \cite{pract-stat-lhc, statistical} for m
 \end{align}
 
 where $L$ is the profile likelihood
-function\footnote{\url{https://statisticalmethods.web.cern.ch/StatisticalMethods/statisticaltests}}, $\mu$ is the
-parameter of interest\footnote{For our case specifically, $\mu$ refers to the signal strength, and so it is set to $0$
-    as the null hypothesis assumes that there is no signal.}, $\bm{\theta}$ are the \glspl{np}, $\hat{\mu}$ and
-$\hat{\bm{\theta}}$ are the \glspl{mle} of $\mu$ and $\bm{\theta}$ respectively, and $\hat{\hat{\bm{\theta}}}$ is the
-\gls{mle} of $\bm{\theta}$ for a fixed value of $\mu$.
+function\footnote{\url{https://statisticalmethods.web.cern.ch/StatisticalMethods/statisticaltests}}, (see also
+\autoref{eq:likelihood}), $\mu$ is the parameter of interest\footnote{For our case specifically, $\mu$ refers to the
+    signal strength, and so it is set to $0$ as the null hypothesis assumes that there is no signal.}, $\bm{\theta}$ are
+the \acrfullpl{np}, $\hat{\mu}$ and $\hat{\bm{\theta}}$ are the \glspl{mle} of $\mu$ and $\bm{\theta}$ respectively, and
+$\hat{\hat{\bm{\theta}}}$ is the \gls{mle} of $\bm{\theta}$ for a fixed value of $\mu$.
 
 This provides a powerful tool for identifying new phenomena in particle physics. If the significance of a signal exceeds
 a certain threshold (often $5\sigma$ in particle physics, corresponding to a $p$-value of about $3\cdot10^{-7}$), the
 signal is considered a discovery.
+
+\begin{figure}[htb]
+    \centering
+    \begin{subfigure}[t]{0.47\textwidth}
+        \includegraphics[width=\textwidth]{figures/ml/significance/yield.pdf}
+        \caption{Selected events.}
+        \label{fig:signal-yield}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.47\textwidth}
+        \includegraphics[width=\textwidth]{figures/ml/significance/thresholds.pdf}
+        \caption{Significance}
+        \label{fig:threshold-scan}
+    \end{subfigure}
+    \hfill
+    \caption[Influence of the threshold on the significance]
+    {Influence of the threshold on the significance. Two approximations are used. As the threshold changes, the
+        significance changes accordingly. The threshold that maximizes the significance is chosen.}
+    \label{fig:significance-optimization}
+\end{figure}
 
 For our experiments, we conduct the more precise calculation of significance once the best network is selected. However,
 to get an estimate of what we can expect, we use the approximation described above to calculate the significance during
 the model selection. It is important to note that when optimizing for significance, the \argmax strategy is usually not
 optimal, so the threshold scanning (or working point optimization) is performed (see \autoref{fig:threshold-scan}):
 
-\begin{figure}[htb]
-    \centering
-    \begin{subfigure}[t]{0.47\textwidth}
-        \includegraphics[width=\textwidth]{figures/ml/significance/yield.pdf}
-        \caption[Influence of the threshold on the \tth and background processes' yields.]
-        {Influence of the threshold on the \tth and background processes' yields. As the threshold increases,
-            the number of true positives, as well as false positives, decreases.}
-        \label{fig:signal-yield}
-    \end{subfigure}
-    \begin{subfigure}[t]{0.47\textwidth}
-        \includegraphics[width=\textwidth]{figures/ml/significance/thresholds.pdf}
-        \caption[Influence of the threshold on the significance.]
-        {Influence of the threshold on the significance. Two approximations are used. As the threshold changes, the
-            significance changes accordingly. The threshold that maximizes the significance is chosen.}
-        \label{fig:threshold-scan}
-    \end{subfigure}
-    \hfill
-    \caption{Significance optimization.}
-    \label{fig:significance-optimization}
-\end{figure}
 
 When we start with a threshold of 0, all events are essentially get classified as \tth, producing a high number of true
 positives, but also a high number of false positives. As the threshold increases, the model gets more conservative and

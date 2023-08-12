@@ -31,19 +31,11 @@ significant improvements. We have attempted several strategies:
 
 Unfortunately, any of the weighting methods did not produce any noticeable increase in performance. Training with
 disregarding the weights completely turned out to be most effective. The results are summarized in
-\autoref{tab:weights}.
+\autoref{fig:weights}.
 
-\begin{table}[htb]
+\begin{figure}[htb]
     \centering
-    \begin{tabular}{ccc}
-        \toprule
-        Loss Function                      & Accuracy & AUC  \\
-        \midrule
-        Cross-Entropy                      & 0.85     & 0.91 \\
-        Cross-Entropy with Class Weights   & 0.87     & 0.93 \\
-        Sample-wise Weighted Cross-Entropy & 0.88     & 0.94 \\
-        \bottomrule
-    \end{tabular}
-    \caption{Comparison of different loss functions.}
-    \label{tab:weights}
-\end{table}
+    \includegraphics[width=0.5\textwidth]{example-image-a}
+    \caption{Comparison of different weighting strategies.}
+    \label{fig:weights}
+\end{figure}

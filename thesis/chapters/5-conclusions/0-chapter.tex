@@ -1,35 +1,24 @@
-\chapter{Conclusions}
-\label{ch:Conclusions}
+\chapter*{Conclusions}
+\addcontentsline{toc}{chapter}{Conclusions}
+\label{ch:conclusions}
 
 In this thesis, we have developed and employed advanced machine learning techniques to improve the identification of the
-ttH process in the ATLAS data at CERN. The results of this work advance upon previous efforts by Severin König and Jan
-Presperín \cite{severin, jan}, who established an effective baseline using feed-forward neural networks and grid search
-optimization techniques.
+\tth process. The results of this work advance upon previous efforts in the field, demonstrating the potential of
+machine learning to enhance the identification of the \tth process.
 
-This research demonstrates the capacity of more complex machine learning models, such as residual neural networks
-(ResNets) and Feature Tokenizer - Transformers (FT-Transformers), to enhance the classification performance.
-Specifically, these architectures provided a significant performance boost when trained on an extended training dataset,
-showcasing the importance of a substantial and diverse dataset for model training in particle physics.
+This research explored the usage of a transformer architecture, adapted for the tabular data (\gls{ftt}),
+particularly in the domain of particle physics and event selection.
 
-A significant innovation in this thesis was the application of systematic uncertainties to the ttH analysis, introducing
-a higher level of complexity to the analysis. Even though these uncertainties pose a considerable challenge, we showed
-that they can be effectively managed with the use of the TRExFitter program. This additional step in the ttH analysis
-underscores the multifaceted nature of machine learning applications in particle physics, incorporating not only
-statistical, but also systematic uncertainties.
+Additionally, the thesis investigated the impact of dropping the selection cuts and training on the extended training
+set. Combined with the large \gls{nn} models, this approach yielded a significant increase in performance, showcasing
+the importance of a substantial and diverse dataset for model training in particle physics.
+
+Evaluation of systematic uncertainties was a new step in the \tth analysis, the ranking of the uncertainties was
+performed, and the measurement precision on the median strength parameter $\mu$ was estimated.
 
 Moreover, we have addressed a flaw in the previous analysis where event weights were not used in the computation of the
-Receiver Operating Characteristic (ROC) curves. The inclusion of event weights, which scale the distribution of the
-simulated dataset to match the real data, proved essential in evaluating classifier performance and accuracy.
+\gls{roc} curves.
 
 The binary and multi-class prediction problems were investigated, and it was found that differentiating between all the
-classes yielded better results. This insight further supports the need for granular and precise classification methods
-in ttH identification.
-
-Moving forward, this research opens several avenues for future exploration. Fine-tuning the models by initially training
-on a multi-class prediction problem and subsequently transitioning to binary classification could potentially enhance
-performance even further. Further research could also explore other regularization techniques and model architectures to
-continue advancing the state-of-the-art in ttH process identification.
-
-In conclusion, this work represents a significant contribution to the field, enhancing the identification of the ttH
-process and offering novel approaches and techniques that could be instrumental in future research in particle physics.
-As the field continues to evolve, these methodologies provide a robust foundation upon which to build and explore.
+classes yielded better results. Furthermore, the two-phase training process is proposed, where the model is initially
+trained on the multi-class prediction problem and subsequently switched to binary classification.

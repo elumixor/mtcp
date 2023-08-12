@@ -1,75 +1,154 @@
-\chapter{Evaluating of Uncertainties}
+\chapter{Evaluation of Uncertainties}
 \label{ch:Evaluation}
 
-Uncertainty estimation forms the bedrock of any experimental research, including the search for the ttH process in our
-study. It serves as a quantifier of the confidence in our results, ensuring that our findings are not merely the
-consequence of random fluctuations or approximations made during analysis. Particularly, we focus on the uncertainties
-associated with our estimate of the significance of the ttH signal. Significance, in the context of our analysis, is a
-measure of how confidently we can claim the presence of the ttH process amidst the background noise. As such, accurately
-estimating its uncertainty is crucial as it sets the boundary between discovery and mere chance. This aspect is
-especially vital when claiming the observation of new physics, as we seek to minimize the possibility of a false
-discovery. In the following sections, we delve deeper into the sources of uncertainties that we account for in our
-study: statistical uncertainties, which arise due to limited data, and systematic uncertainties, resulting from
-potential biases and approximations in our experimental setup and data analysis.
+This section presents the estimation of the statistical and systematic uncertainties on the median signal strength
+$\mu$. $\mu$ is defined as a scale factor, applied to the number of the signal events, such that the sum of the scaled
+signal $s$ and background $b$ events matches the observed data $n$:
+
+\begin{equation}
+    b + \mu \cdot s = n
+\end{equation}
+
+% \todo{How do we relate $\mu$ and significance? The whole thesis is mainly about significance...}
+% Hmmm, so I think we construct the Asimov dataset, and estimate hte median significance from that.
+
+Estimation of the uncertainties on the $\mu$ is done by performing a fit to the Asimov dataset \cite{statistical}, where
+we assume $n = b + s$, thus $\mu = 1$. The Asimov dataset is a representative data set that provides a
+simple method to obtain the median experimental sensitivity of a search or measurement as well as fluctuations about
+this expectation. It is used to estimate the median significance by replacing the ensemble of simulated data sets by a
+single representative one.
+
+% which is a measure of the significance of the ttH signal. In this chapter, we discuss the sources of
+% significance of the ttH signal. Significance, in the context of our analysis, is a measure of how confidently we can
+% claim the presence of the ttH process amidst the background noise. As such, accurately estimating its uncertainty is
+% crucial as it sets the boundary between discovery and mere chance. This aspect is especially vital when claiming the
+% observation of new physics, as we seek to minimize the possibility of a false discovery. In the following sections, we
+% delve deeper into the sources of uncertainties that we account for in our study: statistical uncertainties, which arise
+% due to limited data, and systematic uncertainties, resulting from potential biases and approximations in our
+% experimental setup and data analysis.
+
+To perform statistical testing, the binned profile likelihood method is used. The binned profile likelihood is a
+statistical method commonly used in high-energy physics, especially in the context of searches for new phenomena or
+precision measurements. It's a variant of the profile likelihood method adapted for histogram-like (binned) data.
+
+Each bin has a count representing the number of events or occurrences in that bin. When applying the profile likelihood
+method to binned data, one constructs a likelihood based on the expected number of events in each bin and the observed
+number of events. The expected number of events is typically a function of both the parameters of interest and the
+nuisance parameters.
+
+The likelihood for each bin $i$, given a signal strength parameter $\mu$, background $b$, and observed data $n$
+is modeled as a Poisson distribution:
+
+\begin{equation}
+    \label{eq:likelihood}
+    L(\mu, \vec{\theta}) = \prod_{j=1}^{N} \frac{(\mu s_j + b_j)^{n_j}}{n_j!} e^{-(\mu s_j + b_j)} \,
+    \prod_{k=1}^{M} \frac{u_k(\vec{\theta})^{m_k}}{m_k!} e^{-u_k(\vec{\theta})}
+\end{equation}
+
+The first part of the equation models the likelihood of observing the parameter of interest $\mu$ given the binned
+distribution. Here $N$ is the number of bins, $s_j$ is the number of signal events in bin $j$, $b_j$ is the
+number of background events in bin, $n_j = s_j + b_j$ is the total number of events in bin $j$. We have used the
+distribution of the \gls{nn} output as the binned distribution (\autoref{fig:nn-output}), however any variable can be
+used in principle. The automatic binning was used in order to make sure there is a relatively equal number of events in
+each bin.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\textwidth]{figures/nn-output.pdf}
+    \caption{The distribution of the \gls{nn} output for the signal and background events.}
+    \label{fig:nn-output}
+\end{figure}
+
+The second part of the equation models the likelihood of observing the nuisance parameters $\vec{\theta}$ given some
+control sample. Here $M$ is the number of bins in the control sample, $m_k$ is the number of events in bin $k$, and
+$u_k(\vec{\theta})$ are calculable quantities that depend on the nuisance parameters $\vec{\theta}$ \cite{statistical}.
+When maximizing the likelihood with respect to the nuisance parameters, such $\vec{\theta}$ are taken, which produce
+the maximum values for the quantities $u_k(\vec{\theta})$. Essentially, this allows us to generate a control sample
+(for example with a different \gls{mc} generator) and use it to estimate the nuisance parameters.
 
 \section{Statistical Uncertainties}
 
 Statistical uncertainties emerge from the inherently stochastic nature of the data collection process, particularly due
 to the limited size of our data sample. This type of uncertainty, which decreases as we accumulate more data, is tied to
-our estimate of the significance of the ttH signal.
+our estimate of the significance of the \tth signal.
 
-The significance in our analysis is closely related to the $\mu$ parameter, or the median signal strength. This
-parameter scales the expected number of signal events such that the sum of the scaled signal events and background
-events matches the observed data: $n_{\text{background}} + \mu \cdot n_{\text{signal}} = n_{\text{data}}$.
+The best fit results when only statistical uncertainties corresponds to the measurement precision of:
 
-However, the actual number of observed events ($n_{\text{data}}$) is not known at the time of model training and
-validation. To handle this, we perform what's known as an "Asimov fit". In an Asimov fit, we assume that the actual data
-perfectly follows our model prediction. In other words, we operate under the assumption that $\mu$ is 1 - that is, the
-observed data is a perfect mixture of background and signal events as predicted by our model. While this assumption may
-not hold in reality, the Asimov fit allows us to gain crucial insights into the behavior of our model and estimate
-uncertainties related to the significance of our signal.
-
-By performing the Asimov fit, we can gauge the spread in possible values for our significance, indicating the
-statistical uncertainty. This aids in understanding the reliability of our results and the range within which the true
-value of our signal's significance is likely to fall with a 95\% confidence level.
-
-With the established method, we perform our analysis to estimate the statistical uncertainties associated with our
-significance. The estimated bounds of the median signal strength $\mu$ from the Asimov fit are found to be:
-
-% $$
-$\mu$ = 1 + \todo{XXX} - \todo{XXX}
-% $$
-
-This result gives us a measure of the precision of our significance estimate.
-Alternatively, to achieve the desired 95\% confidence level, we would need to multiply the cross section by a factor of
-\todo{XXX}.
+\begin{figure}
+    \centering
+    \includegraphics[trim=0 0 7cm 0, clip, width=0.8\textwidth]{figures/uncertainty/stats.pdf}
+    \caption{The relative uncertainties on the median signal strength $\mu$ for the \tth process including statistical
+        uncertainties only.}
+    \label{fig:stat}
+\end{figure}
 
 \section{Systematic Uncertainties}
 
 Systematic uncertainties in particle physics originate from a wide range of sources, with several pertinent to our
 analysis:
 
-Luminosity Uncertainty: The luminosity of the accelerator, or the number of particles within a beam per unit area, is a
-fundamental parameter in any experiment. Uncertainties in the measurement of luminosity can translate into uncertainties
-in the overall scale of the data.
+\begin{itemize}
 
-Electron and Muon Uncertainty: The identification, reconstruction, and isolation of electrons and muons can have
-associated uncertainties. Differences in efficiencies between data and simulation can result in systematic errors.
+    \item Luminosity Uncertainty: The luminosity of the accelerator, or the number of particles within a beam per unit
+          area, is a fundamental parameter in any experiment. Uncertainties in the measurement of luminosity can
+          translate into uncertainties in the overall scale of the data.
 
-Next Leading Order (NLO) Uncertainty: Predictions of the rates for various processes are typically calculated to leading
-order (LO) or next-to-leading order (NLO) in perturbation theory. The precision of these predictions is limited by the
-order to which they are calculated, with higher-order terms introducing potential systematic uncertainties.
+    \item Electron and Muon Uncertainty: The identification, reconstruction, and isolation of electrons and muons can
+          have associated uncertainties. Differences in efficiencies between data and simulation can result in
+          systematic errors.
 
-Final State Radiation (FSR) and Initial State Radiation (ISR) Uncertainties: These uncertainties are associated with the
-additional emission of photons from the initial or final state particles. While these effects are included in
-simulations, they are based on theoretical models and can have associated uncertainties.
+    \item Next Leading Order (NLO) Uncertainty: Predictions of the rates for various processes are typically calculated
+          to leading order (LO) or next-to-leading order (NLO) in perturbation theory. The precision of these
+          predictions is limited by the order to which they are calculated, with higher-order terms introducing
+          potential systematic
+          uncertainties.
 
-When these systematic uncertainties are combined with the statistical ones, we perform a fit to estimate the bounds on
-the signal strength $\mu$. The bounds from this combined fit are found to be:
+    \item Final State Radiation (FSR) and Initial State Radiation (ISR) Uncertainties: These uncertainties are
+          associated with the additional emission of photons from the initial or final state particles. While these
+          effects are included in simulations, they are based on theoretical models and can have associated
+          uncertainties.
 
-% $$
-$\mu$ = 1 + \todo{XXX} - \todo{XXX}
-% $$
+    \item Modeling Uncertainties for Each Class: Each class or category of events you're analyzing (e.g., \tth,
+          \ttw, \ttz, etc.) may have associated modeling uncertainties. These arise due to potential differences
+          between the simulation and the actual experimental data. The uncertainties can stem from the choice of event
+          generator, the specific model assumptions for the process in question, or the parameters used in the
+          simulation.
 
-This can be translated into the required increase in cross-section to reach the 95\% confidence
-level, yielding a factor of \todo{XXX}.
+    \item Cross-Section Uncertainties: The cross-section of a process is a measure of the likelihood of that process
+          occurring. In particle physics, theoretical calculations predict these cross-sections, but they come with
+          uncertainties. These uncertainties can be due to missing higher-order terms, variations in parton distribution
+          functions, or other theoretical approximations.
+
+    \item Electron JET Modelling: Generally, modeling of electron jets or their interactions and behaviors inside
+          detectors can introduce uncertainties. This is because actual jet formation and detection can be complex, with
+          many overlapping signals and backgrounds. Variations between the simulated and actual jet properties can lead
+          to systematic errors.
+
+    \item Generator Uncertainties: These are uncertainties associated specifically with the event generators (e.g.,
+          Pythia, Sherpa\footnote{https://sherpa-team.gitlab.io/}). Event generators use a myriad of theoretical
+          approximations and models to simulate particle collisions. Each generator has its strengths and weaknesses,
+          and switching from one to another or even using different versions/settings of the same generator can yield
+          different results.
+\end{itemize}
+
+When these systematic uncertainties are combined with the statistical ones, the measurement precision becomes:
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[trim=0 0 7cm 0, clip, width=0.8\textwidth]{figures/uncertainty/sys.pdf}
+    \caption{The relative uncertainties on the median signal strength $\mu$ for the \tth process including statistical
+        and systematic uncertainties.}
+    \label{fig:sys}
+\end{figure}
+
+An important aspect of the analysis of the systematic uncertainties is the ranking plot. The ranking plot shows the
+relative impact of each systematic (or statistical - denoted by $\gamma$) uncertainty on the final result.
+The ranking plot for the \tth process is shown in \autoref{fig:ranking}. The uncertainties are ranked in descending
+order of their impact on the final result. Top 20 uncertainties are shown.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{figures/uncertainty/ranking.pdf}
+    \caption[The ranking plot for the uncertainties.]{The ranking plot for the uncertainties.}
+    \label{fig:ranking}
+\end{figure}
