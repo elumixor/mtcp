@@ -4,11 +4,11 @@
 Regularization is a crucial component in training neural networks to prevent overfitting and improve generalization.
 From the \gls{erm} perspective, regularization can be viewed as constraining the hypothesis space $\mathcal{H}$.
 Given a hypothesis space $\mathcal{H}$ with VC dimension $d$, training set $\ttrn$ of size $N$, and a classifier
-$h^\ttrn$ training on that training set, for any $\delta > 0$ the following bound:
+$h^{\ttrn}$ training on that training set, for any $\delta > 0$ the following bound:
 
 \begin{equation}
     \label{eq:generalization}
-    \underbrace{R(h^\ttrn) - R_\ttrn(h^\ttrn)}_\text{generalization error}
+    \underbrace{R(h^{\ttrn}) - R_\ttrn(h^{\ttrn})}_\text{generalization error}
     \leq 2\sqrt{\frac{2 d \log \frac{2N}{d} + 2 \log \frac{2}{\delta}}{N}}
 \end{equation}
 

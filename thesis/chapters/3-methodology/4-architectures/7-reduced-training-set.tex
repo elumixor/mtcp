@@ -5,20 +5,18 @@ as well (about 4 million learnable parameters), the training takes a long time. 
 the effect of the reduced training set size on the performance of the classifier, hoping that we can reduce the
 training time without sacrificing too much performance. The results are summarized on the \autoref{tab:reduced-training-set}.
 
-\todo{get results, fill the table, and then write the text}
-
 \begin{figure}[htb]
     \centering
-    \includegraphics[width=0.5\textwidth]{example-image-a}
-    \caption{Effect of reduced training set size on classifier performance}
+    \includegraphics[width=\textwidth]{figures/ml/fraction/results.pdf}
+    \caption[Effect of reduced training set size on classifier performance]
+    {Effect of reduced training set size on classifier performance. \gls{ftt} with 2 blocks was used.}
     \label{tab:reduced-training-set}
 \end{figure}
 
-We have performed 5 experiments with 100\%, 80\%, 60\%, 40\%, and 20\% of the extended training set. The results are
+We have performed 4 experiments with 100\%, 50\%, 10\%, and 5\% of the extended training set \ttrn. The results are
 shown in \autoref{tab:reduced-training-set}. During each experiment, we have kept the same random seed to keep the
 initialization of the \gls{nn} the same. We also kept the same batch size and learning rate. The results show that the
-performance of the classifier do not degrade dramatically between 100\% and 80\% of the training set. Even 60\%-40\%
-provide good compromise between training time and performance. Such training set size of about 4 million events seem
-adequate to obtain some sufficiently good results. Of course, for maximum performance, it is best to use the full
-training set. When dropping to 20\% of the training set, the performance degrades significantly and does not accurately
-represent the full potential of the model.
+performance of the classifier does not degrade significantly from 100\% and 50\%. Such training set size of about 4
+million events seem adequate to obtain some sufficiently good results. Of course, for maximum performance, it is best to
+use the full training set. When dropping to 10\% or 5\% of the training set, the performance degrades significantly,
+but is nevertheless much better than when the standard training set \ttrn is used.

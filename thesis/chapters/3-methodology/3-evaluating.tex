@@ -24,7 +24,7 @@ The confusion matrix provides a comprehensive view of the classifier's performan
 is a $2\times2$ matrix where the rows correspond to the true classes and the columns correspond to the predicted classes:
 
 \begin{equation}
-    \mathbf{C}_\bin = \begin{pmatrix}
+    \Cbin = \begin{pmatrix}
         \text{TP} & \text{FP} \\
         \text{FN} & \text{TN} \\
     \end{pmatrix}
@@ -47,7 +47,7 @@ performance. Otherwise, the results we obtain are not representative of the real
 we use thus stem from the \emph{weighted} confusion matrix, defined as:
 
 \begin{equation}
-    \Cbin = \begin{pmatrix}
+    \Cbin_w = \begin{pmatrix}
         \text{TP}_{w} & \text{FP}_{w} \\
         \text{FN}_{w} & \text{TN}_{w} \\
     \end{pmatrix}
@@ -60,17 +60,17 @@ we use thus stem from the \emph{weighted} confusion matrix, defined as:
     \text{TN}_{w} & = \sum_{i=1}^{N} w_i \llbracket y_i = 0 \land \hat{y}_i = 0 \rrbracket\,,
 \end{align}
 
-where \Cbin is the confusion matrix, $w_i$ is the \gls{mc} weight of the $i$-th event, calculated as described in the
+where $\Cbin_w$ is the confusion matrix, $w_i$ is the \gls{mc} weight of the $i$-th event, calculated as described in the
 \appref{appendix:weights}, and $N$ is the total number of events in the evaluation set. Further on, when referring to
 the confusion matrix, true positives, false positives, false negatives, and true negatives, we will always be referring
-to their weighted counterparts, unless explicitly stated otherwise.
+to their weighted counterparts, dropping the subscript $w$ for brevity, unless otherwise specified.
 
 \autoref{fig:cm} shows how such confusion matrix looks in our case for the binary classification task - when we only
 care about differentiating between \tth and non-\tth events.
 
 \begin{figure}[htb]
     \centering
-    \includegraphics[width=\textwidth]{figures/ml/cm/signal_argmax.pdf}
+    \includegraphics[trim=0.5cm 0 3cm 0, clip, width=0.8\textwidth]{figures/ml/cm/signal_argmax.pdf}
     \caption[Confusion matrix for a binary classification task]
     {Confusion matrix for a binary classification task. This confusion matrix is produced using 5-blocks
         \gls{ftt} (see \autoref{sec:ftt}) trained on the extended training set (see \autoref{sec:extended-set}). The
@@ -93,7 +93,7 @@ in the corresponding true class.
 
 \begin{figure}[htb]
     \centering
-    \includegraphics[width=\textwidth]{figures/ml/cm/all_argmax.pdf}
+    \includegraphics[trim=0.5cm 0 6cm 0, clip, width=\textwidth]{figures/ml/cm/all_argmax.pdf}
     \caption[Confusion matrix for a multi-class classification task]
     {Confusion matrix for a multi-class classification task. This confusion matrix is produced using 5-blocks
         \gls{ftt} (see \autoref{sec:ftt}) trained on the extended training set (see \autoref{sec:extended-set}). The
@@ -102,7 +102,7 @@ in the corresponding true class.
 \end{figure}
 
 The confusion matrix serves as the basis for several other performance metrics, including accuracy, F1 score, and area
-under the ROC curve (AUC-ROC).
+under the \gls{roc} curve (AUC-ROC).
 
 \subsubsection{Accuracy: The Proportion of Correct Predictions}
 

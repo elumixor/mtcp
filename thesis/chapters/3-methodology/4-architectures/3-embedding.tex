@@ -95,14 +95,15 @@ such embeddings were completely unnecessary, suggesting that categorical feature
 prediction.
 
 Furthermore, the dataset contains missing or invalid values for some samples.  Some\footnote{lep\_nTrackParticles\_0,
-    lep\_nTrackParticles\_1} features use -1 to indicate a missing value, some \footnote{taus\_passJVT\_0} use -99, and
+    lep\_nTrackParticles\_1} features use -1 to indicate a missing value, some\footnote{taus\_passJVT\_0} use -99, and
 some\footnote{lep\_nInnerPix\_0, lep\_nInnerPix\_1, lep\_Mtrktrk\_atConvV\_CO\_0, lep\_Mtrktrk\_atPV\_CO\_1,
     lep\_Mtrktrk\_atPV\_CO\_0, lep\_Mtrktrk\_atConvV\_CO\_1} use -999. To properly handle these, we introduce a separate
 category for them when the feature is categorical (as an invalid value is essentially an extra unique value, so the
 number of unique values for the feature would be automatically increased by 1). For continuous features, we replace the
 missing values with a learnable parameter\footnote{We have experimented with also setting such values to zero. We didn't
     observe any notable difference with \glspl{resnet}, but for \gls{ftt} it seemed to have been an important
-    optimization to make (see \autoref{fig:learnable-nan-w}).} $w^\text{NaN}_i$ for each feature $x_i$:
+    optimization to make (\autoref{fig:learnable-nan-w-resnets}, \autoref{fig:learnable-nan-w-transformers}).}
+$w^\text{NaN}_i$ for each feature $x_i$:
 
 \begin{equation}
     x_i \xRightarrow[\text{handle invalid values}]{} \begin{cases}
@@ -111,24 +112,21 @@ missing values with a learnable parameter\footnote{We have experimented with als
     \end{cases}\,.
 \end{equation}
 
-
-The whole structure of the pre-processing layer is shown on the \autoref{fig:preprocessing}.
+\begin{figure}[htb]
+    \centering
+    \includegraphics[width=\textwidth]{figures/ml/embedding/resnets.pdf}
+    \caption{Impact of using learnable parameters for missing/invalid values and/or embedding categorical features \acrshortpl{resnet}.}
+    \label{fig:learnable-nan-w-resnets}
+\end{figure}
 
 \begin{figure}[htb]
     \centering
-    \includegraphics[width=0.5\textwidth]{example-image-a}
-    \caption{Pre-processing layer.}
-    \label{fig:preprocessing}
+    \includegraphics[width=\textwidth]{figures/ml/embedding/transformers.pdf}
+    \caption[Impact of using learnable parameters for missing/invalid values on \acrshortpl{ftt}.]
+    {Impact of using learnable parameters for missing/invalid values on \ftts. \ftt with 2 blocks trained on the
+        standard training set \ttrn was used.}
+    \label{fig:learnable-nan-w-transformers}
 \end{figure}
 
-
-\begin{figure}[htb]
-    \centering
-    \includegraphics[width=0.5\textwidth]{example-image-c}
-    \caption{Impact of having learnable parameters for missing/invalid values.}
-    \label{fig:learnable-nan-w}
-\end{figure}
-
-Overall, with the 8 blocks \gls{resnet} with an embedding size of 64 we were able to achieve a significance $S = $
-\todo{???}, $\AUC_\tth = $ \todo{???}, $\AUC_\text{mean} = $ \todo{???}. The results are summarized on the
-\autoref{tab:results}.
+Overall, with the 8 blocks \gls{resnet} with an embedding size of 64 we were able to achieve a significance $Z = 2.29$,
+$\AUC_\tth = 0.74$, $\AUC_\text{mean} = 0.83$. The results are summarized on the \autoref{tab:results}.

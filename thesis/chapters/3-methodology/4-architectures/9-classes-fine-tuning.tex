@@ -1,4 +1,4 @@
-\section{All classes vs signal and background only vs two-phase training}
+\section{All classes vs signal and background only}
 \label{sec:binary}
 
 In \cite{severin}, the authors experimented with both multiclass and binary classification formulations. The multiclass
@@ -16,24 +16,23 @@ information from the input data (see \autoref{fig:two-phase-training}). This app
 towards distinguishing individual background classes, which might not be essential for the primary task of signal and
 background discrimination.
 
-Consequently, we propose an alternative strategy, which we refer to as "two-phase training," to utilize the model's
-resources more effectively. Initially, we train the model on all classes. Once satisfactory performance is achieved, we
-transition to the binary formulation. In practical terms, this means we no longer penalize the model for misclassifying
-among the background classes (e.g., if the true class is \ttw and the predicted one is \ttz, the prediction is still
-deemed correct since both processes are background). This strategy allows the model to focus on the primary task of
-signal and background discrimination after gleaning sufficient information from the distinctions among all classes. The
-model first learns the patterns in the underlying physics comprehensively and then hones its focus on the primary task.
+Consequently, we suggest considering an alternative strategy, which we refer to as "two-phase training," to utilize the
+model's resources more effectively. Initially, it would involve training the model on all classes. Once satisfactory
+performance is achieved, one could transition to the binary formulation. In practical terms, this would mean no longer
+penalizing the model for misclassifying among the background classes (e.g., if the true class is \ttw and the predicted
+one is \ttz, the prediction would still be deemed correct since both processes are background). This strategy could
+potentially allow the model to focus on the primary task of signal and background discrimination after gleaning
+sufficient information from the distinctions among all classes. The model would first learn the patterns in the
+underlying physics comprehensively and then hone its focus on the primary task.
 
 The results are summarized in \autoref{fig:two-phase-training}, showcasing the progress in AUC and accuracy for
-differentiating signal from background. It's evident that the multiclass formulation outperforms the binary one, and
-this performance is further enhanced when transitioning to the binary formulation after achieving good performance in
-the multiclass phase.
+differentiating signal from background. It is evident that the multiclass formulation outperforms the binary one, and
+we hypothesize that this performance could be further enhanced by the two-phase training strategy.
 
 
 \begin{figure}[htb]
     \centering
-    \includegraphics[width=0.8\textwidth]{example-image-a}
-    \caption{Comparison of the multiclass and binary formulations. The dashed line indicates the point where the model
-        switches from the multiclass to the binary formulation. (second-phase-training)}
+    \includegraphics[width=\textwidth]{figures/ml/bin_vs_multi/results.pdf}
+    \caption{Comparison of the multiclass and binary formulations.}
     \label{fig:two-phase-training}
 \end{figure}

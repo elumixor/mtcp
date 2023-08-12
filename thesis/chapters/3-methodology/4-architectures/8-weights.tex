@@ -14,28 +14,30 @@ In our analysis we have experimented with different approaches, but we have foun
 significant improvements. We have attempted several strategies:
 
 \begin{enumerate}
-    \item \textbf{No weights} - the weights were not used at all.
-    \item \textbf{Per-sample weights} - the weights were used as in \cite{jan} (\autoref{eq:weight-per-sample}).
-    \item \textbf{Address raw samples class imbalance} - the total number of \emph{raw} samples was divided by the
-          number of raw \emph{samples} in each class. Then the weights were normalized (\autoref{eq:weight-per-class}).
-    \item \textbf{Address weighted sample class imbalance} - the total number of \emph{weighted} samples was divided by
-          the number of \emph{weighted} samples in each class. Then the weights were normalized
-          (\autoref{eq:weight-per-class}).
-    \item \textbf{Per-sample weights with raw class weights} - the weights were used as in \cite{jan}
-          (\autoref{eq:weight-per-sample}), but additional weights applied to account for the class imbalance.
-          Additional weights are calculated using the \emph{raw} number of samples.
-    \item \textbf{Per-sample weights with weighted class weights} - the weights were used as in \cite{jan}
-          (\autoref{eq:weight-per-sample}), but additional weights applied to account for the class imbalance.
-          Additional weights are calculated using the \emph{weighted} number of samples.
+      \item \textbf{No weights} - the weights were not used at all.
+      \item \textbf{Per-sample weights} - the weights were used as in \cite{jan}.
+      \item \textbf{Per-sample weights, not normalized} - the weights were used as in \cite{jan} but without the
+            per-sample normalization (\autoref{eq:weight-per-sample}). \label{item:per-sample-not-normalized}
+      \item \textbf{Raw class-imbalance weights} - the total number of \emph{raw}
+            samples was divided by the number of raw \emph{samples} in each class. Then the weights were normalized
+            (\autoref{eq:weight-per-class}).  \label{item:raw-class-imbalance}
+      \item \textbf{Weighted class-imbalance weights} - the total number of \emph{weighted} samples was divided by
+            the number of \emph{weighted} samples in each class. Then the weights were normalized
+            (\autoref{eq:weight-per-class}). \label{item:weighted-class-imbalance}
+      \item \textbf{Raw class-imbalance weights \& per-sample not normalized weights}:
+            \autoref{item:per-sample-not-normalized} \& \autoref{item:raw-class-imbalance}
+      \item \textbf{Weighted class-imbalance weights \& per-sample not normalized weights}:
+            \autoref{item:per-sample-not-normalized} \& \autoref{item:weighted-class-imbalance}
 \end{enumerate}
 
-Unfortunately, any of the weighting methods did not produce any noticeable increase in performance. Training with
-disregarding the weights completely turned out to be most effective. The results are summarized in
-\autoref{fig:weights}.
+Results are shown on the \autoref{fig:weights}. Any of the weighting methods did not produce any substantial increase in
+performance. Further investigation of the subject is suggested. We have decided to train without weights for simplicity.
 
 \begin{figure}[htb]
-    \centering
-    \includegraphics[width=0.5\textwidth]{example-image-a}
-    \caption{Comparison of different weighting strategies.}
-    \label{fig:weights}
+      \centering
+      \includegraphics[width=\textwidth]{figures/ml/weighting/results.pdf}
+      \caption[Comparison of different weighting strategies.]
+      {Comparison of different weighting strategies. \gls{ftt} with 2 blocks was used on the standard training set
+            \ttrn.}
+      \label{fig:weights}
 \end{figure}

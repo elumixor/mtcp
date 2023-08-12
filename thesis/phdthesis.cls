@@ -38,8 +38,8 @@
 % Informace o skole - mozno menit dynamicky skrze optiony
 \newcommand\University{Czech Technical University in Prague}
 \newcommand\Faculty{Faculty of Electrical Engineering}
-\newcommand\Department{Department of Telecommunication Engineering}
-\newcommand\PhDProgram{Electrical Engineering and Information Technology}
+\newcommand\Department{Department of Cybernetics}
+\newcommand\PhDProgram{Cybernetics and Robotics}
 \newcommand\PhDBranch{Telecommunication Engineering}
 
 % Makra pro definici vedouciho prace

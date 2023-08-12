@@ -70,7 +70,7 @@ Consider, for example the following "cheating" classifier:
 
 
 This classifier would have zero empirical risk, but would perform poorly on unseen data (would not generalize well).
-This is referred to as overfitting (see \autoref{fig:standard-losses}). Generally, in case of an unconstrained
+This is referred to as overfitting (see \autoref{fig:losses}). Generally, in case of an unconstrained
 hypothesis space $\mathcal{H}$, we have no guarantee that the empirical risk $R_\ttrn(h)$ is a good approximation of the
 true risk $R(h)$.
 
@@ -95,26 +95,16 @@ the best classifier $h^*$ from a set of classifiers $\mathcal{H}$ is called mode
 
 \begin{figure}[htb]
     \centering
-    \begin{minipage}[t][\height][t]{0.47\textwidth}
-        \includegraphics[width=\textwidth]{figures/ml/training/standard-ts-losses.png}
-        \caption{\acrshort{ftt} with 2 blocks and 256 embedding size training on the standard training set.}
-        \label{fig:standard-losses}
-    \end{minipage}
-    \hfill
-    \begin{minipage}[t][\height][t]{0.47\textwidth}
-        \includegraphics[width=\textwidth]{figures/ml/training/extended-ts-losses.png}
-        \caption{\acrshort{ftt} with 5 blocks, 256 embedding size, and 20\% dropout training on the \emph{extended} training
-            set.} \label{fig:extended-losses}
-    \end{minipage}
+    \includegraphics[width=\textwidth]{figures/ml/training/losses.pdf}
     \caption[Training and validation losses during the training process with and without extended training set.]
     {Training and validation losses during the training process with and without extended training set.
-        \autoref{fig:standard-losses} shows the training of the \acrshort{ftt} with 2 blocks (see \autoref{sec:ftt}) on the
+        The left plot shows the training of the \acrshort{ftt} with 2 blocks (see \autoref{sec:ftt}) on the
         standard training set. Because of the lack of training samples, and high capacity of the model, we observe
         overfitting. The training loss continues to decrease while the validation loss starts to increase. The
         checkpoint with the validation loss is the lowest is then used as the final model. This is referred to as early
         stopping. The best way to prevent overfitting is to get more training data (see
         \autoref{sec:extended-set}). If that is not possible, one might also consider augmentation techniques, or
-        regularization - dropout (see \autoref{sec:dropout}), weight decay etc. \autoref{fig:extended-losses} shows the
+        regularization - dropout (see \autoref{sec:dropout}), weight decay etc. Thr right plot shows the
         training of the \acrshort{ftt} with 5 blocks (see \autoref{sec:ftt}) on the extended training set. Also, the 20\%
         dropout is introduced. We observe now only a slight overfitting, which means that the model has generalized
         a lot better.}
