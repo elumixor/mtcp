@@ -49,17 +49,9 @@ class evaluate:
 
         with torch.no_grad():
             # Compute the loss on the training set
-            batches = tqdm(
-                trn.batches(batch_size, shuffle=False),
-                desc=" - evaluation: trn",
-                disable=not use_tqdm,
-            )
+            batches = tqdm(trn.batches(batch_size, shuffle=False), desc=" - evaluation: trn", disable=not use_tqdm)
 
-            with torch.autocast(
-                device_type=device,
-                dtype=torch.float16 if use_half or device == "cuda" else torch.bfloat16,
-                enabled=use_half,
-            ):
+            with torch.autocast(device_type=device, dtype=torch.float16 if use_half or device == "cuda" else torch.bfloat16, enabled=use_half,):
                 self.metrics["trn/loss"] = (
                     torch.stack(
                         [model(batch.to(device), return_loss=True) for batch in batches]

@@ -1,8 +1,6 @@
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
 
-from ml.data import Data
 from .model import Model
 from .my_embed import MyEmbed
 
@@ -83,9 +81,7 @@ class ResNet(Model):
             "dropout": self.dropout_p,
         }
 
-    def forward(self, batch: Data, return_loss=False, return_all=False):
-        x_continuous = batch.x_continuous
-        x_categorical = batch.x_categorical
+    def get_logits(self, x_continuous, x_categorical):
         if self.embed is not None:
             x = self.embed(x_continuous, x_categorical)
         else:
@@ -106,16 +102,6 @@ class ResNet(Model):
         linear = self.layers[i + 1]
 
         logits = linear(ln(self.activation(x)))
-
-        loss = None
-        if return_loss or return_all:
-            y = batch.y
-            loss = F.cross_entropy(logits, y, weight=self.class_weights)
-
-        if return_all:
-            return logits, loss
-        elif return_loss:
-            return loss
         return logits
 
     @property

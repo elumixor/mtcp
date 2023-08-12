@@ -8,6 +8,7 @@ import tempfile
 import signal
 
 from ml.data import load_from_config
+from ml.get_wandb import get_wandb
 from ml.nn import Transformer, ResNet
 from ml.evaluation import evaluate
 from ml.training import find_lr, train, load_checkpoint
@@ -97,39 +98,7 @@ for trial in range(repeat):
     model = get_model()
 
     if config.use_wandb:
-        wandb_config = dict(
-            trn_size=trn.n_samples,
-            val_size=val.n_samples,
-            n_classes=trn.n_classes,
-            n_parameters=model.n_params,
-            **config,
-        )
-
-        del wandb_config["run_name"]
-
-        tags = config.tags + args.tags
-        wandb_run = wandb.init(
-            project=config.project_name,
-            name=config.run_name,
-            config=wandb_config,
-            tags=tags,
-        )
-        print()
-
-        # Define min/max metrics for W&B
-        wandb.define_metric("epoch")
-
-        wandb.define_metric("trn/loss", step_metric="epoch", summary="min")
-        wandb.define_metric("val/loss", step_metric="epoch", summary="min")
-
-        wandb.define_metric("val/acc/bin", step_metric="epoch", summary="max")
-        wandb.define_metric("val/acc/multi", step_metric="epoch", summary="max")
-
-        wandb.define_metric("val/f1", step_metric="epoch", summary="max")
-
-        wandb.define_metric("val/auc_w/ttH", step_metric="epoch", summary="max")
-        wandb.define_metric("val/auc_w/mean", step_metric="epoch", summary="max")
-        wandb.define_metric("sig/significance", step_metric="epoch", summary="max")
+        wandb_run = get_wandb(trn, val, model, config, tags=args.tags)
     else:
         wandb_run = None
 

@@ -32,6 +32,7 @@ def train(
     device="cpu",
     use_tqdm=True,
     half=None,
+    start_epoch=None,
 ):
     # Let's estimate the initial loss
     initial_loss = model.estimated_initial_loss
@@ -52,6 +53,7 @@ def train(
 
         stats_best = load_checkpoint(best_path, model, optim, scheduler)
         stats = load_checkpoint(last_path, model, optim, scheduler)
+        evaluation = stats[-1]
 
         print(f"Last evaluation:\n{stats[-1]}\n")
     except FileNotFoundError:
@@ -72,6 +74,16 @@ def train(
     optim_best = optim.state_dict()
     scheduler_best = scheduler.state_dict() if scheduler is not None else None
 
+    first_epoch = start_epoch if start_epoch is not None else (stats[-1].epoch + 1)
+
+    # Log stats to wandb
+    if run is not None:
+        metrics = evaluation.to_dict()
+        metrics["lr"] = optim.param_groups[0]["lr"]
+        metrics["epoch"] = first_epoch
+        # metrics["n_grad_steps"] = first_epoch * len(batches)
+        run.log(metrics)
+
     interrupted = False
 
     # Register the handler for SIGINT
@@ -85,7 +97,8 @@ def train(
     start_time = time.time()
 
     model.train()
-    first_epoch = stats[-1].epoch + 1
+    model.to(device)
+
     for epoch in range(first_epoch, first_epoch + epochs):
         batches = trn.batches(batch_size)
         for batch in tqdm(

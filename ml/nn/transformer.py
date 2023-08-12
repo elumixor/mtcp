@@ -2,9 +2,6 @@ from __future__ import annotations
 
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
-
-from ml.data import Data
 
 from .model import Model
 from .my_embed import MyEmbed
@@ -67,21 +64,11 @@ class Transformer(Model):
         self.ln = nn.LayerNorm(n_embed)
         self.logits = nn.Linear(n_embed, n_classes)
 
-    def forward(self, batch: Data, return_loss=False, return_all=False):
-        x = self.embed(batch.x_continuous, batch.x_categorical)
+    def get_logits(self, x_continuous, x_categorical):
+        x = self.embed(x_continuous, x_categorical)
         x = self.blocks(x)
         x = self.ln(x)
         logits = self.logits(x[:, 0, :])
-
-        loss = None
-        if return_loss or return_all:
-            y = batch.y
-            loss = F.cross_entropy(logits, y, weight=self.class_weights)
-
-        if return_all:
-            return logits, loss
-        elif return_loss:
-            return loss
         return logits
 
     @property

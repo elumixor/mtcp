@@ -53,28 +53,40 @@ def save_checkpoint(name: str,
     return result
 
 
-def load_checkpoint(name: str,
-                    model: nn.Module,
+def load_checkpoint(name: str | Checkpoint,
+                    model: nn.Module | None = None,
                     optim: torch.optim.Optimizer | None = None,
-                    scheduler: torch.optim.lr_scheduler.LRScheduler | None = None):
+                    scheduler: torch.optim.lr_scheduler.LRScheduler | None = None,
+                    compile=True):
     # Make names
-    model_name = os.path.join(name, "model.pt")
-    stats_name = os.path.join(name, "stats.pt")
-    optim_name = os.path.join(name, "optim.pt")
-    scheduler_name = os.path.join(name, "scheduler.pt")
+    if isinstance(name, Checkpoint):
+        model_name = name.model
+        stats_name = name.stats
+        optim_name = name.optim
+        scheduler_name = name.scheduler
+    else:
+        model_name = os.path.join(name, "model.pt")
+        stats_name = os.path.join(name, "stats.pt")
+        optim_name = os.path.join(name, "optim.pt")
+        scheduler_name = os.path.join(name, "scheduler.pt")
 
     # Load the model
-    model.load_state_dict(torch.load(model_name))
+    if model is not None:
+        model.load_state_dict(torch.load(model_name))
 
     # Load the optim
     if optim is not None:
-        optim.load_state_dict(torch.load(optim_name))
+        optim_w = torch.load(optim_name)
+        if not compile:
+            optim_w = {k.replace("_orig_mod.", ""): v for k, v in optim_w.items()}
+
+        optim.load_state_dict(optim_w)
 
     # Load the scheduler
     if scheduler is not None:
         scheduler.load_state_dict(torch.load(scheduler_name))
 
     # Load the stats
-    stats = torch.load(stats_name) if os.path.exists(stats_name) else None
+    stats = torch.load(stats_name) if stats_name is not None and os.path.exists(stats_name) else None
 
     return stats
