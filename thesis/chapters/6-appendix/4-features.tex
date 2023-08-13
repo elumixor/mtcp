@@ -1,140 +1,222 @@
-\subsection{New/changed features}
+\clearpage \subsection{Features used}
 
-\todo{WE NEED TO TURN IT into a list of featue - description}
+\subsubsection{\texttt{lep\_E\_X}} The energy of the Xth lepton.
 
-\todo{Afterwards, we can present the table}
+\subsubsection{\texttt{DRjj\_lead}} $\Delta R$ between the two leading jets. $\Delta R$ is a distance metric in the
+$\eta-\phi$ space frequently used in particle physics.
 
-\todo{We can sort by feature importance, well-modellign score (?) and if it is present or not in the top20, etc.}
+\subsubsection{\texttt{Ptll01}} The transverse momentum of the dilepton system made up of the two leading leptons.
 
-This can just be a table with:
+\subsubsection{\texttt{lep\_nTrackParticles\_X}} The number of track particles associated with the Xth lepton.
 
-\begin{longtable}{ll}
-    \hline
-    \textbf{Feature}             & \textbf{Importance}          \\ \hline
-    \endfirsthead
+\subsubsection{\texttt{custTrigMatch\_LooseID\_FCLooseIso\_DLT}} Custom trigger matching for loosely identified and loosely
+isolated leptons, likely related to the dilepton trigger
 
-    \multicolumn{2}{c}%
-    {{\bfseries Table \thetable\ continued from previous page}} \\
-    \hline
-    \textbf{Feature}             & \textbf{Importance}          \\ \hline
-    \endhead
+\subsubsection{\texttt{Mll01}} The invariant mass of the two leading leptons.
 
-    \hline \multicolumn{2}{|r|}{{Continued on next page}}       \\ \hline
-    \endfoot
+\subsubsection{\texttt{Mlll012}} The invariant mass of the three leading leptons.
 
-    \hline
-    \endlastfoot
+\subsubsection{\texttt{total\_charge}} The sum of the electric charges of the particles in the event.
 
-    HT                           & 1.2                          \\
-    HT\_fwdJets                  & 2.5                          \\
-    HT\_inclFwdJets              & 1.8                          \\
-    HT\_lep                      & 3.1                          \\
-    HT\_jets                     & 2.7                          \\
-    HT\_taus                     & 2.9                          \\
-    jets\_eta\_0                 & 5.0                          \\
-    jets\_pt\_0                  & 4.8                          \\
-    jets\_e\_0                   & 4.9                          \\
-    jets\_phi\_0                 & 4.7                          \\
-    jets\_eta\_1                 & 2.3                          \\
-    jets\_pt\_1                  & 2.1                          \\
-    jets\_e\_1                   & 2.2                          \\
-    jets\_phi\_1                 & 2.0                          \\
-    jets\_eta\_2                 & 1.5                          \\
-    jets\_pt\_2                  & 1.3                          \\
-    jets\_e\_2                   & 1.4                          \\
-    jets\_phi\_2                 & 1.2                          \\
-    jets\_eta\_3                 & 0.9                          \\
-    jets\_pt\_3                  & 0.8                          \\ \hline
-    jets\_e\_3                   & 0.8                          \\
-    jets\_phi\_3                 & 0.7                          \\
-    jets\_eta\_4                 & 0.5                          \\
-    jets\_pt\_4                  & 0.4                          \\
-    jets\_e\_4                   & 0.4                          \\
-    jets\_phi\_4                 & 0.3                          \\
-    jets\_eta\_5                 & 0.2                          \\
-    jets\_pt\_5                  & 0.1                          \\
-    jets\_e\_5                   & 0.1                          \\
-    jets\_phi\_5                 & 0.1                          \\
-    lep\_E\_0                    & 3.5                          \\
-    lep\_E\_1                    & 3.4                          \\
-    lep\_Eta\_0                  & 1.6                          \\
-    lep\_Eta\_1                  & 1.5                          \\
-    lep\_EtaBE2\_0               & 1.2                          \\
-    lep\_EtaBE2\_1               & 1.1                          \\
-    lep\_ID\_0                   & 1.8                          \\
-    lep\_ID\_1                   & 1.7                          \\
-    lep\_ambiguityType\_0        & 1.1                          \\
-    lep\_ambiguityType\_1        & 1.0                          \\
-    lep\_sigd0PV\_0              & 2.3                          \\
-    lep\_sigd0PV\_1              & 2.2                          \\
-    Mb1                          & 1.3                          \\
-    lep\_Mtrktrk\_atConvV\_CO\_0 & 1.5                          \\
-    lep\_Mtrktrk\_atConvV\_CO\_1 & 1.4                          \\
-    lep\_Mtrktrk\_atPV\_CO\_0    & 1.3                          \\
-    lep\_Mtrktrk\_atPV\_CO\_1    & 1.2                          \\
-    lep\_nInnerPix\_0            & 1.0                          \\
-    lep\_nInnerPix\_1            & 0.9                          \\
-    lep\_nTrackParticles\_0      & 1.1                          \\
-    lep\_nTrackParticles\_1      & 1.0                          \\
-    lep\_Phi\_0                  & 1.6                          \\
-    lep\_Phi\_1                  & 1.5                          \\
-    lep\_Pt\_0                   & 2.1                          \\
-    lep\_Pt\_1                   & 2.0                          \\
-    lep\_sigd0PV\_0              & 2.3                          \\
-    lep\_sigd0PV\_1              & 2.2                          \\
-    lep\_Z0SinTheta\_0           & 1.3                          \\
-    lep\_Z0SinTheta\_1           & 1.2                          \\
-    max\_eta                     & 1.4                          \\
-    met\_met                     & 2.6                          \\
-    met\_phi                     & 2.5                          \\
-    taus\_DL1r\_0                & 2.4                          \\
-    taus\_charge\_0              & 1.9                          \\
-    taus\_decayMode\_0           & 1.8                          \\
-    taus\_eta\_0                 & 2.0                          \\
-    taus\_fromPV\_0              & 1.7                          \\
-    taus\_numTrack\_0            & 1.6                          \\
-    taus\_passEleBDT\_0          & 1.5                          \\
-    taus\_passEleOLR\_0          & 1.4                          \\
-    taus\_passJVT\_0             & 1.3                          \\
-    taus\_phi\_0                 & 2.1                          \\
-    taus\_pt\_0                  & 2.0                          \\
-    taus\_width\_0               & 1.9                          \\
-    minDeltaR\_LJ\_0             & 1.1                          \\
-    minDeltaR\_LJ\_1             & 1.0                          \\
-    minDeltaR\_LJ\_2             & 0.9                          \\
-    minOSMll                     & 1.2                          \\
-    minOSSFMll                   & 1.1                          \\
-    mjjMax\_frwdJet              & 1.7                          \\
-    MLepMet                      & 2.3                          \\
-    Mll01                        & 2.2                          \\
-    Mlll012                      & 2.1                          \\
-    Mllll0123                    & 2.0                          \\
-    MtLepMet                     & 2.6                          \\
-    nFwdJets\_OR                 & 1.8                          \\
-    nJets\_OR                    & 2.4                          \\
-    nTaus\_OR\_Pt25              & 2.3                          \\
-    Ptll01                       & 2.2                          \\
-    sumPsbtag                    & 1.9                          \\
-    total\_charge                & 1.6                          \\
-    Mlb                          & 1.7                          \\
-    total\_leptons               & 1.5                          \\
-    passPLIVTight\_0             & 2.0                          \\
-    passPLIVTight\_1             & 1.9                          \\
-    nJets\_OR\_DL1r\_77          & 1.4                          \\
-    nTaus\_OR                    & 1.3                          \\
-    best\_Z\_Mll                 & 1.6                          \\
-    best\_Z\_other\_Mll          & 1.5                          \\
-    best\_Z\_other\_MtLepMet     & 1.4                          \\
-    DeltaR\_min\_lep\_jet        & 2.0                          \\
-    DeltaR\_min\_lep\_jet\_fwd   & 1.9                          \\
-    dEta\_maxMjj\_frwdjet        & 1.8                          \\
-    dilep\_type                  & 1.7                          \\
-    DRll01                       & 2.2                          \\
-    DeltaR\_max\_lep\_bjet77     & 2.1                          \\
-    DRjj\_lead                   & 2.0                          \\
-    eta\_frwdjet                 & 1.9                          \\
-    flag\_JetCleaning\_LooseBad  & 1.8                          \\
-    MtLep1Met                    & 2.4                          \\
-    \caption{Feature Importance}
-    \label{tab:feature_importance}
-\end{longtable}
+\subsubsection{\texttt{HT}} The scalar sum of the transverse momenta of all jets in the event.
+
+\subsubsection{\texttt{HT\_lep}} The scalar sum of the transverse momenta of all leptons in the event.
+
+\subsubsection{\texttt{lep\_Eta\_X}} The pseudorapidity of the Xth lepton.
+
+\subsubsection{\texttt{nTaus\_OR\_Pt25}} The number of overlapping-removed taus with a transverse momentum above 25 GeV.
+
+\subsubsection{\texttt{nFwdJets\_OR}} The number of overlapping-removed forward jets.
+
+\subsubsection{\texttt{MLepMet}} The invariant mass of a lepton and the missing transverse energy vector.
+
+\subsubsection{\texttt{taus\_DL1r\_X}} The DL1r score for the Xth tau.
+
+\subsubsection{\texttt{lep\_isolationLoose\_VarRad\_X}} Indicates whether a lepton (where X refers to the lepton index)
+passes an isolation cut with a variable radius. Looser isolation cuts allow more nearby activity in the detector.
+
+\subsubsection{\texttt{lep\_EtaBE2\_X}} The pseudorapidity of the Xth lepton in the second layer of the electromagnetic
+calorimeter.
+
+\subsubsection{\texttt{HT\_fwdJets}} The scalar sum of the transverse momenta of all forward jets in the event.
+
+\subsubsection{\texttt{taus\_width\_X}} The width of the Xth tau.
+
+\subsubsection{\texttt{nJets\_OR\_DL1r\_85}} Count of jets that pass overlap removal (OR) and are b-tagged according to the
+DL1r algorithm at the 85\% working point.
+
+\subsubsection{\texttt{lep\_nInnerPix\_X}} Number of hits in the inner pixel detector associated with the lepton, where X
+refers to the lepton index.
+
+\subsubsection{\texttt{met\_phi}} The azimuthal angle of the missing transverse energy in the event.
+
+\subsubsection{\texttt{DeltaR\_max\_lep\_bjet77}} The maximum DeltaR value between a lepton and a b-tagged jet. The "77"
+may refer to the working point of the b-tagging algorithm.
+
+\subsubsection{\texttt{MbX}} Invariant mass associated with the leading b-jet in the event
+
+\subsubsection{\texttt{lep\_RadiusCO\_X}} Possibly the radius of the cone used for isolation of the lepton, or
+alternatively a parameter associated with the trajectory of the lepton.
+
+\subsubsection{\texttt{lep\_Mtrktrk\_atConvV\_CO\_X}} The invariant mass of track pairs at the conversion vertex for lepton
+X. This might be related to photon conversions into an electron-positron pair.
+
+\subsubsection{\texttt{lep\_Z0SinTheta\_X}} The z0 impact parameter times the sine of the lepton's polar angle.
+
+\subsubsection{\texttt{lep\_Pt\_X}} The transverse momentum of the Xth lepton.
+
+\subsubsection{\texttt{mjjMax\_frwdJet}} The maximum invariant mass of a pair of forward jets.
+
+\subsubsection{\texttt{dilep\_type}} The type of dilepton event (e.g., $ee$, $\mu e$, $\mu \mu$).
+
+\subsubsection{\texttt{eta\_frwdjet}} The pseudorapidity of the forward jet.
+
+\subsubsection{\texttt{Mlb}} Invariant mass of a lepton and a b-jet.
+
+\subsubsection{\texttt{taus\_RNNJetScoreSigTrans\_X}} Transformed RNN-based score for tau lepton, possibly to better
+separate signal from background.
+
+\subsubsection{\texttt{minDeltaR\_LJ\_X}} The minimum $\Delta R$ distance between the Xth lepton and any jet in the event.
+
+\subsubsection{\texttt{nTaus\_OR}} Number of tau leptons that pass overlap removal. Overlap removal is a step in particle
+reconstruction where, for instance, an object identified as both a jet and a tau would be considered only as one or the
+other.
+
+\subsubsection{\texttt{DeltaR\_min\_lep\_jet}} The minimum $\Delta R$ distance between a lepton and a jet in the event.
+
+\subsubsection{\texttt{lep\_sigd0PV\_X}} Significance of the transverse impact parameter (d0) of the lepton X with respect
+to the primary vertex (PV). This is a common variable for distinguishing prompt particles produced in the primary
+collision from secondary particles produced in a decay.
+
+\subsubsection{\texttt{taus\_eta\_X}} The pseudorapidity of the Xth tau.
+
+\subsubsection{\texttt{HT\_jets}} The scalar sum of the transverse momenta of all jets (not forward jets) in the event.
+
+\subsubsection{\texttt{lep\_Phi\_X}} The azimuthal angle (in radians) of the Xth lepton.
+
+\subsubsection{\texttt{bTagSF\_weight\_DL1r\_85}} A weight applied to events based on the scale factor for b-tagging using
+the DL1r algorithm at an 85\% efficiency working point. This scale factor corrects the b-tagging efficiency in Monte
+Carlo simulations to match that observed in real data.
+
+\subsubsection{\texttt{lep\_chargeIDBDTResult\_recalc\_rel207\_tight\_X}} The outcome of a BDT-based charge identification
+for a lepton, recalculated with some specific settings, and applying a 'tight' threshold.
+
+\subsubsection{\texttt{taus\_phi\_X}} The azimuthal angle (in radians) of the Xth tau.
+
+\subsubsection{\texttt{taus\_passJVT\_X}} A boolean flag indicating whether the Xth tau passes the jet vertex tightness
+(JVT) requirement.
+
+\subsubsection{\texttt{jets\_eta}} The pseudorapidity of the jets (array).
+
+\subsubsection{\texttt{taus\_charge\_X}} The charge of the Xth tau.
+
+\subsubsection{\texttt{passPLIVTight\_X}} Boolean flag indicating if a lepton with high transverse momentum passes the
+"tight" criteria of the Prompt Lepton Veto (PLIV), a tool for identifying non-prompt light leptons.
+
+\subsubsection{\texttt{lep\_Mtrktrk\_atPV\_CO\_X}} The invariant mass of track pairs at the primary vertex for lepton X.
+This could be related to certain types of particle decays happening at the primary collision vertex.
+
+\subsubsection{\texttt{taus\_JetRNNSigMedium\_X}} RNN-based score for tau lepton, used to distinguish tau leptons from
+jets, with 'medium' selection criteria.
+
+\subsubsection{\texttt{minOSMll}} The minimum invariant mass of oppositely-signed dilepton pairs.
+
+\subsubsection{\texttt{lep\_ID\_X}} The identification number for the Xth lepton.
+
+\subsubsection{\texttt{Mllll0123}} The invariant mass of the four leading leptons.
+
+\subsubsection{\texttt{custTrigSF\_TightElMediumMuID\_FCLooseIso\_DLT}} Custom trigger scale factor, for events with a
+tight electron and a medium muon, both of which are loosely isolated, likely related to the dilepton trigger (DLT).
+
+\subsubsection{\texttt{best\_Z\_Mll}} The invariant mass of the dilepton system that is closest to the Z boson mass.
+
+\subsubsection{\texttt{met\_met}} The missing transverse energy in the event.
+
+\subsubsection{\texttt{MtLep1Met}} Transverse mass between the leading lepton and missing transverse energy. Transverse
+mass is often used in searches for particles that decay to a lepton and a neutrino.
+
+\subsubsection{\texttt{lep\_ambiguityType\_X}} Type of ambiguity for lepton identification, where X refers to the lepton
+index. Ambiguity could arise from several factors, such as a single track matching with multiple reconstructed
+particles.
+
+\subsubsection{\texttt{jets\_phi}} The azimuthal angle (in radians) of the jets (array).
+
+\subsubsection{\texttt{lep\_isMedium\_X}} Boolean flag indicating if a lepton passes the 'medium' selection criteria.
+
+\subsubsection{\texttt{taus\_RNNJetScore\_X}} RNN-based score for tau lepton, used to distinguish tau leptons from jets.
+
+\subsubsection{\texttt{MtLepMet}} The transverse mass of a lepton and the missing transverse energy vector.
+
+\subsubsection{\texttt{DeltaR\_min\_lep\_jet\_fwd}} The minimum $\Delta R$ distance between a lepton and a forward jet in the event.
+
+\subsubsection{\texttt{jets\_e}} The energy of the jets (array).
+
+\subsubsection{\texttt{minOSSFMll}} The minimum invariant mass of oppositely-signed, same-flavor dilepton pairs.
+
+\subsubsection{\texttt{nJets\_OR}} The number of overlapping-removed jets.
+
+\subsubsection{\texttt{total\_leptons}} The total number of leptons in the event.
+
+\subsubsection{\texttt{taus\_numTrack\_X}} The number of tracks associated with the Xth tau.
+
+\subsubsection{\texttt{HT\_taus}} Scalar sum of the transverse momenta ($P_t$) of all tau leptons in the event.
+
+\subsubsection{\texttt{taus\_passEleOLR\_X}} A boolean flag indicating whether the Xth tau passes the electron overlap
+removal.
+
+\subsubsection{\texttt{HT\_inclFwdJets}} The scalar sum of the transverse momenta of all jets, including forward jets, in
+the event.
+
+\subsubsection{\texttt{DRll01}} The $\Delta R$ distance between the two leading leptons.
+
+\subsubsection{\texttt{taus\_JetRNNSigLoose\_X}} RNN-based score for tau lepton, used to distinguish tau leptons from
+jets, with 'loose' selection criteria.
+
+\subsubsection{\texttt{taus\_pt\_X}} The transverse momentum of the Xth tau.
+
+\subsubsection{\texttt{bTagSF\_weight\_DL1r\_77}} A weight applied to events based on the scale factor for b-tagging using
+the DL1r algorithm at an 77\% efficiency working point. This scale factor corrects the b-tagging efficiency in Monte
+Carlo simulations to match that observed in real data.
+
+\subsubsection{\texttt{flag\_JetCleaning\_LooseBad}} A flag variable indicating whether a jet passes a loose cleaning cut
+to remove bad or noisy jets from the analysis.
+
+\subsubsection{\texttt{taus\_fromPV\_X}} A boolean flag indicating whether the Xth tau comes from the primary vertex.
+
+\subsubsection{\texttt{best\_Z\_other\_MtLepMet}} The transverse mass between the lepton and missing transverse energy for
+the event that best reconstructs a Z boson using other criteria.
+
+\subsubsection{\texttt{nJets\_OR\_DL1r\_77}} Count of jets that pass overlap removal (OR) and are b-tagged according to the
+DL1r algorithm at the 77\% working point.
+
+\subsubsection{\texttt{jets\_pt}} The transverse momentum of the jets (array).
+
+\subsubsection{\texttt{lep\_isTightLH\_X}} Boolean flag indicating if a lepton passes the 'tight' Likelihood-based
+identification criteria.
+
+\subsubsection{\texttt{taus\_JetRNNSigTight\_X}} RNN-based score for tau lepton, used to distinguish tau leptons from
+jets, with 'tight' selection criteria.
+
+\subsubsection{\texttt{sumPsbtag}} The sum of b-tagging weights for jets in the event.
+
+\subsubsection{\texttt{taus\_decayMode\_X}} The decay mode of the Xth tau.
+
+\subsubsection{\texttt{dEta\_maxMjj\_frwdjet}} The maximum difference in pseudorapidity ($\eta$) between two forward jets.
+
+\subsubsection{\texttt{max\_eta}} The maximum pseudorapidity among all particles in the event.
+
+\subsubsection{\texttt{best\_Z\_other\_Mll}} The invariant mass of the dilepton system that is closest to the Z boson mass,
+not considering the leading leptons.
+
+\subsubsection{\texttt{taus\_passEleBDT\_X}} Flag indicating if a tau lepton passes the Electron Boosted Decision Tree
+discriminator.
+
+\begin{figure}[hbtp]
+    \centering
+    \includegraphics[width=\textwidth]{figures/ml/features/top20.pdf}
+    \caption{Feature importance for the top 20 most important features. Feature importance was calculated using the
+        \gls{ig} method \cite{ig}.}
+    \label{fig:feature_importance}
+\end{figure}
+
+\clearpage

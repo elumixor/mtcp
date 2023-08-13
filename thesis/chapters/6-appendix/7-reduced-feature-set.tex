@@ -1,48 +1,48 @@
-\section{Effect of the reduced feature set}
+% \section{Effect of the reduced feature set}
 
-The process of reducing the total number of features in a classification model is a common technique used to minimize
-the systematic uncertainties that may arise from the use of a large number of features. The systematic uncertainties are
-a result of the inherent limitations of the data and the model used to analyze it. These uncertainties can arise from a
-variety of sources, including the statistical fluctuations in the data, the limitations of the model used to analyze the
-data, and the presence of unaccounted-for systematic effects.
+% The process of reducing the total number of features in a classification model is a common technique used to minimize
+% the systematic uncertainties that may arise from the use of a large number of features. The systematic uncertainties are
+% a result of the inherent limitations of the data and the model used to analyze it. These uncertainties can arise from a
+% variety of sources, including the statistical fluctuations in the data, the limitations of the model used to analyze the
+% data, and the presence of unaccounted-for systematic effects.
 
-To minimize these uncertainties, it is best to have as few features as possible. However, this trade-off comes at the
-cost of losing some information, which can lead to a reduced performance of the classifier. Therefore, it is important
-to carefully select the features that are most relevant to the classification problem at hand.
+% To minimize these uncertainties, it is best to have as few features as possible. However, this trade-off comes at the
+% cost of losing some information, which can lead to a reduced performance of the classifier. Therefore, it is important
+% to carefully select the features that are most relevant to the classification problem at hand.
 
-In addition to selecting the most relevant features, it is also important to ensure that the selected features are well
-modeled. This means that the distributions of the features in the simulated data should agree with the recorded data
-well enough. If the distributions do not agree, it can lead to biases in the classification results, which can affect
-the accuracy of the model.
+% In addition to selecting the most relevant features, it is also important to ensure that the selected features are well
+% modeled. This means that the distributions of the features in the simulated data should agree with the recorded data
+% well enough. If the distributions do not agree, it can lead to biases in the classification results, which can affect
+% the accuracy of the model.
 
-To ensure that the selected features are well modeled, it is important to perform a thorough analysis of the data and
-the model used to analyze it. This analysis should include a comparison of the distributions of the features in the
-simulated data and the recorded data, as well as an evaluation of the systematic uncertainties associated with the
-model. By carefully selecting and modeling the features used in the classification model, it is possible to minimize the
-systematic uncertainties and improve the accuracy of the model.
+% To ensure that the selected features are well modeled, it is important to perform a thorough analysis of the data and
+% the model used to analyze it. This analysis should include a comparison of the distributions of the features in the
+% simulated data and the recorded data, as well as an evaluation of the systematic uncertainties associated with the
+% model. By carefully selecting and modeling the features used in the classification model, it is possible to minimize the
+% systematic uncertainties and improve the accuracy of the model.
 
-We have performed 7 different experiments each with a different feature set. The results are shown in
-\autoref{tab:feature_sets}. To leave out the effects of random initialization, we have always started with the same
-\gls{nn} using all the features. Then we have removed the input neurons corresponding to the features that we wanted to
-leave out. We have also kept the same random seed for each experiment. The results show that the classifier trained on
-all the features performs the best. However, the classifier trained on the top 20 most important features performs
-almost as well, which makes it suitable for reducing the systematic uncertainty.
+% We have performed 7 different experiments each with a different feature set. The results are shown in
+% \autoref{tab:feature_sets}. To leave out the effects of random initialization, we have always started with the same
+% \gls{nn} using all the features. Then we have removed the input neurons corresponding to the features that we wanted to
+% leave out. We have also kept the same random seed for each experiment. The results show that the classifier trained on
+% all the features performs the best. However, the classifier trained on the top 20 most important features performs
+% almost as well, which makes it suitable for reducing the systematic uncertainty.
 
-\begin{table}[htbp]
-    \centering
-    \begin{tabular}{lccc}
-        \toprule
-        Feature Set                                             & Accuracy & $\text{AUC}_\text{Mean}$ & $\text{AUC}_\tth$ \\
-        \midrule
-        All features                                            & 0.85     & 0.92                     & 0.87              \\
-        Only well-modelled features      (34 features)          & 0.81     & 0.89                     & 0.83              \\
-        Top 20 most important features                          & 0.83     & 0.91                     & 0.85              \\
-        Top 20 best modelled features                           & 0.79     & 0.87                     & 0.81              \\
-        Top 20 most important (of the well-modelled)            & 0.82     & 0.90                     & 0.84              \\
-        Top 20 with least systematical uncertainty contribution & 0.84     & 0.91                     & 0.86              \\
-        Features from the BDT from the Rome's group             & 0.80     & 0.88                     & 0.82              \\
-        \bottomrule
-    \end{tabular}
-    \caption{Comparison of different feature sets}
-    \label{tab:feature_sets}
-\end{table}
+% \begin{table}[htbp]
+%     \centering
+%     \begin{tabular}{lccc}
+%         \toprule
+%         Feature Set                                             & Accuracy & $\text{AUC}_\text{Mean}$ & $\text{AUC}_\tth$ \\
+%         \midrule
+%         All features                                            & 0.85     & 0.92                     & 0.87              \\
+%         Only well-modelled features      (34 features)          & 0.81     & 0.89                     & 0.83              \\
+%         Top 20 most important features                          & 0.83     & 0.91                     & 0.85              \\
+%         Top 20 best modelled features                           & 0.79     & 0.87                     & 0.81              \\
+%         Top 20 most important (of the well-modelled)            & 0.82     & 0.90                     & 0.84              \\
+%         Top 20 with least systematical uncertainty contribution & 0.84     & 0.91                     & 0.86              \\
+%         Features from the BDT from the Rome's group             & 0.80     & 0.88                     & 0.82              \\
+%         \bottomrule
+%     \end{tabular}
+%     \caption{Comparison of different feature sets}
+%     \label{tab:feature_sets}
+% \end{table}

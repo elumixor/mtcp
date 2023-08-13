@@ -102,7 +102,8 @@ taus_JetRNNSigLoose_X: RNN-based score for tau lepton, used to distinguish tau l
 taus_RNNJetScoreSigTrans_X: Transformed RNN-based score for tau lepton, possibly to better separate signal from background.
 lep_isMedium_X: Boolean flag indicating if a lepton passes the 'medium' selection criteria.
 taus_RNNJetScore_X: RNN-based score for tau lepton, used to distinguish tau leptons from jets.
-bTagSF_weight_DL1r_77: Weight for the b-tagging scale factor, associated with the DL1r algorithm and 77% working point.
+bTagSF_weight_DL1r_77: A weight applied to events based on the scale factor for b-tagging using the DL1r algorithm at an 77% efficiency working point. This scale factor corrects the b-tagging efficiency in Monte Carlo simulations to match that observed in real data.
+bTagSF_weight_DL1r_85: A weight applied to events based on the scale factor for b-tagging using the DL1r algorithm at an 85% efficiency working point. This scale factor corrects the b-tagging efficiency in Monte Carlo simulations to match that observed in real data.
 nJets_OR_DL1r_85: Count of jets that pass overlap removal (OR) and are b-tagged according to the DL1r algorithm at the 85% working point.
 custTrigSF_TightElMediumMuID_FCLooseIso_DLT: Custom trigger scale factor, for events with a tight electron and a medium muon, both of which are loosely isolated, likely related to the dilepton trigger (DLT).
 nJets_OR_DL1r_77: Count of jets that pass overlap removal (OR) and are b-tagged according to the DL1r algorithm at the 77% working point.
