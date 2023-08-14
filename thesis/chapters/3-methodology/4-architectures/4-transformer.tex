@@ -5,7 +5,7 @@
 We adopt the \gls{ftt} as our primary architecture. The architecture was proposed in \cite{ft-transformer} and is an
 adaptation of the famous transformer architecture \cite{transformer} to the tabular data.
 
-\subsubsection{Transformer architecture}
+\subsubsection{Transformer Architecture}
 
 The transformer architecture was originally proposed for the \gls{nlp} processing tasks, but has since been applied
 to almost every domain of machine learning. The transformer architecture is a fully-attentional architecture, which
@@ -66,23 +66,23 @@ head $i$, and then attention is applied in parallel. This allows the model to jo
 different representation subspaces at different positions. Then, the outputs of the heads are concatenated and projected
 to the desired dimensionality by the matrix $\vec{W}_O$.
 
-    {\fontsize{11}{10}\selectfont
-        \begin{align}
-            \label{eq:ftt}
-            \FTT(x)                 & = \Linear(\LayerNorm(\FTTBlock(\dots(\FTTBlock(\Embed(x)))))_1) \\
-            \FTTBlock(x)            & = \texttt{FeedForward}(x + \MHA(\LayerNorm(x)))                 \\
-            \texttt{FeedForward}(x) & = x + \Dropout(\Linear(\GELU(\Linear(\LayerNorm(x)))))
-        \end{align}
-    }
+The full \gls{ftt} transformer architecture is formalized as follows:
 
-The full transformer architecture is composed of multiple blocks which are applied after continuous and categorical
-features mapped to the embedding space. Each block consists of a \LayerNorm, \MHA, and two \Linear
+{\fontsize{11}{10}\selectfont
+\begin{align}
+    \label{eq:ftt}
+    \FTT(x)                 & = \Linear(\LayerNorm(\FTTBlock(\dots(\FTTBlock(\Embed(x)))))_1) \\
+    \FTTBlock(x)            & = \texttt{FeedForward}(x + \MHA(\LayerNorm(x)))                 \\
+    \texttt{FeedForward}(x) & = x + \Dropout(\Linear(\GELU(\Linear(\LayerNorm(x))))) \,.
+\end{align}
+}
+
+The architecture is composed of multiple blocks which are applied sequentially after mapping continuous and categorical
+features into the embedding space. Each block consists of a \LayerNorm, \MHA, and two \Linear
 layers. The residual connections are applied after the \MHA, and one more time after at the end of each block.
 \LayerNorm layers are applied before each \MHA, and additionally before the first \Linear layer. After the first \Linear
 layer, a \GELU activation is applied. Additionally, \Dropout is applied in the end of the block before the residual
-connection.
-
-The output of the last block is passed to the \LayerNorm, and then the first token as taken and passed to the
+connection. The output of the last block is passed to the \LayerNorm, and then the first token as taken and passed to the
 final \Linear layer to obtain the log probabilities (logits) The whole structure is formalized in
 \autoref{eq:ftt} as well as presented on the \autoref{fig:ftt}.
 
@@ -101,13 +101,13 @@ change is that \LayerNorm layer has been moved from after the \MHA and \texttt{F
 and easier to train \cite{pre-norm}. We also adopt this change, following \cite{ft-transformer}.
 
 To conclude, transformer is a powerful architecture. Attention mechanism essentially represent a form of the
-computation and have shown to be able to approximate a wide range of functions really well. The parallelization
-possibility that comes with using modern \gls{gpu}s makes it possible to train such models very efficiently. The usage
+computation and have shown to be able to approximate a wide range of functions really well. The possibility of
+parallelization that comes with using modern \gls{gpu}s makes it possible to train such models very efficiently. The usage
 of residual connections and \LayerNorm layers makes it possible to train very deep models.
 
 In our experiments, we have observed that transformers have shown better regularization and better results. On the other
-hand, training requires much more more time and memory compared to the simple \glspl{resnet}, and produces a larger
-$\text{CO}_2$ footprint. The details about the training speeds are presented in the \appref{appendix:training-speed}.
+hand, training requires much more time and memory compared to the simple \glspl{resnet}, and produces a larger
+$\text{CO}_2$ footprint.% The details about the training speeds are presented in the \appref{appendix:training-speed}.
 
 % \subsubsection{Flatten last layers ?}
 

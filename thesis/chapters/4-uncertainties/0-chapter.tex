@@ -2,11 +2,12 @@
 \label{ch:Evaluation}
 
 This section presents the estimation of the statistical and systematic uncertainties on the median signal strength
-$\mu$. $\mu$ is defined as a scale factor, applied to the number of the signal events, such that the sum of the scaled
+$\mu$, where $\mu$ is defined as a scale factor, applied to the number of the signal events, such that the sum of the scaled
 signal $s$ and background $b$ events matches the observed data $n$:
 
 \begin{equation}
-    b + \mu \cdot s = n
+    \label{eq:mu}
+    b + \mu \cdot s = n\,.
 \end{equation}
 
 % \todo{How do we relate $\mu$ and significance? The whole thesis is mainly about significance...}
@@ -29,7 +30,7 @@ single representative one.
 
 To perform statistical testing, the binned profile likelihood method is used. The binned profile likelihood is a
 statistical method commonly used in high-energy physics, especially in the context of searches for new phenomena or
-precision measurements. It's a variant of the profile likelihood method adapted for histogram-like (binned) data.
+precision measurements. It is a variant of the profile likelihood method adapted for histogram-like (binned) data.
 
 Each bin has a count representing the number of events or occurrences in that bin. When applying the profile likelihood
 method to binned data, one constructs a likelihood based on the expected number of events in each bin and the observed
@@ -48,14 +49,18 @@ is modeled as a Poisson distribution:
 The first part of the equation models the likelihood of observing the parameter of interest $\mu$ given the binned
 distribution. Here $N$ is the number of bins, $s_j$ is the number of signal events in bin $j$, $b_j$ is the
 number of background events in bin, $n_j = s_j + b_j$ is the total number of events in bin $j$. We have used the
-distribution of the \gls{nn} output as the binned distribution (\autoref{fig:nn-output}), however any variable can be
-used in principle. The automatic binning was used in order to make sure there is a relatively equal number of events in
+distribution of the \gls{nn} output (probability of event being \tth, formally the posterior
+$p(y=\tth|\vec{x})$)\footnote{To achieve this, one must either inject the custom feature - \gls{nn} output in our case
+    - into the existing n-tuples, or use the so-called friend trees. The approach is described in the
+    \appref{appendix:friend-trees}} as the binned distribution (\autoref{fig:nn-output}), however any variable can be
+used in principle. The automatic binning was used in order to make sure there is a relatively equal number of events
+in
 each bin.
 
-\begin{figure}
+\begin{figure}[hbt]
     \centering
     \includegraphics[width=0.5\textwidth]{figures/nn-output.pdf}
-    \caption{The distribution of the \gls{nn} output for the signal and background events.}
+    \caption{\gls{nn} output for the signal and background events.}
     \label{fig:nn-output}
 \end{figure}
 
@@ -72,19 +77,20 @@ Statistical uncertainties emerge from the inherently stochastic nature of the da
 to the limited size of our data sample. This type of uncertainty, which decreases as we accumulate more data, is tied to
 our estimate of the significance of the \tth signal.
 
-The best fit results when only statistical uncertainties corresponds to the measurement precision of:
+The best fit results when only statistical uncertainties corresponds to the measurement precision shown in
+\autoref{fig:stat}.
 
-\begin{figure}
+\begin{figure}[h]
     \centering
     \includegraphics[trim=0 0 7cm 0, clip, width=0.8\textwidth]{figures/uncertainty/stats.pdf}
-    \caption{The relative uncertainties on the median signal strength $\mu$ for the \tth process including statistical
+    \caption{Expected uncertainties on the median signal strength $\mu$ for the \tth process including statistical
         uncertainties only.}
     \label{fig:stat}
 \end{figure}
 
 \section{Systematic Uncertainties}
 
-Systematic uncertainties in particle physics originate from a wide range of sources, with several pertinent to our
+Systematic uncertainties in particle physics originate from a wide range of sources, with several relevant to our
 analysis:
 
 \begin{itemize}
@@ -119,10 +125,10 @@ analysis:
           uncertainties. These uncertainties can be due to missing higher-order terms, variations in parton distribution
           functions, or other theoretical approximations.
 
-    \item Electron JET Modelling: Generally, modeling of electron jets or their interactions and behaviors inside
-          detectors can introduce uncertainties. This is because actual jet formation and detection can be complex, with
-          many overlapping signals and backgrounds. Variations between the simulated and actual jet properties can lead
-          to systematic errors.
+          % \item Electron JET Modelling: Generally, modeling of electron jets or their interactions and behaviors inside
+          %       detectors can introduce uncertainties. This is because actual jet formation and detection can be complex, with
+          %       many overlapping signals and backgrounds. Variations between the simulated and actual jet properties can lead
+          %       to systematic errors.
 
     \item Generator Uncertainties: These are uncertainties associated specifically with the event generators (e.g.,
           Pythia, Sherpa\footnote{https://sherpa-team.gitlab.io/}). Event generators use a myriad of theoretical
@@ -131,24 +137,27 @@ analysis:
           different results.
 \end{itemize}
 
-When these systematic uncertainties are combined with the statistical ones, the measurement precision becomes:
+When these systematic uncertainties are combined with the statistical ones, the measurement precision shown in
+\autoref{fig:sys}.
 
 \begin{figure}[h]
     \centering
     \includegraphics[trim=0 0 7cm 0, clip, width=0.8\textwidth]{figures/uncertainty/sys.pdf}
-    \caption{The relative uncertainties on the median signal strength $\mu$ for the \tth process including statistical
+    \caption{Expected uncertainties on the median signal strength $\mu$ for the \tth process including statistical
         and systematic uncertainties.}
     \label{fig:sys}
 \end{figure}
 
-An important aspect of the analysis of the systematic uncertainties is the ranking plot. The ranking plot shows the
+An important aspect of the analysis of systematic uncertainties is the ranking plot. The ranking plot shows the
 relative impact of each systematic (or statistical - denoted by $\gamma$) uncertainty on the final result.
 The ranking plot for the \tth process is shown in \autoref{fig:ranking}. The uncertainties are ranked in descending
-order of their impact on the final result. Top 20 uncertainties are shown.
+order of their impact on the final result. The top 20 uncertainties are shown.
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=\textwidth]{figures/uncertainty/ranking.pdf}
-    \caption[The ranking plot for the uncertainties.]{The ranking plot for the uncertainties.}
+    \includegraphics[width=0.75\textwidth]{figures/uncertainty/ranking.pdf}
+    \caption{Ranking plot for systematic uncertainties.}
     \label{fig:ranking}
 \end{figure}
+
+These results on systematic uncertainties are preliminary and further studies are ongoing.

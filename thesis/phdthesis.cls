@@ -131,18 +131,19 @@
 
 	% Page with declaration
 	\chapter*{Declaration}
-	I hereby declare I have written this doctoral thesis independently and quoted all the sources of information used in accordance with methodological instructions on ethical principles for writing an academic thesis. Moreover, I state that this thesis has neither been submitted nor accepted for any other degree.
+	I declare that the presented work was developed independently and that I have listed all sources of information used
+	within it in accordance with the methodical instructions for observing the ethical principles in the preparation of
+	university theses.
 
-	\vspace{5mm}
+	\vspace{1cm}
 	\noindent
-	In \@placeyear
+	Prague, date \quad .................................. \hspace{3cm} ............................................. \\
+	\parbox[t]{20cm}{\hspace{10.5cm}\@author} \\
 
-	\vspace{10mm}
-	\hfill\parbox[t]{8cm}{%
-		\centering
-		............................................ \\
-		\@author \\
-	}
+	% \vspace{10mm}
+	% \hfill\parbox[t]{8cm}{%
+	% 	\centering
+	% }
 
 }
 

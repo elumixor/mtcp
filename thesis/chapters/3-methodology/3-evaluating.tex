@@ -42,8 +42,8 @@ number of negative instances correctly identified as negative, FP (false positiv
 incorrectly identified as positive (Type I error), and FN (false negative) is the number of positive instances
 incorrectly identified as negative (Type II error).
 
-As explained before in the \autoref{sec:mc}, the event weights should always be used when evaluating the classifier's
-performance. Otherwise, the results we obtain are not representative of the real-world performance. All of the metrics
+As explained in \autoref{sec:mc}, the event weights should always be used when evaluating the classifier's
+performance. Otherwise, the results we obtain are not representative of the real-world performance. All metrics
 we use thus stem from the \emph{weighted} confusion matrix, defined as:
 
 \begin{equation}
@@ -70,17 +70,18 @@ care about differentiating between \tth and non-\tth events.
 
 \begin{figure}[htb]
     \centering
-    \includegraphics[trim=0.5cm 0 3cm 0, clip, width=0.8\textwidth]{figures/ml/cm/signal_argmax.pdf}
+    \includegraphics[trim=0.5cm 0 2cm 0, clip, width=0.8\textwidth]{figures/ml/cm/signal_argmax.pdf}
     \caption[Confusion matrix for a binary classification task]
     {Confusion matrix for a binary classification task. This confusion matrix is produced using 5-blocks
-        \gls{ftt} (see \autoref{sec:ftt}) trained on the extended training set (see \autoref{sec:extended-set}). The
-        $\arg\max$ classification strategy was used.  Note that the classifier was \emph{trained} to differentiate
-        between all the classes, but during evaluation, all the non-\tth events are grouped together.}
+        \gls{ftt} (\autoref{sec:ftt}) trained on the extended training set (\autoref{sec:extended-set}) evaluated on the
+        validation set, that contains 20\% of the \gls{sr} events. Signal refers to \tth, and background refers to all
+        the other classes. The $\arg\max$ classification strategy was used.  Note that the classifier was \emph{trained}
+        to differentiate between all the classes, but during evaluation, all the non-\tth events are grouped together.}
     \label{fig:cm}
 \end{figure}
 
 Binary confusion matrix naturally extends to a multi-class formulation (\autoref{fig:cm-muli}), leading to a
-$|\classY| \times |\classY|$ matrix for an $|\classY|$-class classification task:
+$|\classY| \times |\classY|$ matrix for a $|\classY|$-class classification task:
 
 \begin{equation}
     \Cmulti_{ij} = \sum_{k=1}^{|\classY|} w_k \llbracket y_k = i \land \hat{y}_k = j \rrbracket\,,
@@ -96,7 +97,7 @@ in the corresponding true class.
     \includegraphics[trim=0.5cm 0 6cm 0, clip, width=\textwidth]{figures/ml/cm/all_argmax.pdf}
     \caption[Confusion matrix for a multi-class classification task]
     {Confusion matrix for a multi-class classification task. This confusion matrix is produced using 5-blocks
-        \gls{ftt} (see \autoref{sec:ftt}) trained on the extended training set (see \autoref{sec:extended-set}). The
+        \gls{ftt} (\autoref{sec:ftt}) trained on the extended training set (\autoref{sec:extended-set}). The
         $\arg\max$ classification strategy was used.}
     \label{fig:cm-muli}
 \end{figure}
@@ -106,8 +107,9 @@ under the \gls{roc} curve (AUC-ROC).
 
 \subsubsection{Accuracy: The Proportion of Correct Predictions}
 
-Accuracy is the most intuitive performance metric. It is the proportion of the number of correctly classified examples
-to the total number of examples. Accuracy is calculated trivially from the confusion matrix:
+Accuracy is the most intuitive performance metric. It is the ratio of the number of correctly classified examples
+to the total number of examples (called events in particle physics). Accuracy is calculated trivially from the confusion
+matrix:
 
 \begin{align}
     \acc  = \frac{\trace \C_{ii}}{\sum_{i=1}^\classY \sum_{j=1}^\classY \C_{ij}}\,,
@@ -133,17 +135,15 @@ solely on accuracy can be misleading. It would typically be considered alongside
 into the performance on the class of interest. Thus, while accuracy may not be the most representative metric in such
 cases, it might still hold some value as part of a broader evaluation framework.
 
-Absolutely, let's proceed with defining precision and recall in a style consistent with what we've been working on.
-
 \subsubsection{Precision and Recall}
 
-Two other important metrics derived from the confusion matrix are precision and recall, which are particularly useful
-when dealing with imbalanced classes.
+Two other important metrics which are derived from the confusion matrix are precision and recall, which are particularly
+useful when dealing with imbalanced classes.
 
-\paragraph{Precision} is the proportion of TP to all \emph{predicted} positives. Specifically, in our case, it
-is the ratio of the correctly classified \tth events, to all events classified (or misclassified) as \tth. From here on
-out, we assume $y_1 = \tth$, and so the true \tth events correspond to the first row of the confusion matrix, while
-predicted \tth events correspond to the first column. Precision is then given by:
+\paragraph{Precision} is the proportion of TP to all \emph{predicted} positives. Specifically, in our case, it is the
+ratio of the correctly classified \tth events, to all events classified (or misclassified) as \tth. From here on, we
+assume $y_1 = \tth$, and so the true \tth events correspond to the first row of the confusion matrix, while predicted
+\tth events correspond to the first column. Precision is then given by
 
 \begin{align}
     \text{Precision} = \frac{\C_{11}}{\sum_{j=1}^\classY \C_{1j}}\,.
@@ -151,7 +151,7 @@ predicted \tth events correspond to the first column. Precision is then given by
 
 \paragraph{Recall} (or sensitivity) is the proportion of TP to all \emph{actual} positives. In our case, it is the ratio
 of the correctly classified \tth events to all actual \tth events (which the model might have missed by classifying them
-as background). Recall is given by:
+as background). Recall is given by
 
 \begin{align}
     \text{Recall} = \frac{\C_{11}}{\sum_{i=1}^\classY \C_{i1}}\,.
@@ -163,7 +163,7 @@ complementary insights, and understanding the trade-off between them is essentia
 tasks. Next, we will introduce the F1 score, a metric that combines both precision and recall to provide a balanced view
 of the model's performance on both fronts.
 
-\subsubsection{F1 score: The Balance Between Precision and Recall}
+\subsubsection{F1 Score: The Balance Between Precision and Recall}
 
 The F1 score is the harmonic mean of precision and recall, providing a balance between the two. It is calculated as:
 
@@ -197,11 +197,12 @@ while a random classifier has an AUC-ROC of 0.5. The ROC curves for the \tth and
         \label{fig:roc-ttz}
     \end{subfigure}
     \caption[\acrshort{roc} curves for \tth, \ttz, and \ttz]
-    {\gls{roc} curves for the \tth, \ttw, and \ttz computed using one versus all classification. The curves are produced
-        using 5-blocks \gls{ftt} (see \autoref{sec:ftt}) trained on the extended training set (see
-        \autoref{sec:extended-set}). We provide both the \glspl{roc} computed with the weighted and unweighted confusion
-        matrices for completeness and comparison with the previous analysis, bet we emphasize
-        that the weighted \glspl{roc} are the ones that should be used always.} \label{fig:rocs}
+    {\gls{roc} curves for the \tth, \ttw, and \ttz computed using one process versus all other processes. The curves are produced
+        using 5-blocks \gls{ftt} (\autoref{sec:ftt}) trained on the extended training set (\autoref{sec:extended-set}).
+        We provide both the \glspl{roc} computed with the weighted and unweighted confusion matrices for completeness
+        and comparison with the previous analysis, however, we emphasize that the weighted \glspl{roc} are the ones that
+        should be used always.}
+    \label{fig:rocs}
 \end{figure}
 
 

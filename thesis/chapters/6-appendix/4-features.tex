@@ -1,4 +1,5 @@
-\clearpage \subsection{Features used}
+\clearpage
+\subsection{Features used}
 
 \subsubsection{\texttt{lep\_E\_X}} The energy of the Xth lepton.
 
@@ -7,10 +8,10 @@ $\eta-\phi$ space frequently used in particle physics.
 
 \subsubsection{\texttt{Ptll01}} The transverse momentum of the dilepton system made up of the two leading leptons.
 
-\subsubsection{\texttt{lep\_nTrackParticles\_X}} The number of track particles associated with the Xth lepton.
+\subsubsection{\texttt{lep\_nTrackParticles\_X}} The number of tracks associated with the Xth lepton.
 
 \subsubsection{\texttt{custTrigMatch\_LooseID\_FCLooseIso\_DLT}} Custom trigger matching for loosely identified and loosely
-isolated leptons, likely related to the dilepton trigger
+isolated leptons.
 
 \subsubsection{\texttt{Mll01}} The invariant mass of the two leading leptons.
 
@@ -21,6 +22,12 @@ isolated leptons, likely related to the dilepton trigger
 \subsubsection{\texttt{HT}} The scalar sum of the transverse momenta of all jets in the event.
 
 \subsubsection{\texttt{HT\_lep}} The scalar sum of the transverse momenta of all leptons in the event.
+
+\subsubsection{\texttt{HT\_jets}} The scalar sum of the transverse momenta of all jets (not forward jets) in the event.
+
+\subsubsection{\texttt{HT\_fwdJets}} The scalar sum of the transverse momenta of all forward jets in the event.
+
+\subsubsection{\texttt{HT\_taus}} The scalar sum of the transverse momenta ($P_t$) of all tau leptons in the event.
 
 \subsubsection{\texttt{lep\_Eta\_X}} The pseudorapidity of the Xth lepton.
 
@@ -38,30 +45,28 @@ passes an isolation cut with a variable radius. Looser isolation cuts allow more
 \subsubsection{\texttt{lep\_EtaBE2\_X}} The pseudorapidity of the Xth lepton in the second layer of the electromagnetic
 calorimeter.
 
-\subsubsection{\texttt{HT\_fwdJets}} The scalar sum of the transverse momenta of all forward jets in the event.
-
 \subsubsection{\texttt{taus\_width\_X}} The width of the Xth tau.
 
-\subsubsection{\texttt{nJets\_OR\_DL1r\_85}} Count of jets that pass overlap removal (OR) and are b-tagged according to the
-DL1r algorithm at the 85\% working point.
+\subsubsection{\texttt{nJets\_OR\_DL1r\_85}} Number of jets that pass overlap removal (OR) and are b-tagged according to the
+DL1r algorithm at the 85\% working point.Overlap removal is a step in particle reconstruction where, for instance, an
+object identified as both a jet and a tau would be considered only as one or the other.
 
 \subsubsection{\texttt{lep\_nInnerPix\_X}} Number of hits in the inner pixel detector associated with the lepton, where X
 refers to the lepton index.
 
 \subsubsection{\texttt{met\_phi}} The azimuthal angle of the missing transverse energy in the event.
 
-\subsubsection{\texttt{DeltaR\_max\_lep\_bjet77}} The maximum DeltaR value between a lepton and a b-tagged jet. The "77"
-may refer to the working point of the b-tagging algorithm.
+\subsubsection{\texttt{DeltaR\_max\_lep\_bjet77}} The maximum $\Delta R$ value between a lepton and a b-tagged jet.
 
 \subsubsection{\texttt{MbX}} Invariant mass associated with the leading b-jet in the event
 
-\subsubsection{\texttt{lep\_RadiusCO\_X}} Possibly the radius of the cone used for isolation of the lepton, or
+\subsubsection{\texttt{lep\_RadiusCO\_X}} Radius of the cone used for isolation of the lepton, or
 alternatively a parameter associated with the trajectory of the lepton.
 
 \subsubsection{\texttt{lep\_Mtrktrk\_atConvV\_CO\_X}} The invariant mass of track pairs at the conversion vertex for lepton
-X. This might be related to photon conversions into an electron-positron pair.
+X.
 
-\subsubsection{\texttt{lep\_Z0SinTheta\_X}} The z0 impact parameter times the sine of the lepton's polar angle.
+% \subsubsection{\texttt{lep\_Z0SinTheta\_X}} The z0 impact parameter times the sine of the lepton's polar angle.
 
 \subsubsection{\texttt{lep\_Pt\_X}} The transverse momentum of the Xth lepton.
 
@@ -73,14 +78,12 @@ X. This might be related to photon conversions into an electron-positron pair.
 
 \subsubsection{\texttt{Mlb}} Invariant mass of a lepton and a b-jet.
 
-\subsubsection{\texttt{taus\_RNNJetScoreSigTrans\_X}} Transformed RNN-based score for tau lepton, possibly to better
-separate signal from background.
+% \subsubsection{\texttt{taus\_RNNJetScoreSigTrans\_X}} Transformed RNN-based score for tau lepton, possibly to better
+% separate signal from background.
 
 \subsubsection{\texttt{minDeltaR\_LJ\_X}} The minimum $\Delta R$ distance between the Xth lepton and any jet in the event.
 
-\subsubsection{\texttt{nTaus\_OR}} Number of tau leptons that pass overlap removal. Overlap removal is a step in particle
-reconstruction where, for instance, an object identified as both a jet and a tau would be considered only as one or the
-other.
+\subsubsection{\texttt{nTaus\_OR}} Number of tau leptons that pass overlap removal.
 
 \subsubsection{\texttt{DeltaR\_min\_lep\_jet}} The minimum $\Delta R$ distance between a lepton and a jet in the event.
 
@@ -90,13 +93,11 @@ collision from secondary particles produced in a decay.
 
 \subsubsection{\texttt{taus\_eta\_X}} The pseudorapidity of the Xth tau.
 
-\subsubsection{\texttt{HT\_jets}} The scalar sum of the transverse momenta of all jets (not forward jets) in the event.
-
 \subsubsection{\texttt{lep\_Phi\_X}} The azimuthal angle (in radians) of the Xth lepton.
 
-\subsubsection{\texttt{bTagSF\_weight\_DL1r\_85}} A weight applied to events based on the scale factor for b-tagging using
-the DL1r algorithm at an 85\% efficiency working point. This scale factor corrects the b-tagging efficiency in Monte
-Carlo simulations to match that observed in real data.
+% \subsubsection{\texttt{bTagSF\_weight\_DL1r\_85}} A weight applied to events based on the scale factor for b-tagging using
+% the DL1r algorithm at an 85\% efficiency working point. This scale factor corrects the b-tagging efficiency in Monte
+% Carlo simulations to match that observed in real data.
 
 \subsubsection{\texttt{lep\_chargeIDBDTResult\_recalc\_rel207\_tight\_X}} The outcome of a BDT-based charge identification
 for a lepton, recalculated with some specific settings, and applying a 'tight' threshold.
@@ -114,7 +115,7 @@ for a lepton, recalculated with some specific settings, and applying a 'tight' t
 "tight" criteria of the Prompt Lepton Veto (PLIV), a tool for identifying non-prompt light leptons.
 
 \subsubsection{\texttt{lep\_Mtrktrk\_atPV\_CO\_X}} The invariant mass of track pairs at the primary vertex for lepton X.
-This could be related to certain types of particle decays happening at the primary collision vertex.
+% This could be related to certain types of particle decays happening at the primary collision vertex.
 
 \subsubsection{\texttt{taus\_JetRNNSigMedium\_X}} RNN-based score for tau lepton, used to distinguish tau leptons from
 jets, with 'medium' selection criteria.
@@ -126,7 +127,7 @@ jets, with 'medium' selection criteria.
 \subsubsection{\texttt{Mllll0123}} The invariant mass of the four leading leptons.
 
 \subsubsection{\texttt{custTrigSF\_TightElMediumMuID\_FCLooseIso\_DLT}} Custom trigger scale factor, for events with a
-tight electron and a medium muon, both of which are loosely isolated, likely related to the dilepton trigger (DLT).
+tight electron and a medium muon, both of which are loosely isolated.
 
 \subsubsection{\texttt{best\_Z\_Mll}} The invariant mass of the dilepton system that is closest to the Z boson mass.
 
@@ -159,13 +160,8 @@ particles.
 
 \subsubsection{\texttt{taus\_numTrack\_X}} The number of tracks associated with the Xth tau.
 
-\subsubsection{\texttt{HT\_taus}} Scalar sum of the transverse momenta ($P_t$) of all tau leptons in the event.
-
 \subsubsection{\texttt{taus\_passEleOLR\_X}} A boolean flag indicating whether the Xth tau passes the electron overlap
 removal.
-
-\subsubsection{\texttt{HT\_inclFwdJets}} The scalar sum of the transverse momenta of all jets, including forward jets, in
-the event.
 
 \subsubsection{\texttt{DRll01}} The $\Delta R$ distance between the two leading leptons.
 
@@ -174,9 +170,9 @@ jets, with 'loose' selection criteria.
 
 \subsubsection{\texttt{taus\_pt\_X}} The transverse momentum of the Xth tau.
 
-\subsubsection{\texttt{bTagSF\_weight\_DL1r\_77}} A weight applied to events based on the scale factor for b-tagging using
-the DL1r algorithm at an 77\% efficiency working point. This scale factor corrects the b-tagging efficiency in Monte
-Carlo simulations to match that observed in real data.
+% \subsubsection{\texttt{bTagSF\_weight\_DL1r\_77}} A weight applied to events based on the scale factor for b-tagging using
+% the DL1r algorithm at an 77\% efficiency working point. This scale factor corrects the b-tagging efficiency in Monte
+% Carlo simulations to match that observed in real data.
 
 \subsubsection{\texttt{flag\_JetCleaning\_LooseBad}} A flag variable indicating whether a jet passes a loose cleaning cut
 to remove bad or noisy jets from the analysis.
@@ -214,7 +210,7 @@ discriminator.
 \begin{figure}[hbtp]
     \centering
     \includegraphics[width=\textwidth]{figures/ml/features/top20.pdf}
-    \caption{Feature importance for the top 20 most important features. Feature importance was calculated using the
+    \caption{Feature importance of the top 20 most important features. The feature importance was calculated using the
         \gls{ig} method \cite{ig}.}
     \label{fig:feature_importance}
 \end{figure}

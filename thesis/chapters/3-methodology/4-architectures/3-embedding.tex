@@ -1,4 +1,4 @@
-\subsection{Pre-processing and embedding}
+\subsection{Pre-Processing and Embedding}
 
 
 In previous work, all the features were treated as continuous variables. Before feeding them to the network, they were
@@ -64,7 +64,7 @@ embeddings:
         \,\, e^{d^j}_1, \dots, e^{d^j}_{d_h}}_\text{categorical}),\,
 \end{align}
 
-while the the second option would be to map each continuous feature $x^i$ to a $d_h$-dimensional space as well:
+while the second option would be to map each continuous feature $x^i$ to a $d_h$-dimensional space as well:
 
 \begin{equation}
     x_i \xRightarrow[embed]{} x_i \, \vec{w}^i + \vec{b}^i = \vec{e}^{x_i}\,.
@@ -89,7 +89,7 @@ while the the second option would be to map each continuous feature $x^i$ to a $
         \end{pmatrix}}_\text{categorical})\,.
 \end{equation}
 
-For the \gls{ftt}, the \autoref{eq:full-embed} is necessary (see \autoref{sec:ftt}), as each attention layer operates
+For the \gls{ftt}, the \autoref{eq:full-embed} is necessary (\autoref{sec:ftt}), as each attention layer operates
 on an array of 2D tokens, as opposed to an array of 1D features. For the \glspl{resnet}, however, we have found that
 such embeddings were completely unnecessary, suggesting that categorical features were not particularly useful in
 prediction.
@@ -115,7 +115,8 @@ $w^\text{NaN}_i$ for each feature $x_i$:
 \begin{figure}[htb]
     \centering
     \includegraphics[width=\textwidth]{figures/ml/embedding/resnets.pdf}
-    \caption{Impact of using learnable parameters for missing/invalid values and/or embedding categorical features \acrshortpl{resnet}.}
+    \caption[Impact of using learnable parameters for missing/invalid values and/or embedding categorical features for \acrshortpl{resnet}.]
+    {Impact of using learnable parameters for missing/invalid values and/or embedding categorical features for \acrshortpl{resnet}. \transplot}
     \label{fig:learnable-nan-w-resnets}
 \end{figure}
 
@@ -124,9 +125,10 @@ $w^\text{NaN}_i$ for each feature $x_i$:
     \includegraphics[width=\textwidth]{figures/ml/embedding/transformers.pdf}
     \caption[Impact of using learnable parameters for missing/invalid values on \acrshortpl{ftt}.]
     {Impact of using learnable parameters for missing/invalid values on \ftts. \ftt with 2 blocks trained on the
-        standard training set \ttrn was used.}
+        standard training set \ttrn was used. \transplot}
     \label{fig:learnable-nan-w-transformers}
 \end{figure}
 
 Overall, with the 8 blocks \gls{resnet} with an embedding size of 64 we were able to achieve a significance $Z = 2.29$,
 $\AUC_\tth = 0.74$, $\AUC_\text{mean} = 0.83$. The results are summarized on the \autoref{tab:results}.
+

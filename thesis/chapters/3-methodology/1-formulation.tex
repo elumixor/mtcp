@@ -1,8 +1,6 @@
 \section{Problem Formulation}
 \label{sec:formulation}
 
-\todo{proofread}
-
 \glsreset{erm}
 \subsection[Empirical Risk Minimization]{\gls{erm}}
 
@@ -14,7 +12,7 @@ the class labels we are differentiating between. We can further split the proble
 (seeking to differentiate between \tth (signal) and not \tth (background)) or a multi-class classification (seeking to
 correctly discriminate between each of the processes - \tth, \ttw, \ttz, \ttbar, etc.).
 
-As we approach this task as a supervised learning problem (recall \autoref{sec:mc}), we assume that a set of labeled
+As we approach this task as a supervised learning problem (\autoref{sec:mc}), we assume that a set of labeled
 observations $\ttrn = {(\bm{x}_i, y_i)}_{i=1}^N$ is provided.  Here $\bm{x}_i \in \mathbf{X}$ is a feature vector
 representing different properties (features) of an event and $y_i \in \mathbf{Y}$ is its corresponding true class label.
 We assume there exists a joint probability distribution $P(\bm{x}, y)$ over the observations $\bm{x}$ and their
@@ -70,7 +68,7 @@ Consider, for example the following "cheating" classifier:
 
 
 This classifier would have zero empirical risk, but would perform poorly on unseen data (would not generalize well).
-This is referred to as overfitting (see \autoref{fig:losses}). Generally, in case of an unconstrained
+This is referred to as overfitting (\autoref{fig:losses}). Generally, in case of an unconstrained
 hypothesis space $\mathcal{H}$, we have no guarantee that the empirical risk $R_\ttrn(h)$ is a good approximation of the
 true risk $R(h)$.
 
@@ -83,31 +81,33 @@ This violates the \gls{iid} assumption and thus the empirical risk $R_\ttrn(h_\n
 the true risk $R(h_\nnparams)$ anymore.
 
 
-To address this issue and more accurately assess the generalization ability of the classifier $h$, We would need a
-separate set $\tval \sim P(\bm{x}, y)$ that would provide an unbiased estimate of the true risk $R(h)$. This set is
-called the validation set. Validation set is used to compare the performance of different
-classifiers. Consider two classifiers $h_1$ and $h_2$, where the risk on the training set is $R_\ttrn(h_1) <
-    R_\ttrn(h_2)$, but the risk on the validation set is $R_\tval(h_1) > R_\tval(h_2)$. In this case, we would prefer the
-classifier $h_2$ over $h_1$ as it generalizes better to unseen data. The specific case is often seen with the \gls{nn}
-classifiers, where the classifier $h$ is parametrized by $\nnparams$. Then essentially we compare $h_1 = h_{\nnparams_1}$ and
-$h_2 = h_{\nnparams_2}$, where $\nnparams_1$ and $\nnparams_2$ are two different sets of parameters. The process of selecting
-the best classifier $h^*$ from a set of classifiers $\mathcal{H}$ is called model selection.
+To address this issue and more accurately assess the generalization ability of the classifier $h$, we need a separate
+set $\tval \sim P(\bm{x}, y)$ that provides an unbiased estimate of the true risk $R(h)$. This set is called the
+validation set. The validation set is used to compare the performance of different classifiers. Consider two classifiers
+$h_1$ and $h_2$, where the risk on the training set is $R_\ttrn(h_1) < R_\ttrn(h_2)$, but the risk on the validation set
+is $R_\tval(h_1) > R_\tval(h_2)$. In this case, we prefer the classifier $h_2$ over $h_1$ as it generalizes better
+to unseen data. The specific case is often seen with the \gls{nn} classifiers, where the classifier $h$ is parametrized
+by $\nnparams$. Then essentially we compare $h_1 = h_{\nnparams_1}$ and $h_2 = h_{\nnparams_2}$, where $\nnparams_1$ and
+$\nnparams_2$ are two different sets of parameters. The process of selecting the best classifier $h^*$ from a set of
+classifiers $\mathcal{H}$ is called model selection.
 
 \begin{figure}[htb]
     \centering
     \includegraphics[width=\textwidth]{figures/ml/training/losses.pdf}
-    \caption[Training and validation losses during the training process with and without extended training set.]
-    {Training and validation losses during the training process with and without extended training set.
-        The left plot shows the training of the \acrshort{ftt} with 2 blocks (see \autoref{sec:ftt}) on the
+    \caption[Training and validation losses during the training process on standard versus extended training sets.]
+    {Training and validation losses during the training process on standard versus extended training sets.
+        The semi-transparent lines show the actual loss values, while the solid lines show the exponential
+        moving average.
+        The left plot shows the training of the \acrshort{ftt} with 2 blocks (\autoref{sec:ftt}) on the
         standard training set. Because of the lack of training samples, and high capacity of the model, we observe
-        overfitting. The training loss continues to decrease while the validation loss starts to increase. The
-        checkpoint with the validation loss is the lowest is then used as the final model. This is referred to as early
-        stopping. The best way to prevent overfitting is to get more training data (see
-        \autoref{sec:extended-set}). If that is not possible, one might also consider augmentation techniques, or
-        regularization - dropout (see \autoref{sec:dropout}), weight decay etc. Thr right plot shows the
-        training of the \acrshort{ftt} with 5 blocks (see \autoref{sec:ftt}) on the extended training set. Also, the 20\%
-        dropout is introduced. We observe now only a slight overfitting, which means that the model has generalized
-        a lot better.}
+        overfitting. The training loss continues to decrease while the validation loss starts to increase.
+        The checkpoint with the validation loss is the lowest is then used as the final model. This is referred to as early
+        stopping.
+        The best way to prevent overfitting is to get more training data (\autoref{sec:extended-set}). If that
+        is not possible, one might also consider augmentation techniques, or regularization - dropout
+        (\autoref{sec:dropout}), weight decay etc. The right plot shows the training of the \acrshort{ftt} with 5 blocks
+        (\autoref{sec:ftt}) on the extended training set. Also, the 20\% dropout is introduced. We observe only a
+        slight overfitting, which means that the model has generalized a lot better.}
     \label{fig:losses}
 \end{figure}
 
@@ -119,7 +119,7 @@ set should be used only once to assess the performance of the fully-trained clas
 
 
 
-\todo{But then why we don't use the test set in our thesis???}
+% \todo{But then why we don't use the test set in our thesis???}
 
 
 
@@ -132,12 +132,12 @@ further reduces to minimization of the empirical risk $R_\ttrn(h)$. As described
 expectation of the loss function $L(y, h(\bm{x}))$ over the training set $\ttrn$. Thus, the choice of the loss function
 will determine the available training algorithms.
 
-This work focuses on training the \gls{nn} classifiers. \gls{nn} can be formally described as a parametric model
+This work focuses on training \acrfull{nn} classifiers. A \gls{nn} can be formally described as a parametric model
 parametrized by a vector of parameters $\nnparams$. \glspl{nn} are generally composed of multiple layers
 $f_{\nnparams_i}^1, \dots f_{\nnparams_L}^D$ ($D$ denotes the total number of layers - depth of the network), where
 each layer $f_{\nnparams_i}^i$ is a parametric function parametrized by $\nnparams_i$.  \glspl{nn} can take different
 architectures, a common one\footnote{In this thesis we use an adaptation of \glspl{resnet} to tabular data and
-    \glspl{ftt}, which are both a special cases of feed-forward \glspl{nn}.} is a feed-forward \gls{nn} where the output
+    \glspl{ftt}, which are both special cases of feed-forward \glspl{nn}.} is a feed-forward \gls{nn} where the output
 of the layer $f_{\nnparams_i}^i$ is fed as an input to the next layer $f_{\nnparams_{i+1}}^{i+1}$. The output
 of the last layer $f_{\nnparams_L}^D$ is the output of the network $h_\nnparams$. Alternative to feed-forward
 \glspl{nn} would be the network that contain cycles (e.g.  \glspl{rnn}\footnote{Overview of the different types of
@@ -157,9 +157,9 @@ layers:
 The goal is then to find the optimal set of parameters $\nnparams^*$ that minimizes the empirical risk $R_\ttrn(h_\nnparams)$.
 
 Training \glspl{nn} efficiently involves the use of gradient-based optimization algorithms where the gradient of the
-empirical risk $R_\ttrn(h_\nnparams)$ with respect to the parameters $\nnparams$ is computed and used to update the parameters
-$\nnparams$ in the direction of the steepest descent. The gradient of the empirical risk $R_\ttrn(h_\nnparams)$ with respect to
-the parameters $\nnparams$ can be computed using the chain rule:
+empirical risk $R_\ttrn(h_\nnparams)$ with respect to the parameters $\nnparams$ is computed and is used to update the
+parameters $\nnparams$ in the direction of the steepest descent. The gradient of the empirical risk
+$R_\ttrn(h_\nnparams)$ with respect to the parameters $\nnparams$ can be computed using the chain rule:
 
 \begin{equation}
     \nabla_\nnparams R_\ttrn(h_\nnparams) = \nabla_\nnparams \frac{1}{N} \sum_{i=1}^{N} L(y_i, h_\nnparams(\bm{x}_i)) = \frac{1}{N} \sum_{i=1}^{N} \nabla_\nnparams L(y_i, h_\nnparams(\bm{x}_i))\,,
@@ -215,8 +215,7 @@ can compute the gradients with respect to the outputs of the layers:
     \vec{\delta}^1     & = \vec{\delta}^2 \dv{\vec{f}^2}{\vec{f}^1}\,.
 \end{align}
 
-Then, the
-gradient of the loss function with respect to the parameters of each layer $\nnparams_i$ is computed as
+Next, the gradient of the loss function with respect to the parameters of each layer $\nnparams_i$ is computed as
 
 \begin{align}
     \dv{L}{\nnparams_D}     & = \dv{L}{\vec{f}^D} \dv{\vec{f}^D}{\nnparams_{D}} = \vec{\delta}^D \dv{\vec{f}^D}{\nnparams_{D}} \\
@@ -235,11 +234,11 @@ the gradient even for very deep \glspl{nn}.
 
 
 
-\subsection{Cross-entropy loss}
+\subsection{Cross-Entropy Loss}
 \label{sec:cross-entropy}
 
 In order for the back-propagation to work, all the functions must be differentiable. The zero-one loss function that we
-have used in the previous section does not conform to this requirement. In practice, when training \glspl{nn} on the
+used in the previous section does not conform to this requirement. In practice, when training \glspl{nn} on the
 classification tasks, the cross-entropy loss function is used. Cross-entropy loss operates on the probabilities, rather
 than on the predicted label, thus making it differentiable and suitable to be used in the back-propagation algorithm.
 The cross-entropy loss function is defined as:
@@ -256,7 +255,7 @@ particular interest or significance.
 
 For example, consider a medical diagnosis application where 95\% of the samples are negative ($y = 0$) and only 5\% are
 positive ($y = 1$) for a specific condition. Training a model on this dataset without any adjustments may lead to a
-classifier that almost always predicts the negative class, since it's encountering it much more often. Such a skewed
+classifier that almost always predicts the negative class, since it is encountering it much more often. Such a skewed
 prediction can be problematic in critical applications, as missing the rare positive cases could have serious
 consequences. To alleviate this issue, class weights can be introduced to the loss function to give equal importance to
 both classes. The modified loss function is:
@@ -279,7 +278,7 @@ the weights so that they sum up to 1.
 
 
 Similarly, the way the cross-entropy is defined, we can also introduce a more refined sample-wise weighting. In this
-case, the loss function would is defined as:
+case, the loss function is defined as:
 
 \begin{equation}
     \label{eq:weight-per-sample}
@@ -288,6 +287,6 @@ case, the loss function would is defined as:
 
 Here we should note that $w_i$ is not the same as the class weight $w_i$ from the previous example. In this case, $w_i$
 is a weight assigned to each sample, rather than to each class, which we note by using the same index $i$ as in the
-$y_i$ and $\vec{x}_i$. This formulation is not commonly used, bt was explored by the previous analysis
+$y_i$ and $\vec{x}_i$. This formulation is not commonly used, but was explored by the previous analysis
 \cite{severin,jan}, thus we include it here for completeness. More details are given in \autoref{sec:weights}.
 

@@ -2,16 +2,15 @@
 \label{sec:weights}
 
 As we described before, each event coming from the \gls{mc} simulation has an associated weight so that the distribution
-of the simulated sample matches the distribution of the real data (see \autoref{sec:mc}). As described in the
+of the simulated sample matches the distribution of the real data (\autoref{sec:mc}). As described in
 \autoref{sec:evaluation}, weights should always be used during evaluation.
 
-But what about the training? As described in \autoref{sec:cross-entropy}, the Cross-Entropy loss function allows to
-assign a weight to each class, that would put more or less emphasis on it. In \cite{jan} authors have trained with
-using the event weights as in \autoref{eq:weight-per-sample}, where, however, the weights were per-batch normalized to
+Regarding the training, as described in \autoref{sec:cross-entropy}, the Cross-Entropy loss function allows to
+assign a weight to each class that would put more or less emphasis on it. In \cite{jan} the authors trained with
+using the event weights as in \autoref{eq:weight-per-sample}, however, the weights were per-batch normalized to
 sum to 1.
 
-In our analysis we have experimented with different approaches, but we have found out that using them produced no
-significant improvements. We have attempted several strategies:
+In our analysis we have experimented with different approaches:
 
 \begin{enumerate}
       \item \textbf{No weights} - the weights were not used at all.
@@ -38,6 +37,10 @@ performance. Further investigation of the subject is suggested. We have decided 
       \includegraphics[width=\textwidth]{figures/ml/weighting/results.pdf}
       \caption[Comparison of different weighting strategies.]
       {Comparison of different weighting strategies. \gls{ftt} with 2 blocks was used on the standard training set
-            \ttrn.}
+            \ttrn.
+            \transplot
+      }
       \label{fig:weights}
 \end{figure}
+
+\clearpage

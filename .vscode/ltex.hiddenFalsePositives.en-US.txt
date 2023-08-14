@@ -1,0 +1,67 @@
+{"rule":"THE_PUNCT","sentence":"^\\QFor the , this corresponds to 0.8M \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q 15K raw events (note that additional cuts (\\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q) are applied, numbers here correspond to the sr).\\E$"}
+{"rule":"UPPERCASE_SENTENCE_START","sentence":"^\\Qappendix:cut-expression shows the precise definition of the \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q.\\E$"}
+{"rule":"UPPERCASE_SENTENCE_START","sentence":"^\\Qis a framework for binned template profile likelihood fits heavily used at CERN.\\E$"}
+{"rule":"COMMA_PARENTHESIS_WHITESPACE","sentence":"^\\QWhen we start with a threshold of 0, all events are classified as , producing a high number of true positives, but also a high number of false positives.\\E$"}
+{"rule":"COMMA_PARENTHESIS_WHITESPACE","sentence":"^\\QAs the threshold increases, the model gets more conservative and starts classifying fewer events as , reducing the number of true positives and false positives.\\E$"}
+{"rule":"SENTENCE_WHITESPACE","sentence":"^\\QThe ranking plot for the uncertainties.\\E$"}
+{"rule":"COMMA_PARENTHESIS_WHITESPACE","sentence":"^\\QHowever, the probability of producing a Higgs boson, along with a top-antitop pair, in a proton-proton collision is very small, estimated to be about 1% of the total cross-section (\\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q) .\\E$"}
+{"rule":"COMMA_PARENTHESIS_WHITESPACE","sentence":"^\\QHowever, the probability of producing a Higgs boson, along with a top-antitop pair, in a proton-proton collision is very small, estimated to be about 1% of the total cross-section (\\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q) .\\E$"}
+{"rule":"COMMA_PARENTHESIS_WHITESPACE","sentence":"^\\QThe accelerator is housed in a tunnel with a circumference of 27 kilometers, around 100 meters underground .\\E$"}
+{"rule":"UPPERCASE_SENTENCE_START","sentence":"^\\Qlhc.\\E$"}
+{"rule":"UPPERCASE_SENTENCE_START","sentence":"^\\Qand the atlas.\\E$"}
+{"rule":"UPPERCASE_SENTENCE_START","sentence":"^\\Qmc\\E$"}
+{"rule":"COMMA_PARENTHESIS_WHITESPACE","sentence":"^\\QWe use software like Pythia to generate a labeled dataset where the final state particles and their properties are the features, and the intermediate processes, such as or , are known and are thus assigned as the corresponding labels.\\E$"}
+{"rule":"UPPERCASE_SENTENCE_START","sentence":"^\\Qappendix:dsids shows list of files for each process.\\E$"}
+{"rule":"MORFOLOGIK_RULE_EN_US","sentence":"^\\Qappendix:dsids shows list of files for each process.\\E$"}
+{"rule":"MORFOLOGIK_RULE_EN_US","sentence":"^\\Qwhere \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q is the profile likelihood function, (\\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q), \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q is the parameter of interest, \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q are the np, \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q and \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q are the Dummies of \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q and \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q respectively, and \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q is the \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q of \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q for a fixed value of \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q.\\E$"}
+{"rule":"UPPERCASE_SENTENCE_START","sentence":"^\\Qsm The sm.\\E$"}
+{"rule":"UPPERCASE_SENTENCE_START","sentence":"^\\Qsm The framework that describes elementary particles and their interactions is known as the \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q of particle physics.\\E$"}
+{"rule":"MORFOLOGIK_RULE_EN_US","sentence":"^\\Qsm The sm.\\E$"}
+{"rule":"EN_A_VS_AN","sentence":"^\\QIn a event, the Higgs boson quickly decays into other particles, making it impossible to observe it directly.\\E$"}
+{"rule":"THE_SENT_END","sentence":"^\\QIn terms of weighted events the transition is from 46K \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q 32.72 weighted events across all the processes, and 523.42 \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q 12.22 weighted events for the .\\E$"}
+{"rule":"COMMA_PARENTHESIS_WHITESPACE","sentence":"^\\QIn an attempt to extend our understanding of the process, this work builds upon the previous efforts made by and .\\E$"}
+{"rule":"COMMA_PARENTHESIS_WHITESPACE","sentence":"^\\QThe staged network is composed of 5 binary classifiers (for , , , \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q, and all the other backgrounds grouped together in one category \"others\").\\E$"}
+{"rule":"COMMA_PARENTHESIS_WHITESPACE","sentence":"^\\QIn , the experiments were also extended beyond simple Dummies, experimenting with TabNet \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q and XGBoost \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q.\\E$"}
+{"rule":"UPPERCASE_SENTENCE_START","sentence":"^\\Qmlp.\\E$"}
+{"rule":"UPPERCASE_SENTENCE_START","sentence":"^\\Qresnet.\\E$"}
+{"rule":"ENGLISH_WORD_REPEAT_BEGINNING_RULE","sentence":"^\\QWe introduce \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q before each layer.\\E$"}
+{"rule":"ENGLISH_WORD_REPEAT_BEGINNING_RULE","sentence":"^\\QWe use a activation \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q.\\E$"}
+{"rule":"EN_A_VS_AN","sentence":"^\\QWe use a activation \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q.\\E$"}
+{"rule":"ENGLISH_WORD_REPEAT_BEGINNING_RULE","sentence":"^\\QWe introduce \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q layers before each layer.\\E$"}
+{"rule":"UPPERCASE_SENTENCE_START","sentence":"^\\QlepnTrackParticles0, lepnTrackParticles1\\E$"}
+{"rule":"UPPERCASE_SENTENCE_START","sentence":"^\\QlepnInnerPix0, lepnInnerPix1, lepMtrktrkatConvVCO0, lepMtrktrkatPVCO1, lepMtrktrkatPVCO0, lepMtrktrkatConvVCO1\\E$"}
+{"rule":"COMMA_PARENTHESIS_WHITESPACE","sentence":"^\\QImpact of using learnable parameters for missing/invalid values on .\\E$"}
+{"rule":"UPPERCASE_SENTENCE_START","sentence":"^\\Qwith 2 blocks trained on the standard training set was used.\\E$"}
+{"rule":"THE_PUNCT","sentence":"^\\QEach block consists of a , , and two layers.\\E$"}
+{"rule":"DOUBLE_PUNCTUATION","sentence":"^\\QEach block consists of a , , and two layers.\\E$"}
+{"rule":"THE_PUNCT","sentence":"^\\QThe residual connections are applied after the , and one more time after at the end of each block.\\E$"}
+{"rule":"UPPERCASE_SENTENCE_START","sentence":"^\\Qlayers are applied before each , and additionally before the first layer.\\E$"}
+{"rule":"COMMA_PARENTHESIS_WHITESPACE","sentence":"^\\Qlayers are applied before each , and additionally before the first layer.\\E$"}
+{"rule":"THE_PUNCT","sentence":"^\\QThe output of the last block is passed to the , and then the first token as taken and passed to the final layer to obtain the log probabilities (logits) The whole structure is formalized in \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q as well as presented on the \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q.\\E$"}
+{"rule":"EN_A_VS_AN","sentence":"^\\QAfter the first layer, a activation is applied.\\E$"}
+{"rule":"POSSIBILTY_POSSIBLE","sentence":"^\\QThe possibility of parallelization that comes with using modern \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Qs makes it possible to train such models very efficiently.\\E$"}
+{"rule":"UPPERCASE_SENTENCE_START","sentence":"^\\Qholds with probability at least \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q.\\E$"}
+{"rule":"MORFOLOGIK_RULE_EN_US","sentence":"^\\QPrivate Communication, August 2023, Nello Bruscino.\\E$"}
+{"rule":"MORFOLOGIK_RULE_EN_US","sentence":"^\\QPrivate Communication, August 2023, Nello Bruscino.\\E$"}
+{"rule":"COMMA_PARENTHESIS_WHITESPACE","sentence":"^\\QOtherwise we would be potentially reporting results on very different region than \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q or even .\\E$"}
+{"rule":"COMMA_PARENTHESIS_WHITESPACE","sentence":"^\\QWe have performed 4 experiments with 100%, 50%, 10%, and 5% of the extended training set .\\E$"}
+{"rule":"COMMA_PARENTHESIS_WHITESPACE","sentence":"^\\Q\\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q with 2 blocks was used on the standard training set .\\E$"}
+{"rule":"COMMA_PARENTHESIS_WHITESPACE","sentence":"^\\QIn practical terms, this would mean no longer penalizing the model for misclassifying among the background classes (e.g., if the true class is and the predicted one is , the prediction would still be deemed correct since both processes are background).\\E$"}
+{"rule":"UPPERCASE_SENTENCE_START","sentence":"^\\Qerm \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q.\\E$"}
+{"rule":"COMMA_PARENTHESIS_WHITESPACE","sentence":"^\\QWe can further split the problem into either a binary classification (seeking to differentiate between (signal) and not (background)) or a multi-class classification (seeking to correctly discriminate between each of the processes - , , , , etc.).\\E$"}
+{"rule":"MORFOLOGIK_RULE_EN_US","sentence":"^\\QThis work focuses on training nn classifiers.\\E$"}
+{"rule":"COMMA_PARENTHESIS_WHITESPACE","sentence":"^\\Q[roc curves for , , and ] \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q curves for the , , and computed using one versus all classification.\\E$"}
+{"rule":"DOUBLE_PUNCTUATION","sentence":"^\\Q[roc curves for , , and ] \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q curves for the , , and computed using one versus all classification.\\E$"}
+{"rule":"THE_PUNCT","sentence":"^\\Q[roc curves for , , and ] \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q curves for the , , and computed using one versus all classification.\\E$"}
+{"rule":"COMMA_PARENTHESIS_WHITESPACE","sentence":"^\\QSpecifically, in our case, it is the ratio of the correctly classified events, to all events classified (or misclassified) as .\\E$"}
+{"rule":"UPPERCASE_SENTENCE_START","sentence":"^\\Qis the proportion of TP to all predicted positives.\\E$"}
+{"rule":"EN_COMPOUNDS","sentence":"^\\QNote that the classifier was trained to differentiate between all the classes, but during evaluation, all the non- events are grouped together.\\E$"}
+{"rule":"COMMA_PARENTHESIS_WHITESPACE","sentence":"^\\QSignal refers to , and background refers to all the other classes.\\E$"}
+{"rule":"EN_COMPOUNDS","sentence":"^\\Q\\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q shows how such confusion matrix looks in our case for the binary classification task - when we only care about differentiating between and non- events.\\E$"}
+{"rule":"COMMA_PARENTHESIS_WHITESPACE","sentence":"^\\QModeling Uncertainties for Each Class: Each class or category of events you're analyzing (e.g., , , , etc.) may have associated modeling uncertainties.\\E$"}
+{"rule":"MORFOLOGIK_RULE_EN_US","sentence":"^\\QThese uncertainties can be due to missing higher-order terms, variations in parton distribution functions, or other theoretical approximations.\\E$"}
+{"rule":"COMMA_PARENTHESIS_WHITESPACE","sentence":"^\\QWe have used the distribution of the \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q output (probability of event being , formally the posterior \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q) as the binned distribution (\\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q), however any variable can be used in principle.\\E$"}
+{"rule":"UPPERCASE_SENTENCE_START","sentence":"^\\Qsr.\\E$"}
+{"rule":"ENGLISH_WORD_REPEAT_BEGINNING_RULE","sentence":"^\\QDistribution of the number of jets.\\E$"}
+{"rule":"ENGLISH_WORD_REPEAT_BEGINNING_RULE","sentence":"^\\QDistribution of the number of \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q-jets.\\E$"}
+{"rule":"EN_A_VS_AN","sentence":"^\\QSignificance represents the confidence level at which we can assert that a detected event is indeed a event rather than a product of background noise or other processes.\\E$"}

@@ -1,18 +1,18 @@
-\subsection{ResNet}
+\subsection[Residual Neural Network]{\acrfull{resnet}}
 \label{sec:resnet}
 
-We compare the staged network to a slightly improved version of \gls{mlp} that introduces residual/skip
-connections between the layers (see \autoref{fig:resnet_architecture}) proposed by \cite{resnet}.
+We compare the staged network to a slightly improved version of the \gls{mlp} that introduces residual/skip
+connections between the layers (\autoref{fig:resnet_architecture}) proposed by \cite{resnet}.
 
 \begin{figure}[htb]
     \centering
     \includegraphics[width=0.5\textwidth]{figures/resnet.pdf}
-    \caption[Resnet architecture]{\gls{resnet} architecture.}
+    \caption[ResNet architecture]{\gls{resnet} architecture.}
     \label{fig:resnet_architecture}
 \end{figure}
 
-These connections improve the training of deep neural networks, as the gradients can flow unimpeded back to the first
-layers. This helps combat the vanishing gradients problem. We can formalize this as in
+These connections improve the training of deep neural networks, as the gradient can flow unimpeded back to the first
+layers. This helps to address the vanishing gradient problem. We can formalize this as in
 \cite{ft-transformer}:
 
 
@@ -24,20 +24,17 @@ layers. This helps combat the vanishing gradients problem. We can formalize this
 \end{align}
 }
 
-ResNets are very fast to train, and more sample efficient than \glspl{mlp}.
 
-% The best results obtained with Resnets were 85\% accuracy,
-% 0.85 $\text{AUC}_\text{mean}$ and 0.85 $\text{AUC}_{t\bar{t}H}$ (see \autoref{fig:resnet_results}).
-
-While keeping the number of trainable parameters the same, it's better to have deeper networks than wider networks.
-Although wide NNs are fast to train, they are extremely prone to overfitting, as the starting layers essentially
-memorize the training data.
+Because of residual connections, \glspl{resnet} are very fast to train, and are more sample efficient than \glspl{mlp}.
+While keeping the number of trainable parameters the same, we have observed that deeper networks perform better than
+wider ones.  Although wide \glspl{nn} are fast to train, they are extremely prone to overfitting, as the wide layers
+close to the inputs essentially memorize the training data.
 
 
 We introduce a few other changes to the training procedure:
 
 \begin{enumerate}
-    \item We use an \verb|AdamW| optimizer \cite{adamw}
-    \item We use a \verb|GELU| activation \cite{gelu}
-    \item We introduce \verb|LayerNorm| \cite{layernorm} before each \verb|Linear| layer.
+    \item We use an \acrfull{adamw} optimizer \cite{adamw}.
+    \item We use a \GELU activation \cite{gelu}.
+    \item We introduce \LayerNorm \cite{layernorm} layers before each \Linear layer.
 \end{enumerate}

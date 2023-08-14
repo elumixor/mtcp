@@ -1,0 +1,28 @@
+\clearpage
+
+\section{Friend Trees}
+\label{appendix:friend-trees}
+
+To be able to perform the analysis of the impact of the systematic uncertainties in \trex using the custom classifier's
+output variable, one must either inject the variable in all the root files, or create the so-called friend n-tuples,
+where each file only contains the classifier's output variable. The latter is the preferred option, as it does not
+require modifying or copy the original files (which are $\approx 2.7$ TB in size).
+
+First, one must essentially process all the events with the classifier. However, to make the processing shorter, the
+cuts can be applied to all the systematic files first, which reduces the total size to $\approx 40$ GB. Then, the
+classifier should be applied to all the events to produce the output variable. For each input file, a new "friend"
+file is produced, which contains only the classifier's output variable.
+
+Once the friend trees are produced, \trex should be made aware of them.
+
+To do so, \texttt{UseFriend: TRUE} should be added across all the \texttt{Sample} blocks. Then, in the \texttt{Job} block
+definition, \texttt{FriendPath: XXX\_FriendPaths} should be added, with the \texttt{XXX\_FriendPaths} pointing to the
+\texttt{nominal} directory of the trees.
+
+Furthermore, for the systematic blocks definitions, where the \texttt{NtuplePathsUp} or \texttt{NtuplePathsDown} are
+defined, the \texttt{FriendPathsUp} and \texttt{FriendPathsDown} should be added, respectively.
+
+This enables \trex to access both the original trees containing all the systematics-related information, and
+the friend trees containing only the classifier's output variable.
+
+\clearpage

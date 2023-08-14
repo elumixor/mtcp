@@ -1,6 +1,6 @@
-\subsection{Previous work}
+\subsection{Previous Work}
 
-In an attempt to further our understanding of the \tth process, this work builds upon the previous efforts made by
+In an attempt to extend our understanding of the \tth process, this work builds upon the previous efforts made by
 \severin and \jan. Their research also involved training feed-forward neural networks to distinguish between the \tth
 and the background processes.
 
@@ -12,20 +12,22 @@ network is composed of 5 binary classifiers (for \ttz, \ttw, \ttbar, $VV$, and a
 together in one category "others"). Each of the classifiers is a \gls{mlp} itself, and during the training only receives
 events of \tth and the corresponding background.
 
-\todo{
-    I fail to see how this would work in reality - how would we know which background to give to each binary classifier?
-}
+% \todo{
+%     I fail to see how this would work in reality - how would we know which background to give to each binary classifier?
+% }
 
 Although the staged network is its essence is equivalent to a single, larger \gls{mlp}, it allows for the training of
-each sub-network on a \emph{different set of features}. This can potentially reduce the systematic uncertainties,
-associated with the final prediction. \todo{although I don't understand really how...}
+each subnetwork on a \emph{different set of features}. This can potentially reduce the systematic uncertainties,
+associated with the final prediction. % \todo{although I don't understand really how...}
 
 The highest mean significance obtained with a multi-class classifier was reported to be $Z = 3.064$ while the highest
 mean significance obtained with a binary classifier was reported to be $Z = 3.114$. The expectation was that having the
 \gls{nn} focus on differentiating between two classes only would improve the performance. However, the results show that
 there was no significant difference. In our work, however, we have observed that when the classifier is trained on
-multiple classes, the performance is increased (see \autoref{sec:binary}). The highest mean significance obtained with a
-staged was reported to be $Z = 2.964$, which is very similar to the other results.
+multiple classes, the performance is increased (\autoref{sec:binary}). The highest mean significance obtained with a
+staged network was reported to be $Z = 2.964$, which is very similar to the other results\footnote{Note that different
+    production of the input n-tuples are used. They have different calibrations, and thus a direct comparison is only
+    approximate.}.
 
 
 
@@ -36,7 +38,8 @@ XGBoost \cite{xgboost}. The authors have also experimented with different hyperp
 fractions of the training set, and different feature sets. The best results were obtained with XGBoost trained on all
 the features and the whole training set, which is unsurprising. The highest mean significance obtained with XGBoost is
 reported as $Z = 2.90$. The authors have also evaluated the uncertainty, associated with the prediction, which is
-reported as $\mu = 1 + 0.42 /- 0.37$.
+reported as $\mu = 1 + 0.42 /- 0.37$, where $\mu$ is the ratio of expected signal to the expectation in the \gls{sm}
+(\autoref{eq:mu}).
 
 
 
@@ -46,24 +49,24 @@ reported as $\mu = 1 + 0.42 /- 0.37$.
 Our research seeks to improve upon these previous efforts by introducing more complex architectures and advanced
 optimization techniques, which will be discussed in the following sections.
 
-\subsection[MLP]{\gls{mlp}}
+\subsection[Multilayer Perceptron]{\acrfull{mlp}}
 
-In previous work, \severin utilized \glspl{mlp} as the primary model architecture.
+In previous work, \severin utilized \acrfullpl{mlp} as the primary model architecture.
 While he experimented with combining multiple \glspl{mlp}, this approach is essentially equivalent to using a single,
 larger \gls{mlp}. This can be formalized as in \cite{ft-transformer}:
 
 \begin{align}
-    \texttt{MLP(x)}      & = \Linear(\texttt{MLPBlock}(\dots(\texttt{MLPBlock}(x)))) \\
-    \texttt{MLPBlock(x)} & = \Dropout(\sigma(\Linear(x)))
+    \texttt{MLP}(\vec{x})      & = \Linear(\texttt{MLPBlock}(\dots(\texttt{MLPBlock}(\vec{x})))) \\
+    \texttt{MLPBlock}(\vec{x}) & = \Dropout(\sigma(\Linear(\vec{x})))
 \end{align}
 
 Where $\sigma$ is the activation function\footnote{Common activation functions include ReLU, Leaky ReLU (LReLU)
     \cite{relu, lrelu}, sigmoid, $\tanh$, and others. Throughout our experiments we mostly use GELU activation
     \cite{gelu}.},
-$\Linear$ is a linear transformations:
+$\Linear$ is a linear transformation:
 
 \begin{equation}
-    \Linear(x) = Wx + b\,,
+    \Linear(\vec{x}) = \vec{W}\vec{x} + \vec{b}\,,
 \end{equation}
 
 and $\Dropout$ is a layer that randomly (with a fixed probability $p$) sets a fraction of the input features to
@@ -71,7 +74,14 @@ zero \cite{dropout}:
 
 \begin{equation}
     \Dropout_i(\vec{x}) = \begin{cases}
-        0,         & \text{with probability } p \\
-        \vec{x}_i, & \text{otherwise}
+        0,   & \text{with probability } p \\
+        x_i, & \text{otherwise}\,.
     \end{cases}
 \end{equation}
+
+Here, $\vec{x} \in \mathbb{R}^{d_f}$ is an input vector of features size of size $d_f$. The first \Linear layer
+transforms the input vector into a vector of size $d_h$, where $d_h$ is the embedding size (number of hidden units),
+thus $\vec{W} \in \mathbb{R}^{d_h \times d_f}$ and $\vec{b} \in \mathbb{R}^{d_h}$. Each \Linear layer in principle may
+have a different embedding size, but in practice, we use the same embedding size for all the layers. The last \Linear
+layer transforms maps the output vector to the desired output size $d_o$, where $d_o$ is the number of classes to
+distinguish between.

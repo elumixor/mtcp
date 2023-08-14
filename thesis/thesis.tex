@@ -22,7 +22,10 @@
 \usepackage{stmaryrd}
 \usepackage[english]{babel}
 \usepackage[compat=1.1.0]{tikz-feynhand}
+\usepackage{pdfpages}
 \usepackage{csquotes}
+\usepackage{siunitx}
+
 
 \input{glossaries}
 \input{commands}
@@ -46,21 +49,27 @@
 \date{August 2023}
 
 \includeonly{
-	% chapters/abstract,
-	% chapters/acknowledgements,
-	% chapters/1-structure,
-	% chapters/2-introduction/0-chapter,
-	% chapters/3-methodology/0-chapter,
-	% chapters/4-uncertainties/0-chapter,
+	% chapters/assignment,
+	chapters/abstract-cz,
+	chapters/abstract,
+	chapters/acknowledgements,
+	chapters/1-structure,
+	chapters/2-introduction/0-chapter,
+	chapters/3-methodology/0-chapter,
+	chapters/4-uncertainties/0-chapter,
 	chapters/5-conclusions/0-chapter,
 	chapters/6-appendix/0-chapter,
 	}
 
+
 \begin{document}
+
+\includepdf[pages=-]{assignment.pdf}
 
 % Introductory pages
 \maketitle
 
+\include{chapters/abstract-cz}
 \include{chapters/abstract}
 \newpage
 \include{chapters/acknowledgements}

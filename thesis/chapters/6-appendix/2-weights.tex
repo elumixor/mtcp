@@ -3,9 +3,6 @@
 \section{Event Weighting}
 \label{appendix:weights}
 
-% \subsection*{XXX\_VV\_NJET}
-
-% \textbf{Channel Numbers for which a particular formula is applied:}
 \begin{align}
     \text{Channels} = \{
      & 364250, 364253, 364254, 364255, 364283, 364284, 364285,  \nonumber \\
@@ -13,7 +10,6 @@
      & 363360, 363489, 345705, 345706, 345715, 345718, 345723\} \nonumber
 \end{align}
 
-% \textbf{Weighting Based on Number of Jets:}
 \begin{equation}
     \text{Weight}_{\text{nJets}} = \begin{cases}
         1.0,      & \text{if } \texttt{nJets\_OR} = 0    \\
@@ -27,7 +23,6 @@
     \end{cases}
 \end{equation}
 
-% \textbf{Final Formula for XXX\_VV\_NJET:}
 \begin{equation}
     \texttt{XXX\_VV\_NJET} = \begin{cases}
         \text{Weight}_{\text{nJets}}, & \text{if } \texttt{mcChannelNumber} \in \text{Channels} \\
@@ -35,9 +30,6 @@
     \end{cases}
 \end{equation}
 
-% \subsection*{XXX\_MC\_WEIGHT}
-
-% \textbf{Year-based Weight:}
 \begin{equation}
     \text{YearLuminosity} = \begin{cases}
         36646.74, & \text{if } \texttt{RunYear} = 2015 \text{ or } \texttt{RunYear} = 2016 \\
@@ -46,40 +38,24 @@
     \end{cases}
 \end{equation}
 
-% \textbf{Weighting Factors:}
-% \begin{align*}
-%      & \text{custTrigSF\_LooseID\_FCLooseIso\_SLTorDLT} \\
-%      & \text{weight\_pileup}                            \\
-%      & \text{jvtSF\_customOR}                           \\
-%      & \text{bTagSF\_weight\_DL1r\_85}                  \\
-%      & XXX_{VV\_NJET}                                   \\
-%      & \text{weight\_mc}                                \\
-%      & \text{xs}                                        \\
-%      & \text{lep\_SF\_CombinedTight\_0}                 \\
-%      & \text{lep\_SF\_CombinedTight\_1}                 \\
-%      & \text{lepSF\_PLIV\_Prompt\_0}                    \\
-%      & \text{lepSF\_PLIV\_Prompt\_1}
-% \end{align*}
-
-% \textbf{Final Formula for XXX\_MC\_WEIGHT:}
 \begin{align}
     \text{Event weight} = w =
      & \quad \texttt{YearLuminosity}                                       \nonumber \\
-     & \times \frac{\sigma}{\mathcal{L}}                              \nonumber      \\
-     & \times \texttt{custTrigSF\_LooseID\_FCLooseIso\_SLTorDLT} \nonumber           \\
-     & \times \texttt{weight\_pileup}                            \nonumber           \\
-     & \times \texttt{jvtSF\_customOR}                           \nonumber           \\
-     & \times \texttt{bTagSF\_weight\_DL1r\_85}                  \nonumber           \\
-     & \times \texttt{XXX\_VV\_NJET}                             \nonumber           \\
-     & \times \texttt{weight\_mc}                                \nonumber           \\
-     & \times \texttt{lep\_SF\_CombinedTight\_0}                   \nonumber         \\
-     & \times \texttt{lep\_SF\_CombinedTight\_1}                   \nonumber         \\
-     & \times \texttt{lepSF\_PLIV\_Prompt\_0}                      \nonumber         \\
-     & \times \texttt{lepSF\_PLIV\_Prompt\_1}                      \nonumber         \\
-     & \times \frac{1}{\sum_{w \sim \text{\acrshort{mc}}} w}
+     & \times \frac{\sigma}{\mathcal{L}}                                   \nonumber \\
+     & \times \texttt{custTrigSF\_LooseID\_FCLooseIso\_SLTorDLT}           \nonumber \\
+     & \times \texttt{weight\_pileup}                                      \nonumber \\
+     & \times \texttt{jvtSF\_customOR}                                     \nonumber \\
+     & \times \texttt{bTagSF\_weight\_DL1r\_85}                            \nonumber \\
+     & \times \texttt{XXX\_VV\_NJET}                                       \nonumber \\
+     & \times \texttt{weight\_mc}                                          \nonumber \\
+     & \times \texttt{lep\_SF\_CombinedTight\_0}                           \nonumber \\
+     & \times \texttt{lep\_SF\_CombinedTight\_1}                           \nonumber \\
+     & \times \texttt{lepSF\_PLIV\_Prompt\_0}                              \nonumber \\
+     & \times \texttt{lepSF\_PLIV\_Prompt\_1}                              \nonumber \\
+     & \times \frac{1}{\sum_{w \sim \text{\acrshort{mc}}} w}\,,
 \end{align}
 
-where $\mathcal{L} = \text{Luminosity} = 140068.94$, $\sigma$ is the cross section ($\texttt{xs}$), and $\sum_{w \sim
+where $\mathcal{L} = \text{Luminosity} = 140068.94$, $\sigma$ is the cross-section ($\texttt{xs}$), and $\sum_{w \sim
         \text{\acrshort{mc}}} w$ is the sum of the weights of all simulated events ($\texttt{totalEventsWeighted}$).
 
 

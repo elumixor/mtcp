@@ -1,4 +1,4 @@
-\section{All classes vs signal and background only}
+\section{All Classes versus Signal and Background Only}
 \label{sec:binary}
 
 In \cite{severin}, the authors experimented with both multiclass and binary classification formulations. The multiclass
@@ -12,7 +12,7 @@ For \cite{severin}, based solely on the reported significance, the results were 
     significance, it is challenging to conclude which approach is superior.} for both formulations. However, our
 observations suggest that when the model is trained to differentiate among all classes, it demonstrates enhanced
 learning capabilities\footnote{Based on accuracy, \gls{auc}, and significance.} and can potentially extract more
-information from the input data (see \autoref{fig:two-phase-training}). This approach, however, also allocates resources
+information from the input data (\autoref{fig:two-phase-training}). This approach, however, also allocates resources
 towards distinguishing individual background classes, which might not be essential for the primary task of signal and
 background discrimination.
 
@@ -33,6 +33,6 @@ we hypothesize that this performance could be further enhanced by the two-phase 
 \begin{figure}[htb]
     \centering
     \includegraphics[width=\textwidth]{figures/ml/bin_vs_multi/results.pdf}
-    \caption{Comparison of the multiclass and binary formulations.}
+    \caption{Comparison of the multiclass and binary formulations. \transplot}
     \label{fig:two-phase-training}
 \end{figure}

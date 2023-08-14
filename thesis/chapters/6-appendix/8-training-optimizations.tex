@@ -1,13 +1,12 @@
-\section{Training optimizations}
+\section{Training Optimizations}
 
-Here we list some additional details that do not influence the quality of the optimization itself, but have a rather
-tangent relation to it.
+Here we list some additional details that do not influence the quality of the optimization itself.
 
 As we have used large \glspl{nn} and a large training set, the training times are quite long. Without some necessary
 optimization, experiments take extremely long time to complete. We have used the following techniques to speed up the
 training:
 
-\subsection{Mixed precision training}
+\subsection{Mixed Precision Training}
 
 Mixed precision training is a technique in deep learning that leverages the benefits of both low-precision and
 high-precision numerical representations to accelerate model training and improve overall efficiency. It involves using
@@ -37,16 +36,16 @@ PyTorch models during training and inference.
 
 \subsection{FlashAttention}
 
-FlashAttention is a fast and memory-efficient exact attention algorithm that aims to improve the training speed and
-quality of models with long sequences in machine learning applications. It incorporates IO-awareness, which involves
-dividing operations between faster and slower levels of GPU memory to optimize performance. By reordering the attention
-computation and leveraging classical techniques such as tiling and recomputation, FlashAttention significantly speeds up
-the attention process and reduces memory usage from quadratic to linear in sequence length. This algorithm outperforms
-other exact attention algorithms in terms of training speed and model quality, especially when dealing with long
-sequences. It achieves faster end-to-end training time and higher quality models by accounting for GPU memory reads and
-writes, resulting in improved performance and reduced compute complexity. FlashAttention is a valuable tool for
-researchers and practitioners working with attention mechanisms in machine learning, enabling them to train models more
-efficiently and effectively.
+FlashAttention \cite{flash-attention} is a fast and memory-efficient exact attention algorithm that aims to improve the
+training speed and quality of models with long sequences in machine learning applications. It incorporates IO-awareness,
+which involves dividing operations between faster and slower levels of GPU memory to optimize performance. By reordering
+the attention computation and leveraging classical techniques such as tiling and recomputation, FlashAttention
+significantly speeds up the attention process and reduces memory usage from quadratic to linear in sequence length. This
+algorithm outperforms other exact attention algorithms in terms of training speed and model quality, especially when
+dealing with long sequences. It achieves faster end-to-end training time and higher quality models by accounting for GPU
+memory reads and writes, resulting in improved performance and reduced compute complexity. FlashAttention is a valuable
+tool for researchers and practitioners working with attention mechanisms in machine learning, enabling them to train
+models more efficiently and effectively.
 
 % We have observed an about 2.5x speedup when using FlashAttention, which can be seen from
 % the \autoref{tab:additional_optimization}.

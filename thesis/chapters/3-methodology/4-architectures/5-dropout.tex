@@ -17,7 +17,7 @@ holds with probability at least $1 - \delta$ \cite{generalization-bound}.
 From this inequality, it follows that the generalization error can be reduced by increasing the size of the training
 set\footnote{\vspace{5pt}Because $\lim_{N \rightarrow \inf}\frac{\log N}{N} = 0$.}, or by reducing the VC dimension of the
 hypothesis space\footnote{$\frac{\partial}{\partial d} d \log \frac{2N}{d} = \frac{2N}{d} - 1$, which is larger than 0
-    when $d < \frac{2N}{e}$. In practice it is almost always true, it is uncommon to have VC dimension as
+    when $d < \frac{2N}{e}$. In practice, it is almost always true, it is uncommon to have VC dimension as
     disproportionally large, compared to the training set size.}. The latter can be achieved by constraining the
 hypothesis space, which is precisely what regularization does.
 

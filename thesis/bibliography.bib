@@ -10,6 +10,16 @@
   year      = {2021}
 }
 
+@article{dl-in-pp,
+  title     = {Deep learning and its application to LHC physics},
+  author    = {Guest, Dan and Cranmer, Kyle and Whiteson, Daniel},
+  journal   = {Annual Review of Nuclear and Particle Science},
+  volume    = {68},
+  pages     = {161--181},
+  year      = {2018},
+  publisher = {Annual Reviews}
+}
+
 @article{adam,
   author  = {Kingma, Diederik and Ba, Jimmy},
   year    = {2014},
@@ -163,19 +173,31 @@
   month     = {06--11 Aug},
   publisher = {PMLR},
   pdf       = {http://proceedings.mlr.press/v70/sundararajan17a/sundararajan17a.pdf},
-  url       = {https://proceedings.mlr.press/v70/sundararajan17a.html},
-  abstract  = {We study the problem of attributing the prediction of a deep network to its input features, a problem previously studied by several other works. We identify two fundamental axioms—Sensitivity and Implementation Invariance that attribution methods ought to satisfy. We show that they are not satisfied by most known attribution methods, which we consider to be a fundamental weakness of those methods. We use the axioms to guide the design of a new attribution method called Integrated Gradients. Our method requires no modification to the original network and is extremely simple to implement; it just needs a few calls to the standard gradient operator. We apply this method to a couple of image models, a couple of text models and a chemistry model, demonstrating its ability to debug networks, to extract rules from a network, and to enable users to engage with models better.}
+  url       = {https://proceedings.mlr.press/v70/sundararajan17a.html}
 }
 
 @article{pytorch,
-  title  = {Automatic differentiation in PyTorch},
-  author = {Paszke, Adam and Gross, Sam and Chintala, Soumith and Chanan, Gregory and Yang, Edward and DeVito, Zachary and Lin, Zeming and Desmaison, Alban and Antiga, Luca and Lerer, Adam},
-  year   = {2017}
+  title     = {PyTorch: An Imperative Style, High-Performance Deep Learning Library},
+  author    = {Paszke, Adam and Gross, Sam and Massa, Francisco and Lerer, Adam and Bradbury, James and Chanan, Gregory and Killeen, Trevor and Lin, Zeming and Gimelshein, Natalia and Antiga, Luca and Desmaison, Alban and Kopf, Andreas and Yang, Edward and DeVito, Zachary and Raison, Martin and Tejani, Alykhan and Chilamkurthy, Sasank and Steiner, Benoit and Fang, Lu and Bai, Junjie and Chintala, Soumith},
+  booktitle = {Advances in Neural Information Processing Systems 32},
+  pages     = {8024--8035},
+  year      = {2019},
+  publisher = {Curran Associates, Inc.},
+  url       = {http://papers.neurips.cc/paper/9015-pytorch-an-imperative-style-high-performance-deep-learning-library.pdf}
+}
+
+@article{flash-attention,
+  title   = {FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness},
+  author  = {Tri Dao and Daniel Y. Fu and Stefano Ermon and Atri Rudra and Christopher R'e},
+  journal = {ArXiv},
+  year    = {2022},
+  volume  = {abs/2205.14135},
+  url     = {https://api.semanticscholar.org/CorpusID:249151871}
 }
 
 @article{severin,
   author = {Konig, Severin},
-  title  = {{Optimization of ttH¯ Signal and Background Separation
+  title  = {{Optimization of \tth Signal and Background Separation
             Using Machine Learning in the 2lSS1tau Channel}},
   year   = {2022},
   url    = {https://cds.cern.ch/record/2836425}
@@ -183,7 +205,7 @@
 
 @article{jan,
   author = {Presperin, Jan},
-  title  = {{Machine learning for ttH mechanism Higgs boson detection
+  title  = {{Machine learning for \tth mechanism Higgs boson detection
             from CERN ATLAS data}},
   year   = {2022},
   url    = {https://cds.cern.ch/record/2812400},
@@ -306,7 +328,7 @@
   year          = {2017},
   url           = {https://cds.cern.ch/record/2255226},
   note          = {All figures including auxiliary figures are available at
-                   https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PUBNOTES/ATL-PHYS-PUB-2017-003}
+                   \url{https://atlas.web.cern.ch/Atlas/GROUPS/PHYSICS/PUBNOTES/ATL-PHYS-PUB-2017-003}}
 }
 
 @article{negative-weights,
@@ -336,11 +358,15 @@
 }
 
 @article{risk-minimization,
-  title   = {Principles of risk minimization for learning theory},
-  author  = {Vapnik, Vladimir},
-  journal = {Advances in neural information processing systems},
-  volume  = {4},
-  year    = {1991}
+  author    = {Vapnik, V.},
+  booktitle = {Advances in Neural Information Processing Systems},
+  editor    = {J. Moody and S. Hanson and R.P. Lippmann},
+  pages     = {},
+  publisher = {Morgan-Kaufmann},
+  title     = {Principles of Risk Minimization for Learning Theory},
+  url       = {https://proceedings.neurips.cc/paper_files/paper/1991/file/ff4d5fbbafdf976cfdc032e3bde78de5-Paper.pdf},
+  volume    = {4},
+  year      = {1991}
 }
 
 @inproceedings{rnn,

@@ -1,6 +1,6 @@
 \glsreset{mc}
 
-\section[Monte Carlo simulation]{\gls{mc} simulation}
+\section[Monte Carlo Simulation]{\gls{mc} Simulation}
 \label{sec:mc}
 
 To be able to train classifiers for the precise identification of \tth events, we must adopt a method that transcends
@@ -17,7 +17,7 @@ clustering presents an alternative, supervised learning often proves to be more 
 conditions allow for its use (see \appref{appendix:why-supervised} for more details).
 
 By employing a theoretical model with established branching rules, we construct a \gls{mc} simulation.  We use software
-like Pythia\footnote{\url{https://pythia.org/}} to we generate a labeled dataset where the
+like Pythia\footnote{\url{https://pythia.org/}} to generate a labeled dataset where the
 final state particles and their properties are the features, and the intermediate processes, such as \tth or \ttw, are
 known and are thus assigned as the corresponding labels.
 
@@ -29,13 +29,11 @@ This simulation relies heavily on having an accurate theoretical model and preci
 of the detectors. Recognizing that the simulation may have imperfections, we engage in an iterative process that
 involves comparing the simulated results with real data, finding and accounting for any discrepancies, and producing a
 new more refined and accurate version of the simulated dataset\footnote{This work was done on the version 8 (v0801) of
-    the n-tuples. See also the \appref{appendix:dsids} for a precise list of files for each process.}.
-
-
+    the n-tuples. \appref{appendix:dsids} shows list of files for each process.}.
 
 \subsection{Event Weighting}
 
-\tth process is very rare and accounts for only about 1\% of all Higgs production. This results in a very low number of
+The \tth process is very rare and accounts for only about 1\% of all Higgs production. This results in a very low number of
 signal events, and, as noted before, training on such a small dataset is practically not tractable. To alleviate this
 difficulty, more signal events are explicitly generated.
 
@@ -44,5 +42,5 @@ simulation with the real, the weight $w_i$ is applied to each event $i$. This we
 probability of the event $i$ occurring in the real data, also given specific detector configuration.
 
 Various factors contribute to the weight of an event. The most important ones are the luminosity, that is different for
-different runs of the \gls{lhc}, and the cross-section. We provide the complete formula in the
+different runs of the \gls{lhc}, and the cross-section. We provide the complete formula in
 \appref{appendix:weights}.

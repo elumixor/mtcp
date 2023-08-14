@@ -1,6 +1,6 @@
 \section{Significance}
 
-Significance, represents the confidence level at which we can assert that a detected event is
+Significance represents the confidence level at which we can assert that a detected event is
 indeed a \tth event rather than a product of background noise or other processes. A robust measurement of significance
 ensures that the observations are not mere statistical fluctuations.
 
@@ -33,14 +33,14 @@ where $e$ is the base of the natural logarithm, and $k!$ is the factorial of $k$
 
 \begin{figure}[htb]
     \centering
-    \includegraphics[width=0.8\textwidth]{figures/poisson.pdf}
+    \includegraphics[width=\textwidth]{figures/poisson.pdf}
     \caption[Poisson distribution for various values of $\lambda$]
     {Poisson distribution for various values of $\lambda$. For large $\lambda$, the Poisson distribution
         approaches a Gaussian distribution.}
     \label{fig:poisson}
 \end{figure}
 
-\subsection[Central Limit Theorem]{\gls{clt}}
+\subsection[Central Limit Theorem]{\acrlong{clt}}
 
 \glsreset{clt}
 
@@ -65,7 +65,7 @@ independent and identically distributed random variables.
 
 Mathematically, a random variable $X$ that is Poisson-distributed with mean $\lambda$ can be approximated by a Gaussian
 distribution with mean $\lambda$ and variance $\lambda$, if $\lambda$ is large. This is usually taken to mean $\lambda >
-    20$ or $30$ (see \autoref{fig:poisson}). Thus, for a Poisson distribution with large $\lambda$, it can be
+    20$ or $30$ (\autoref{fig:poisson}). Thus, for a Poisson distribution with large $\lambda$, it can be
 approximated as
 
 \begin{equation}
@@ -120,8 +120,10 @@ expected number of background events, then we have evidence against the null hyp
 The "significance" in particle physics refers to how many standard deviations an observed result is away from the
 expectation under the null hypothesis. If our data gives a result that is very unlikely under the null hypothesis (say,
 less than a 0.01 chance), we have strong evidence against the null hypothesis. The significance $Z$ is, in essence, the
-number of standard deviations that the observed data is away from the expectation under the null hypothesis, with $Z = 1$
-corresponding to a $p$-value of about 0.16 (or 16\%), and $Z = 2$ corresponding to a $p$-value of about 0.023 (or 2.3\%).
+number of standard deviations that the observed data is away from the expectation under the null hypothesis, with $Z =
+    1$ corresponding to a $p$-value of about 0.16 (or 16\%), and $Z = 2$ corresponding to a $p$-value of about 0.023 (or
+2.3\%). Note that we are interested in a one-sided conference level (as the number of signal events $s$ is assumed to be
+positive), thus $2\sigma$ corresponds approximately to the $1-0.05=0.95$ \gls{cl} (\autoref{tab:significance}).
 
 \begin{align}
     Z(p) & = \cdfinv(1 - p) & p(Z) & = 1 - \cdf(Z) = \int_{Z}^{\infty} \frac{1}{\sqrt{2\pi}} e^{-\frac{x^2}{2}} dx
@@ -131,20 +133,23 @@ corresponding to a $p$-value of about 0.16 (or 16\%), and $Z = 2$ corresponding 
     \centering
     \begin{tabular}{|c|c|c|c|c|c|}
         \hline
-        Significance   & 1     & 2    & 3    & 4                 & 5                 \\
+        Significance               & 1     & 2    & 3    & 4                 & 5                 \\
         \hline
         \rule{0pt}{15pt}
-        $p$-value (\%) & 15.87 & 2.28 & 0.13 & $3 \cdot 10^{-5}$ & $3 \cdot 10^{-7}$ \\
+        $p$-value (\%)             & 15.87 & 2.28 & 0.13 & $3 \cdot 10^{-5}$ & $3 \cdot 10^{-7}$ \\
+        \hline
+        \rule{0pt}{15pt}
+        $p$-value (one-sided) (\%) & 31.73 & 4.55 & 0.27 & $6\cdot 10^{-3}$  & $6 \cdot 10^{-5}$ \\
         \hline
     \end{tabular}
-    \caption{Table of significances and corresponding p-values.}
+    \caption{Significances and corresponding $p$-values.}
     \label{tab:significance}
 \end{table}
 
 We illustrate this with an example. Suppose we only expect background processes to occur. In other words, during a
 measurement period, we expect to observe $b$ background events. However, we observe $n=b+s$ events. This
 could be due to statistical fluctuations, or it could be due to the presence of a new signal. Because events follow the
-Poisson distribution, which can be approximated by a Gaussian for large $B$ and $S$, we can use the Normal distribution
+Poisson distribution, which can be approximated by a Gaussian for large $b$ and $s$, we can use the Normal distribution
 $N(b, \sqrt{b})$ to model the number of observed events. The $Z$-score is then given by:
 
 \begin{equation}
@@ -152,7 +157,7 @@ $N(b, \sqrt{b})$ to model the number of observed events. The $Z$-score is then g
 \end{equation}
 
 We should note, however that due to the approximation of the Poisson distribution by the Gaussian distribution, the
-number of background events $b$ must be large enough for the $Z$-score to be meaningful.
+number of background events $b$ must be large enough for the $Z$-score to be a good approximation of the significance.
 
 In practice, such approximation is often used in the early stages of a search due to its simplicity. For more accurate
 results, a more complex statistical model is used that also accounts for different \glspl{np} - systematic
@@ -161,12 +166,12 @@ uncertainties (\autoref{ch:Evaluation}, \cite{pract-stat-lhc, statistical} for m
 \begin{align}
     q_0  & = -2 \frac{L(\mu=0, \hat{\hat{\bm{\theta}}}(\mu=0))}{L(\hat{\mu}, \hat{\bm{\theta}})} \, \text{ where $\hat{\mu} > 0$} \\
     Z    & = \cdfinv(1 - p) = \sqrt{q_0}                                                                                          \\
-    p(Z) & = 1 - \cdf(\sqrt{q_0})
+    p(Z) & = 1 - \cdf(\sqrt{q_0})\,,
 \end{align}
 
 where $L$ is the profile likelihood
-function\footnote{\url{https://statisticalmethods.web.cern.ch/StatisticalMethods/statisticaltests}}, (see also
-\autoref{eq:likelihood}), $\mu$ is the parameter of interest\footnote{For our case specifically, $\mu$ refers to the
+function\footnote{\url{https://statisticalmethods.web.cern.ch/StatisticalMethods/statisticaltests}},
+(\autoref{eq:likelihood}), $\mu$ is the parameter of interest\footnote{For our case specifically, $\mu$ refers to the
     signal strength, and so it is set to $0$ as the null hypothesis assumes that there is no signal.}, $\bm{\theta}$ are
 the \acrfullpl{np}, $\hat{\mu}$ and $\hat{\bm{\theta}}$ are the \glspl{mle} of $\mu$ and $\bm{\theta}$ respectively, and
 $\hat{\hat{\bm{\theta}}}$ is the \gls{mle} of $\bm{\theta}$ for a fixed value of $\mu$.
@@ -197,10 +202,10 @@ signal is considered a discovery.
 For our experiments, we conduct the more precise calculation of significance once the best network is selected. However,
 to get an estimate of what we can expect, we use the approximation described above to calculate the significance during
 the model selection. It is important to note that when optimizing for significance, the \argmax strategy is usually not
-optimal, so the threshold scanning (or working point optimization) is performed (see \autoref{fig:threshold-scan}):
+optimal, so the threshold scanning (or working point optimization) is performed (\autoref{fig:threshold-scan}):
 
 
-When we start with a threshold of 0, all events are essentially get classified as \tth, producing a high number of true
+When we start with a threshold of 0, all events are classified as \tth, producing a high number of true
 positives, but also a high number of false positives. As the threshold increases, the model gets more conservative and
 starts classifying fewer events as \tth, reducing the number of true positives and false positives. For each threshold,
 we compute both values for the significance and choose the threshold that maximizes the significance. As noted, this
