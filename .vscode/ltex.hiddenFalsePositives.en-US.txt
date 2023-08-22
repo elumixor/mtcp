@@ -65,3 +65,4 @@
 {"rule":"ENGLISH_WORD_REPEAT_BEGINNING_RULE","sentence":"^\\QDistribution of the number of jets.\\E$"}
 {"rule":"ENGLISH_WORD_REPEAT_BEGINNING_RULE","sentence":"^\\QDistribution of the number of \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q-jets.\\E$"}
 {"rule":"EN_A_VS_AN","sentence":"^\\QSignificance represents the confidence level at which we can assert that a detected event is indeed a event rather than a product of background noise or other processes.\\E$"}
+{"rule":"EXTREME_ADJECTIVES","sentence":"^\\QOptionally clone this to some other cluster where a really good GPU is provided (you can do it later).\\E$"}

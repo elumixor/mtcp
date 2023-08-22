@@ -129,17 +129,6 @@
 	\end{description}
 	Copyright {\copyright} {\@date} {\@author}
 
-	% Page with declaration
-	\chapter*{Declaration}
-	I declare that the presented work was developed independently and that I have listed all sources of information used
-	within it in accordance with the methodical instructions for observing the ethical principles in the preparation of
-	university theses.
-
-	\vspace{1cm}
-	\noindent
-	Prague, date \quad .................................. \hspace{3cm} ............................................. \\
-	\parbox[t]{20cm}{\hspace{10.5cm}\@author} \\
-
 	% \vspace{10mm}
 	% \hfill\parbox[t]{8cm}{%
 	% 	\centering
