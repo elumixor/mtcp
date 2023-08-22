@@ -21,15 +21,15 @@ def evaluate(
     model.eval()
     model.to(device)
 
-    # if roc:
-    #     evaluate_rocs(
-    #         model,
-    #         val,
-    #         batch_size=batch_size,
-    #         device=device,
-    #         wandb_run=wandb_run,
-    #         files_dir=files_dir,
-    #     )
+    if roc:
+        evaluate_rocs(
+            model,
+            val,
+            batch_size=batch_size,
+            device=device,
+            wandb_run=wandb_run,
+            files_dir=files_dir,
+        )
 
     thresholds = [None]
 
@@ -46,20 +46,20 @@ def evaluate(
         )
         thresholds = [None, threshold, threshold_simple]
 
-    # if confusion_matrix:
-    #     for threshold in tqdm(thresholds, desc="Evaluating confusion matrices"):
-    #         evaluate_confusion_matrices(
-    #             model,
-    #             val,
-    #             threshold=threshold,
-    #             batch_size=batch_size,
-    #             device=device,
-    #             wandb_run=wandb_run,
-    #             files_dir=files_dir,
-    #         )
+    if confusion_matrix:
+        for threshold in tqdm(thresholds, desc="Evaluating confusion matrices"):
+            evaluate_confusion_matrices(
+                model,
+                val,
+                threshold=threshold,
+                batch_size=batch_size,
+                device=device,
+                wandb_run=wandb_run,
+                files_dir=files_dir,
+            )
 
-    # if feature_importance:
-    #     evaluate_feature_importance(model, val, device=device, wandb_run=wandb_run, files_dir=files_dir, num_examples=25)
+    if feature_importance:
+        evaluate_feature_importance(model, val, device=device, wandb_run=wandb_run, files_dir=files_dir, num_examples=25)
 
     return thresholds
 

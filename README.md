@@ -2,11 +2,13 @@
 
 #### Short disclaimer
 
-This project is a part of my master thesis. At the end of it, we had little time and had to rush with everything, so the
-overall structure might not be very good. Anyway, I trust that you will figure it out. Feel free to fork this repository
-and modify it to better suit your needs.
+-   This project is a part of my master thesis. At the end of it, we had little time and had to rush with everything, so the
+    overall structure might not be very good. Anyway, I trust that you will figure it out. Feel free to fork this repository
+    and modify it to better suit your needs.
 
-Just in case you wonder, MTCP stands for the **M**aster **T**hesis **C**ERN **P**roject.
+-   Always check for the paths yourself! Look at what files are you running. Study the files and adjust to your needs!
+
+-   Just in case you wonder, MTCP stands for the **M**aster **T**hesis **C**ERN **P**roject.
 
 ## Structure
 
@@ -64,10 +66,101 @@ My approach was the following (maybe you can find a better one):
 
 (as you will be using the TRExFitter, remember to `source setup.sh` in each shell session before you try to do anything)
 
+-   Edit the config file [`trex-fitter/configs/pre-fit.config`](./trex-fitter/configs/pre-fit.config) - uncomment the
+    `# PlotOptions: "YIELDS"` line. This will then show the number of events for each sample. I had it commented out for
+    the thesis, where I didn't want the plot to be cluttered with the numbers.
+
 -   `cd trex-fitter`
 -   `trex-fitter n configs/pre-fit.config` - read the n-tuples
 -   `trex-fitter w configs/pre-fit.config` - create the workspace
 -   `trex-fitter d configs/pre-fit.config` - draw the yields plots
--   Now check the [outputs folder](./trex-fitter/outputs/pre-fit/Plots/) for the plots. You should see something like:
+-   Now check the [outputs folder](./trex-fitter/outputs/pre-fit/Plots/) for the plots. Check if they make any sense or
+    if there is a mistake.
 
-![pre-fit yields](./trex-fitter/outputs/pre-fit/Plots/lep-pt-0.pdf)
+### If all is okay, you can proceed to process the root n-tuples into the numpy arrays.
+
+First, check which features are you using. I had a [bunch of different feature sets](./data_processing/features), where
+I just basically merged them together into [this final set of features](./data_processing/features/merged.yaml).
+
+Once this features file is ready, you can run the data processing with `python data_processing/main.py`. This will
+create the `data_processing/output` folder with the processed dataset in the numpy format.
+
+Now I recommend you transfer these outputs files from lxplus to somewhere where you plan to do the NN training.
+
+### Training the NN
+
+There's a [bunch of different configurations I tried](./ml/configs). You can follow the examples there and create your
+own. To train a simple resnet, you should:
+
+```bash
+python ml/train.py resnets/resnet-6
+```
+
+This uses [wandb](https://wandb.ai/) for logging. So check how you are doing there.
+
+Once the run is finished, some evaluations will be run automatically. However, if you want to make sure all is fine and
+run manually, you can do:
+
+```bash
+python ml/evaluate.py resnets/resnet-6
+```
+
+Then you will have some outputs in the [`ml/outputs`](./ml/outputs) folder.
+
+### Producing the friend trees
+
+To evaluate the systematic uncertainties, we need to get the model prediction for all the events in the systematic
+n-tuples (not just the `nominal`, but also `Sys1`, `Sys2`, ...). All the files weigh about 2.7 TB, so the approach we
+took was:
+
+1. Apply selection to only get events in the SR. This will produce the so-called small n-tuples.
+2. Produce friend trees for just those small n-tuples.
+
+For the first step, you would need to run the
+[HTCondor](https://htcondor.readthedocs.io/en/latest/users-manual/submitting-a-job.html) job.
+
+On the lxplus:
+
+1. Edit the [`jobs/produce-small/run.sh`](./jobs/produce-small/run.sh) and adjust the path to the systematic n-tuples.
+   Also adjust some paths (there is my user path, change to your user).
+2. Submit the condor job: `bash ./jobs/produce-small/run.sh`.
+3. [Monitor the job until it's done](https://htcondor.readthedocs.io/en/latest/users-manual/managing-a-job.html).
+
+Once it's done, you should have a folder with the small n-tuples under the `friend_ntuples/output/small`
+
+Now, you can copy it to the cluster with your main GPU.
+
+On the cluster, you can now run the friend trees production:
+
+(but first check the [config file](./friend_ntuples/config-friend.yaml) and adjust some values/paths there to suit your case)
+
+```bash
+python friend_ntuples/produce_friend.py
+```
+
+If that succeeded, you should have the friend trees in the `friend_ntuples/output/friend` folder.
+
+Now, you can copy those back to lxplus to evaluate the systematic uncertainties.
+
+### Evaluating the systematic uncertainties
+
+Running on all the systematics and all backgrounds takes a lot of time, so it is a good idea to first comment some of
+them out and try running on just a few:
+
+```bash
+cd trex-fitter
+trex-fitter nwdfr configs/probs-partial-sys-partial-bg.config
+```
+
+If that went well, we would need to run on the full set of systematics and backgrounds. That takes a very long time and
+on lxplus the process is just killed. So, we need to launch a condor job for that:
+
+(remember to change the paths in the [`jobs/trex-sys/submit.sh`](./jobs/trex-sys/submit.sh) and [`jobs/trex-sys/job.sh`](./jobs/trex-sys/job.sh) files)
+
+```bash
+bash ./jobs/trex-sys/submit.sh
+```
+
+And that should be it.
+
+# Good luck.
